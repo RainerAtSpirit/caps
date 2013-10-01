@@ -10,7 +10,7 @@
     "grunt-contrib-uglify": "~0.2.4"
   },
   "scripts": {
-    "test": "grunt jasmine"
+    "test": "grunt travis --verbose"
   },
   "keywords": [],
   "author": "Rainer Wittmann",
