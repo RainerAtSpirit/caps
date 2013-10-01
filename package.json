@@ -1,18 +1,22 @@
 {
-  "name": "caps",
-  "version": "0.1.0",
-  "description": "Accessing CorasWorks application service via JavaScript",
-  "main": "caps.js",
-  "dependencies": {},
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-jasmine": "~0.5.2",
-    "grunt-contrib-uglify": "~0.2.4"
-  },
-  "scripts": {
-    "test": "grunt jasmine --verbose"
-  },
-  "keywords": [],
-  "author": "Rainer Wittmann",
-  "license": "MIT"
+    "name": "caps",
+    "version": "0.1.0",
+    "description": "Accessing CorasWorks application service via JavaScript",
+    "main": "caps.js",
+    "dependencies": {},
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-contrib-jasmine": "~0.5.2",
+        "grunt-contrib-uglify": "~0.2.4"
+    },
+    "scripts": {
+        "test": "grunt jasmine --verbose"
+    },
+    "keywords": [],
+    "author": "Rainer Wittmann",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/RainerAtSpirit/caps.git"
+    }
 }
