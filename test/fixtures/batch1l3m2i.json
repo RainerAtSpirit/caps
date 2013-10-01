@@ -1,0 +1,41 @@
+    {
+        "name": "Wizard",
+        "batch": [
+            {
+                "method": "update",
+                "items": [
+                    {
+                        "Id": 1,
+                        "Title": "Updated"
+                    },
+                    {
+                        "Id": 2,
+                        "Title": "Updated as well"
+                    }
+                ]
+            },
+            {
+                "method": "create",
+                "items": [
+                    {
+                        "Title": "Create one"
+                    },
+                    {
+                        "Title": "Create two"
+                    }
+                ]
+            },
+            {
+                "method": "delete",
+                "items": [
+                    {
+                        "Id": 1
+                    },
+                    {
+                        "Id": 2
+                    }
+                ]
+            }
+        ]
+
+    }
