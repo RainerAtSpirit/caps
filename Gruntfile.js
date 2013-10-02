@@ -6,11 +6,13 @@ module.exports = function( grunt ) {
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> \n' +
-                    '* Copyright (c) 1998 - <%= grunt.template.today("yyyy") %> Rainer Wittmann, Spirit EDV-Beratung AG \n' +
+                    '* Copyright (c) 1998, <%= grunt.template.today("yyyy") %> Spirit EDV-Beratung AG \n' +
+                    '* Available via the MIT license.\n' +
+                    '* see: https://github.com/RainerAtSpirit/caps for details.\n' +
                     '*/\n'
             },
             build: {
-                src: 'src/<%= pkg.name %>.js',
+                src: 'build/<%= pkg.name %>.js',
                 dest: 'build/<%= pkg.name %>.min.js'
             }
         },
@@ -35,7 +37,7 @@ module.exports = function( grunt ) {
         },
         jasmine: {
             build: {
-                src: 'build/caps.js',
+                src: 'build/caps.min.js',
                 options: {
                     vendor: [
                         'lib/jquery/jquery-1.9.1.js',
@@ -44,14 +46,14 @@ module.exports = function( grunt ) {
                         'test/libs/jasmine-jquery-1.5.2.js'
                     ],
                     specs: 'test/specs/*spec.build.js',
-                    keepRunner: true
+                    keepRunner: false
                 }
             },
             AMD: {
                 src: 'src/**/*.js',
                 options: {
                     specs: 'test/specs/*spec.js',
-                    keepRunner: true,
+                    keepRunner: false,
                     vendor: [
                         'test/libs/underscore.js',
                         'test/libs/equivalent-xml.js',
@@ -77,7 +79,6 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks("grunt-requirejs");
 
     // Default task(s).
-    grunt.registerTask('default', ['uglify']);
-    grunt.registerTask('build', ['requirejs', 'uglify', 'jasmine:build']);
+    grunt.registerTask('default', ['jasmine:AMD', 'requirejs', 'uglify', 'jasmine:build']);
 
 };
