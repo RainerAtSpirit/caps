@@ -12,9 +12,7 @@
     "grunt-template-jasmine-requirejs": "~0.1.6"
   },
   "scripts": {
-    "test": [
-        "grunt jasmine:AMD --verbose",
-        "grunt jasmine:build --verbose"]
+    "test": "grunt test --verbose"
   },
   "keywords": [],
   "author": "Rainer Wittmann",
