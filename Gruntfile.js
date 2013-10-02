@@ -14,20 +14,58 @@ module.exports = function( grunt ) {
                 dest: 'build/<%= pkg.name %>.min.js'
             }
         },
+        requirejs: {
+            std: {
+                options: {
+                    almond: true,
+                    optimize: 'none',
+                    baseUrl: 'src',
+                    paths: {
+                        jquery: '../lib/jquery/jquery-1.9.1'
+                    },
+                    include: ['caps'],
+                    exclude: ['jquery'],
+                    out: 'build/caps.js',
+                    wrap: {
+                        startFile: 'src/wrap/wrap.start',
+                        endFile: 'src/wrap/wrap.end'
+                    }
+                }
+            }
+        },
         jasmine: {
-            caps: {
-                src: 'src/*js',
+            build: {
+                src: 'build/caps.js',
                 options: {
                     vendor: [
-                        'lib/jquery/jquery-1.9.1.js'
+                        'lib/jquery/jquery-1.9.1.js',
+                        'test/libs/underscore.js',
+                        'test/libs/equivalent-xml.js',
+                        'test/libs/jasmine-jquery-1.5.2.js'
                     ],
+                    specs: 'test/specs/*spec.build.js',
+                    keepRunner: true
+                }
+            },
+            AMD: {
+                src: 'src/**/*.js',
+                options: {
                     specs: 'test/specs/*spec.js',
-                    keepRunner: false,
-                    helpers: [
-                        'test/helpers/underscore.js',
-                        'test/helpers/equivalent-xml.js',
-                        'test/helpers/jasmine-jquery-1.5.2.js'
-                    ]
+                    keepRunner: true,
+                    vendor: [
+                        'test/libs/underscore.js',
+                        'test/libs/equivalent-xml.js',
+                        'test/libs/jasmine-jquery-1.5.2.js'
+                    ],
+                    template: require('grunt-template-jasmine-requirejs'),
+                    templateOptions: {
+                        requireConfig: {
+                            baseUrl: 'src/',
+                            paths: {
+                                "jquery": "../lib/jquery/jquery-1.9.1"
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -36,8 +74,10 @@ module.exports = function( grunt ) {
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks("grunt-requirejs");
 
     // Default task(s).
     grunt.registerTask('default', ['uglify']);
+    grunt.registerTask('build', ['requirejs', 'uglify', 'jasmine:build']);
 
 };

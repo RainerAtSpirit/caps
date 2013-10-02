@@ -204,6 +204,6 @@ EquivalentXml = (function(){
 
         return EquivalentXml.isEquivalent(actual,expected,options);
       }
-    },
+    }
   };
 })();
