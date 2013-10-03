@@ -1,6 +1,7 @@
 define(function() {
+    'use strict';
 
-    function checkNested( obj ) {
+    function checkNested( ) {
         var args = Array.prototype.slice.call(arguments);
         var obj = args.shift();
 
@@ -17,10 +18,10 @@ define(function() {
         col = typeof col === 'object' ? col : Array.prototype.slice.call(arguments, 1);
 
         return str.replace(/\{\{|\}\}|\{(\w+)\}/g, function( m, n ) {
-            if ( m == "{{" ) {
+            if ( m === "{{" ) {
                 return "{";
             }
-            if ( m == "}}" ) {
+            if ( m === "}}" ) {
                 return "}";
             }
             return col[n];
@@ -30,5 +31,5 @@ define(function() {
     return {
         checkNested: checkNested,
         format: format
-    }
+    };
 });

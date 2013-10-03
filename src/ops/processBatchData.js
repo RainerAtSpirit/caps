@@ -1,32 +1,35 @@
-define(['jquery', 'config', 'ops/pbd/createBatchXML'], function( $, config, CreateBatchXML ) {
+define(['jquery', 'config', 'ops/pbd/createBatchXML'],
+    function( $, config, CreateBatchXML ) {
+        'use strict';
 
-    var batchXML = new CreateBatchXML();
+        var batchXML = new CreateBatchXML();
 
-    function createBatchXML (options){
-      return batchXML.create(options);
+        function createBatchXML ( options ) {
+            return batchXML.create(options);
+        }
+
+        function makeRequest ( options, params ) {
+            options = $.isArray(options) ? options : [options];
+            var site = options[0].site;
+            var request = $.extend(true, {}, config.settings, {
+                data: {
+                    RequestType: "ProcessBatchData",
+                    // Todo:
+                    SiteUrl: '%WebRoot%/' + site,
+                    ListTitle: $.map(options,function( obj ) {
+                        return obj.name;
+                    }).join(','),
+                    OutputType: 'json',
+                    Batch: batchXML.create(options)
+                }
+            }, params);
+
+            return $.ajax(request);
+        }
+
+        return {
+            createBatchXML: createBatchXML,
+            makeRequest: makeRequest
+        };
     }
-
-    function makeRequest ( options, params ) {
-        options = $.isArray(options) ? options : [options];
-
-        var request = $.extend(true, {}, config.settings, {
-            data: {
-                RequestType: "ProcessBatchData",
-                // Todo:
-                SiteUrl: '%WebRoot%/' + options[0].site,
-                ListTitle: $.map(options,function( obj, id ) {
-                    return obj.name
-                }).join(','),
-                OutputType: 'json',
-                Batch: batchXML.create(options)
-            }
-        }, params);
-
-        return $.ajax(request)
-    }
-
-    return {
-        createBatchXML: createBatchXML,
-        makeRequest: makeRequest
-    };
-});
+);

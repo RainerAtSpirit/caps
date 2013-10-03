@@ -425,26 +425,24 @@ var requirejs, require, define;
 define("almond", function(){});
 
 define('config',[],function() {
+    
 
-    var SERVICEURL = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx';
-
-    var VERSION = '0.1.0';
-
-    var settings = {
-        url: SERVICEURL,
-        cache: true,
-        dataType: 'json',
-        type: 'POST'
-    };
+    var SERVICEURL = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
+        settings = {
+            url: SERVICEURL,
+            cache: true,
+            dataType: 'json',
+            type: 'POST'
+        };
 
     return {
-        VERSION: VERSION,
         settings: settings
-    }
+    };
 });
 define('fn',[],function() {
+    
 
-    function checkNested( obj ) {
+    function checkNested( ) {
         var args = Array.prototype.slice.call(arguments);
         var obj = args.shift();
 
@@ -461,10 +459,10 @@ define('fn',[],function() {
         col = typeof col === 'object' ? col : Array.prototype.slice.call(arguments, 1);
 
         return str.replace(/\{\{|\}\}|\{(\w+)\}/g, function( m, n ) {
-            if ( m == "{{" ) {
+            if ( m === "{{" ) {
                 return "{";
             }
-            if ( m == "}}" ) {
+            if ( m === "}}" ) {
                 return "}";
             }
             return col[n];
@@ -474,15 +472,17 @@ define('fn',[],function() {
     return {
         checkNested: checkNested,
         format: format
-    }
+    };
 });
-define('ops/pbd/createBatchXML',['jquery', 'fn'], function($, fn) {
-        var ctor = function(  ) {
+define('ops/pbd/createBatchXML',['jquery', 'fn'],
+    function( $, fn ) {
+        
+        var ctor = function() {
             this.methods = "";
         };
 
         $.extend(ctor.prototype, {
-            create: function createBatchXML( json ) {
+            create: function createBatchXML ( json ) {
                 var options = $.isArray(json) ? json : [json];
                 var self = this;
                 self.methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
@@ -546,53 +546,61 @@ define('ops/pbd/createBatchXML',['jquery', 'fn'], function($, fn) {
 
         return ctor;
 
-});
-define('ops/processBatchData',['jquery', 'config', 'ops/pbd/createBatchXML'], function( $, config, CreateBatchXML ) {
-
-    var batchXML = new CreateBatchXML();
-
-    function createBatchXML (options){
-      return batchXML.create(options);
     }
+);
+define('ops/processBatchData',['jquery', 'config', 'ops/pbd/createBatchXML'],
+    function( $, config, CreateBatchXML ) {
+        
 
-    function makeRequest ( options, params ) {
-        options = $.isArray(options) ? options : [options];
+        var batchXML = new CreateBatchXML();
 
-        var request = $.extend(true, {}, config.settings, {
-            data: {
-                RequestType: "ProcessBatchData",
-                // Todo:
-                SiteUrl: '%WebRoot%/' + options[0].site,
-                ListTitle: $.map(options,function( obj, id ) {
-                    return obj.name
-                }).join(','),
-                OutputType: 'json',
-                Batch: batchXML.create(options)
-            }
-        }, params);
+        function createBatchXML ( options ) {
+            return batchXML.create(options);
+        }
 
-        return $.ajax(request)
+        function makeRequest ( options, params ) {
+            options = $.isArray(options) ? options : [options];
+            var site = options[0].site;
+            var request = $.extend(true, {}, config.settings, {
+                data: {
+                    RequestType: "ProcessBatchData",
+                    // Todo:
+                    SiteUrl: '%WebRoot%/' + site,
+                    ListTitle: $.map(options,function( obj ) {
+                        return obj.name;
+                    }).join(','),
+                    OutputType: 'json',
+                    Batch: batchXML.create(options)
+                }
+            }, params);
+
+            return $.ajax(request);
+        }
+
+        return {
+            createBatchXML: createBatchXML,
+            makeRequest: makeRequest
+        };
     }
-
-    return {
-        createBatchXML: createBatchXML,
-        makeRequest: makeRequest
-    };
-});
+);
 /**
  * Caps main module that defines the public API
  */
 define('caps',['config', 'fn', 'ops/processBatchData'],
     function( config, fn, processBatchData ) {
+        
 
-    //Return public API
-    return {
-        VERSION: config.VERSION,
-        settings: config.settings,
-        fn: fn,
-        processBatchData: processBatchData
+        var VERSION = '0.1.0';
+
+        //Return public API
+        return {
+            VERSION: VERSION,
+            settings: config.settings,
+            fn: fn,
+            processBatchData: processBatchData
+        };
     }
-});
+);
     //Register in the values from the outer closure for common dependencies  as local almond modules
     define('jquery', function () {
         return $;

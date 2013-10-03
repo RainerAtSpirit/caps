@@ -3,12 +3,16 @@
  */
 define(['config', 'fn', 'ops/processBatchData'],
     function( config, fn, processBatchData ) {
+        'use strict';
 
-    //Return public API
-    return {
-        VERSION: config.VERSION,
-        settings: config.settings,
-        fn: fn,
-        processBatchData: processBatchData
+        var VERSION = '0.1.0';
+
+        //Return public API
+        return {
+            VERSION: VERSION,
+            settings: config.settings,
+            fn: fn,
+            processBatchData: processBatchData
+        };
     }
-});
+);

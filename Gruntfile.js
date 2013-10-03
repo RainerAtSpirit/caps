@@ -16,6 +16,9 @@ module.exports = function( grunt ) {
                 dest: 'build/<%= pkg.name %>.min.js'
             }
         },
+        jshint: {
+            all: ['Gruntfile.js', 'src/**/*.js', 'test/specs/**/*.js'],
+        },
         requirejs: {
             std: {
                 options: {
@@ -76,9 +79,10 @@ module.exports = function( grunt ) {
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-requirejs");
 
     // Default task(s).
-    grunt.registerTask('default', ['jasmine:AMD', 'requirejs', 'uglify', 'jasmine:build']);
+    grunt.registerTask('default', ['jshint', 'jasmine:AMD', 'requirejs', 'uglify', 'jasmine:build']);
     grunt.registerTask('test', ['jasmine:AMD', 'jasmine:build']);
 };

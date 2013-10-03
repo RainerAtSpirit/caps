@@ -1,10 +1,12 @@
-define(['jquery', 'fn'], function($, fn) {
-        var ctor = function(  ) {
+define(['jquery', 'fn'],
+    function( $, fn ) {
+        'use strict';
+        var ctor = function() {
             this.methods = "";
         };
 
         $.extend(ctor.prototype, {
-            create: function createBatchXML( json ) {
+            create: function createBatchXML ( json ) {
                 var options = $.isArray(json) ? json : [json];
                 var self = this;
                 self.methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
@@ -68,4 +70,5 @@ define(['jquery', 'fn'], function($, fn) {
 
         return ctor;
 
-});
+    }
+);
