@@ -8,13 +8,15 @@ define(['jquery', 'fn'],
         $.extend(ctor.prototype, {
             create: function createBatchXML ( json ) {
                 var options = $.isArray(json) ? json : [json],
-                    self = this;
+                    self = this,
+                    i,
+                    len = options.length;
 
                 self.methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
 
-                $.each(options, function( idx, list ) {
-                    self.processList(list);
-                });
+                for ( i = 0; i < len; i++ ) {
+                    self.processList(options[i]);
+                }
 
                 self.methods += '</ows:Batch></Batch>';
 
@@ -22,22 +24,28 @@ define(['jquery', 'fn'],
             },
             processList: function( list ) {
                 var self = this,
-                    batches = $.isArray(list.batch) ? list.batch : [list.batch];
+                    batches = $.isArray(list.batch) ? list.batch : [list.batch],
+                    i,
+                    len = batches.length;
 
-                $.each(batches, function( mIdx, batch ) {
-                    self.processItems(list.name, batch);
-                });
+                for ( i = 0; i < len; i++ ) {
+                    self.processItems(list.name, batches[i]);
+                }
+
             },
             processItems: function( listName, batch ) {
                 var self = this,
                     items = $.isArray(batch.items) ? batch.items : [batch.items],
+                    i,
+                    len = items.length,
                     typeMap = {
                         'create': 'New',
                         'update': 'Update',
                         'delete': 'Delete'
                     };
 
-                $.each(items, function( iIdx, item ) {
+                for ( i = 0; i < len; i++ ) {
+                    var item = items[i];
                     self.methods += fn.format(
                         '<Method ID="{methodId}">' +
                             '<SetList>%{list}%</SetList>' +
@@ -51,22 +59,24 @@ define(['jquery', 'fn'],
                     );
                     self.processProps(item);
                     self.methods += '</Method>';
-                });
-
+                }
             },
             processProps: function( item ) {
-                var self = this;
+                var self = this,
+                    prop;
 
                 self.methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
                     {itemId: item.Id || 'New'});
 
-                $.each(item, function( prop, val ) {
-                    if ( prop !== 'Id' ) {
-                        self.methods += fn.format(
-                            '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
-                            prop, val);
+                for ( prop in item ) {
+                    if ( item.hasOwnProperty(prop) ) {
+                        if ( prop !== 'Id' ) {
+                            self.methods += fn.format(
+                                '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
+                                prop, item[prop]);
+                        }
                     }
-                });
+                }
             }
         });
 
