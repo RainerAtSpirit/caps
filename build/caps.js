@@ -474,7 +474,7 @@ define('fn',[],function() {
         format: format
     };
 });
-define('ops/pbd/createBatchXML',['jquery', 'fn'],
+define('processBatchData/createBatchXML',['jquery', 'fn'],
     function( $, fn ) {
         
         var ctor = function() {
@@ -548,7 +548,7 @@ define('ops/pbd/createBatchXML',['jquery', 'fn'],
 
     }
 );
-define('ops/processBatchData',['jquery', 'config', 'ops/pbd/createBatchXML'],
+define('processBatchData/index',['jquery', 'config', './createBatchXML'],
     function( $, config, CreateBatchXML ) {
         
 
@@ -586,7 +586,7 @@ define('ops/processBatchData',['jquery', 'config', 'ops/pbd/createBatchXML'],
 /**
  * Caps main module that defines the public API
  */
-define('caps',['config', 'fn', 'ops/processBatchData'],
+define('caps',['config', 'fn', 'processBatchData/index'],
     function( config, fn, processBatchData ) {
         
 

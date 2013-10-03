@@ -7,8 +7,9 @@ define(['jquery', 'fn'],
 
         $.extend(ctor.prototype, {
             create: function createBatchXML ( json ) {
-                var options = $.isArray(json) ? json : [json];
-                var self = this;
+                var options = $.isArray(json) ? json : [json],
+                    self = this;
+
                 self.methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
 
                 $.each(options, function( idx, list ) {
@@ -20,21 +21,21 @@ define(['jquery', 'fn'],
                 return self.methods;
             },
             processList: function( list ) {
-                var self = this;
-                var batches = $.isArray(list.batch) ? list.batch : [list.batch];
+                var self = this,
+                    batches = $.isArray(list.batch) ? list.batch : [list.batch];
 
                 $.each(batches, function( mIdx, batch ) {
                     self.processItems(list.name, batch);
                 });
             },
             processItems: function( listName, batch ) {
-                var self = this;
-                var items = $.isArray(batch.items) ? batch.items : [batch.items];
-                var typeMap = {
-                    'create': 'New',
-                    'update': 'Update',
-                    'delete': 'Delete'
-                };
+                var self = this,
+                    items = $.isArray(batch.items) ? batch.items : [batch.items],
+                    typeMap = {
+                        'create': 'New',
+                        'update': 'Update',
+                        'delete': 'Delete'
+                    };
 
                 $.each(items, function( iIdx, item ) {
                     self.methods += fn.format(
@@ -55,6 +56,7 @@ define(['jquery', 'fn'],
             },
             processProps: function( item ) {
                 var self = this;
+
                 self.methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
                     {itemId: item.Id || 'New'});
 
@@ -69,6 +71,5 @@ define(['jquery', 'fn'],
         });
 
         return ctor;
-
     }
 );

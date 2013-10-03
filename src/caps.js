@@ -1,7 +1,7 @@
 /**
  * Caps main module that defines the public API
  */
-define(['config', 'fn', 'ops/processBatchData'],
+define(['config', 'fn', 'processBatchData/index'],
     function( config, fn, processBatchData ) {
         'use strict';
 
