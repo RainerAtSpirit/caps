@@ -1,8 +1,12 @@
+/*global module, require */
 module.exports = function( grunt ) {
-
+    "use strict";
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        jshint: {
+            all: ['Gruntfile.js', 'src/**/*.js', 'test/specs/**/*.js']
+        },
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> \n' +
@@ -15,9 +19,6 @@ module.exports = function( grunt ) {
                 src: 'build/<%= pkg.name %>.js',
                 dest: 'build/<%= pkg.name %>.min.js'
             }
-        },
-        jshint: {
-            all: ['Gruntfile.js', 'src/**/*.js', 'test/specs/**/*.js'],
         },
         requirejs: {
             std: {
@@ -32,35 +33,35 @@ module.exports = function( grunt ) {
                     exclude: ['jquery'],
                     out: 'build/caps.js',
                     wrap: {
-                        startFile: 'src/wrap/wrap.start',
-                        endFile: 'src/wrap/wrap.end'
+                        startFile: 'src/wrap/start.frag',
+                        endFile: 'src/wrap/end.frag'
                     }
                 }
             }
         },
         jasmine: {
             build: {
-                src: 'build/caps.min.js',
+                src: 'build/caps.js',
                 options: {
                     vendor: [
                         'lib/jquery/jquery-1.9.1.js',
-                        'test/libs/underscore.js',
-                        'test/libs/equivalent-xml.js',
-                        'test/libs/jasmine-jquery-1.5.2.js'
+                        'test/_libs/underscore.js',
+                        'test/_libs/equivalent-xml.js',
+                        'test/_libs/jasmine-jquery-1.5.2.js'
                     ],
-                    specs: 'test/specs/*spec.build.js',
-                    keepRunner: false
+                    specs: 'test/buildSpecs/*spec.js',
+                    keepRunner: true
                 }
             },
             AMD: {
                 src: 'src/**/*.js',
                 options: {
-                    specs: 'test/specs/*spec.js',
+                    specs: 'test/srcSpecs/**/*spec.js',
                     keepRunner: false,
                     vendor: [
-                        'test/libs/underscore.js',
-                        'test/libs/equivalent-xml.js',
-                        'test/libs/jasmine-jquery-1.5.2.js'
+                        'test/_libs/underscore.js',
+                        'test/_libs/equivalent-xml.js',
+                        'test/_libs/jasmine-jquery-1.5.2.js'
                     ],
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {

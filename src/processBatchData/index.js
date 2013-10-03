@@ -14,7 +14,6 @@ define(['jquery', 'config', './createBatchXML'],
                 request = $.extend(true, {}, config.settings, {
                     data: {
                         RequestType: "ProcessBatchData",
-                        // Todo:
                         SiteUrl: '%WebRoot%/' + site,
                         ListTitle: $.map(options,function( obj ) {
                             return obj.name;

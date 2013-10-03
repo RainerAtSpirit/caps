@@ -1,13 +1,17 @@
 (function (root, factory) {
-
-    // Using AMD or Browser globals
     if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
+        // Allow using this built library as an AMD module
+        // in another project. That other project will only
+        // see this AMD call, not the internal modules in
+        // the closure below.
+        define(factory);
     } else {
-        root.caps = factory(root.$);
+        //Browser globals case. Just assign the
+        //result to a property on the global.
+        root.caps = factory();
     }
-}(this, function ($) {
-
+}(this, function () {
+    //almond, and your modules will be inlined here
 
 
 
@@ -483,8 +487,9 @@ define('processBatchData/createBatchXML',['jquery', 'fn'],
 
         $.extend(ctor.prototype, {
             create: function createBatchXML ( json ) {
-                var options = $.isArray(json) ? json : [json];
-                var self = this;
+                var options = $.isArray(json) ? json : [json],
+                    self = this;
+
                 self.methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
 
                 $.each(options, function( idx, list ) {
@@ -496,21 +501,21 @@ define('processBatchData/createBatchXML',['jquery', 'fn'],
                 return self.methods;
             },
             processList: function( list ) {
-                var self = this;
-                var batches = $.isArray(list.batch) ? list.batch : [list.batch];
+                var self = this,
+                    batches = $.isArray(list.batch) ? list.batch : [list.batch];
 
                 $.each(batches, function( mIdx, batch ) {
                     self.processItems(list.name, batch);
                 });
             },
             processItems: function( listName, batch ) {
-                var self = this;
-                var items = $.isArray(batch.items) ? batch.items : [batch.items];
-                var typeMap = {
-                    'create': 'New',
-                    'update': 'Update',
-                    'delete': 'Delete'
-                };
+                var self = this,
+                    items = $.isArray(batch.items) ? batch.items : [batch.items],
+                    typeMap = {
+                        'create': 'New',
+                        'update': 'Update',
+                        'delete': 'Delete'
+                    };
 
                 $.each(items, function( iIdx, item ) {
                     self.methods += fn.format(
@@ -531,6 +536,7 @@ define('processBatchData/createBatchXML',['jquery', 'fn'],
             },
             processProps: function( item ) {
                 var self = this;
+
                 self.methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
                     {itemId: item.Id || 'New'});
 
@@ -545,7 +551,6 @@ define('processBatchData/createBatchXML',['jquery', 'fn'],
         });
 
         return ctor;
-
     }
 );
 define('processBatchData/index',['jquery', 'config', './createBatchXML'],
@@ -560,19 +565,18 @@ define('processBatchData/index',['jquery', 'config', './createBatchXML'],
 
         function makeRequest ( options, params ) {
             options = $.isArray(options) ? options : [options];
-            var site = options[0].site;
-            var request = $.extend(true, {}, config.settings, {
-                data: {
-                    RequestType: "ProcessBatchData",
-                    // Todo:
-                    SiteUrl: '%WebRoot%/' + site,
-                    ListTitle: $.map(options,function( obj ) {
-                        return obj.name;
-                    }).join(','),
-                    OutputType: 'json',
-                    Batch: batchXML.create(options)
-                }
-            }, params);
+            var site = options[0].site,
+                request = $.extend(true, {}, config.settings, {
+                    data: {
+                        RequestType: "ProcessBatchData",
+                        SiteUrl: '%WebRoot%/' + site,
+                        ListTitle: $.map(options,function( obj ) {
+                            return obj.name;
+                        }).join(','),
+                        OutputType: 'json',
+                        Batch: batchXML.create(options)
+                    }
+                }, params);
 
             return $.ajax(request);
         }
@@ -600,13 +604,13 @@ define('caps',['config', 'fn', 'processBatchData/index'],
             processBatchData: processBatchData
         };
     }
-);
-    //Register in the values from the outer closure for common dependencies  as local almond modules
+);    //Register in the values from the outer closure for common dependencies  as local almond modules
     define('jquery', function () {
         return $;
     });
-    // Use almond's special top-level, synchronous require to trigger factory functions, get the final module value,
-    // export it as the public value.
-    return require('caps');
-}));
-
+     // The modules for your project will be inlined above
+     // this snippet. Ask almond to synchronously require the
+     // module value for 'main' here and return it as the
+     // value to use for the public API for the built file.
+     return require('caps');
+ }));

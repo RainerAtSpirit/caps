@@ -1,4 +1,7 @@
+/*global jasmine, describe, beforeEach, it, expect, require */
 describe('caps AMD', function() {
+    "use strict";
+
     var caps = require('caps');
 
     it('should have a version number', function() {

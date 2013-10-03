@@ -1,4 +1,7 @@
+/*global jasmine, describe, beforeEach, it, expect, require */
 describe('fn AMD', function() {
+    "use strict";
+
     var fn = require('fn');
 
     it('should have a format function', function() {
