@@ -57,7 +57,7 @@ module.exports = function( grunt ) {
                 src: 'src/**/*.js',
                 options: {
                     specs: 'test/srcSpecs/**/*spec.js',
-                    keepRunner: false,
+                    keepRunner: true,
                     vendor: [
                         'test/_libs/underscore.js',
                         'test/_libs/equivalent-xml.js',

@@ -488,14 +488,20 @@ define('processBatchData/createBatchXML',['jquery', 'fn'],
         $.extend(ctor.prototype, {
             create: function createBatchXML ( json ) {
                 var options = $.isArray(json) ? json : [json],
-                    self = this;
+                    self = this,
+                    i,
+                    len = options.length;
 
                 self.methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
 
-                $.each(options, function( idx, list ) {
-                    self.processList(list);
-                });
+                for ( i = 0; i < len; i++ ) {
+                    self.processList(options[i]);
+                }
 
+                /* $.each(options, function( idx, list ) {
+                 self.processList(list);
+                 });
+                 */
                 self.methods += '</ows:Batch></Batch>';
 
                 return self.methods;
