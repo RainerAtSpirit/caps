@@ -84,6 +84,6 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks("grunt-requirejs");
 
     // Default task(s).
-    grunt.registerTask('default', ['jshint', 'jasmine:AMD', 'requirejs', 'uglify', 'jasmine:build']);
-    grunt.registerTask('test', ['jasmine:AMD', 'jasmine:build']);
+    grunt.registerTask('build', ['jshint', 'jasmine:AMD', 'requirejs', 'uglify', 'jasmine:build']);
+    grunt.registerTask('default', ['jasmine:AMD', 'jasmine:build']);
 };
