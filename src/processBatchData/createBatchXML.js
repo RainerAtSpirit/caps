@@ -1,7 +1,8 @@
-define(['jquery', 'fn'],
-    function( $, fn ) {
+define(function( require ) {
         'use strict';
-        var ctor = function() {
+        var $ = require('jquery'),
+            fn = require('fn'),
+            ctor = function() {
             this.methods = "";
         };
 

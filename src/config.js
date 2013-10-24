@@ -1,9 +1,9 @@
 define(function() {
     'use strict';
 
-    var SERVICEURL = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
+    var serviceUrl = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
         settings = {
-            url: SERVICEURL,
+            url: serviceUrl,
             cache: true,
             dataType: 'json',
             type: 'POST'

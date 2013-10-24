@@ -1,8 +1,10 @@
-define(['jquery', 'config', './createBatchXML'],
-    function( $, config, CreateBatchXML ) {
+define(function( require ) {
         'use strict';
 
-        var batchXML = new CreateBatchXML();
+        var $ = require('jquery'),
+            config = require('config'),
+            CreateBatchXML = require('./createBatchXML'),
+            batchXML = new CreateBatchXML();
 
         function createBatchXML ( options ) {
             return batchXML.create(options);

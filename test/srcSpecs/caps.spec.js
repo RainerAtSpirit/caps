@@ -5,7 +5,7 @@ describe('caps AMD', function() {
     var caps = require('caps');
 
     it('should have a version number', function() {
-        expect(caps.VERSION).toBeDefined();
+        expect(caps.version).toBeDefined();
     });
 
     it('should have settings object', function() {
