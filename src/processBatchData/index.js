@@ -6,11 +6,7 @@ define(function( require ) {
             CreateBatchXML = require('./createBatchXML'),
             batchXML = new CreateBatchXML();
 
-        function createBatchXML ( options ) {
-            return batchXML.create(options);
-        }
-
-        function makeRequest ( options, params ) {
+        function ProcessBatchData ( options, params ) {
             options = $.isArray(options) ? options : [options];
             var site = options[0].site,
                 request = $.extend(true, {}, config.settings, {
@@ -28,9 +24,12 @@ define(function( require ) {
             return $.ajax(request);
         }
 
-        return {
-            createBatchXML: createBatchXML,
-            makeRequest: makeRequest
-        };
+        $.extend(ProcessBatchData, {
+            createBatchXML: function createBatchXML ( options ) {
+                return batchXML.create(options);
+            }
+        });
+
+        return ProcessBatchData;
     }
 );

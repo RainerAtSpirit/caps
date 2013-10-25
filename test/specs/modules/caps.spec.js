@@ -16,8 +16,12 @@ describe('caps AMD', function() {
         expect(typeof caps.fn).toBe('object');
     });
 
-    it('should have a processBatchData object', function() {
-        expect(typeof caps.processBatchData).toBe('object');
+    it('should have a ProcessBatchData function', function() {
+        expect(typeof caps.ProcessBatchData).toBe('function');
     });
+
+    it('should have a BatchRequest object', function() {
+          expect(typeof caps.BatchRequest).toBe('function');
+      });
 
 });

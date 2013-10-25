@@ -431,9 +431,9 @@ define("almond", function(){});
 define('config',[],function() {
     
 
-    var SERVICEURL = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
+    var serviceUrl = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
         settings = {
-            url: SERVICEURL,
+            url: serviceUrl,
             cache: true,
             dataType: 'json',
             type: 'POST'
@@ -478,12 +478,22 @@ define('fn',[],function() {
         format: format
     };
 });
-define('processBatchData/createBatchXML',['jquery', 'fn'],
-    function( $, fn ) {
+//Scaffolding template. See src/ProcessBatchData and test/modules/ProcessBatchData for implementation example
+define('BatchRequest/index',['require'],function( require ) {
         
-        var ctor = function() {
-            this.methods = "";
-        };
+
+        function BatchRequest ( options, params ) {}
+
+        return BatchRequest;
+    }
+);
+define('ProcessBatchData/createBatchXML',['require','jquery','fn'],function( require ) {
+        
+        var $ = require('jquery'),
+            fn = require('fn'),
+            ctor = function() {
+                this.methods = "";
+            };
 
         $.extend(ctor.prototype, {
             create: function createBatchXML ( json ) {
@@ -498,32 +508,34 @@ define('processBatchData/createBatchXML',['jquery', 'fn'],
                     self.processList(options[i]);
                 }
 
-                /* $.each(options, function( idx, list ) {
-                 self.processList(list);
-                 });
-                 */
                 self.methods += '</ows:Batch></Batch>';
 
                 return self.methods;
             },
             processList: function( list ) {
                 var self = this,
-                    batches = $.isArray(list.batch) ? list.batch : [list.batch];
+                    batches = $.isArray(list.batch) ? list.batch : [list.batch],
+                    i,
+                    len = batches.length;
 
-                $.each(batches, function( mIdx, batch ) {
-                    self.processItems(list.name, batch);
-                });
+                for ( i = 0; i < len; i++ ) {
+                    self.processItems(list.name, batches[i]);
+                }
+
             },
             processItems: function( listName, batch ) {
                 var self = this,
                     items = $.isArray(batch.items) ? batch.items : [batch.items],
+                    i,
+                    len = items.length,
                     typeMap = {
                         'create': 'New',
                         'update': 'Update',
                         'delete': 'Delete'
                     };
 
-                $.each(items, function( iIdx, item ) {
+                for ( i = 0; i < len; i++ ) {
+                    var item = items[i];
                     self.methods += fn.format(
                         '<Method ID="{methodId}">' +
                             '<SetList>%{list}%</SetList>' +
@@ -537,39 +549,39 @@ define('processBatchData/createBatchXML',['jquery', 'fn'],
                     );
                     self.processProps(item);
                     self.methods += '</Method>';
-                });
-
+                }
             },
             processProps: function( item ) {
-                var self = this;
+                var self = this,
+                    prop;
 
                 self.methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
                     {itemId: item.Id || 'New'});
 
-                $.each(item, function( prop, val ) {
-                    if ( prop !== 'Id' ) {
-                        self.methods += fn.format(
-                            '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
-                            prop, val);
+                for ( prop in item ) {
+                    if ( item.hasOwnProperty(prop) ) {
+                        if ( prop !== 'Id' ) {
+                            self.methods += fn.format(
+                                '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
+                                prop, item[prop]);
+                        }
                     }
-                });
+                }
             }
         });
 
         return ctor;
     }
 );
-define('processBatchData/index',['jquery', 'config', './createBatchXML'],
-    function( $, config, CreateBatchXML ) {
+define('ProcessBatchData/index',['require','jquery','config','./createBatchXML'],function( require ) {
         
 
-        var batchXML = new CreateBatchXML();
+        var $ = require('jquery'),
+            config = require('config'),
+            CreateBatchXML = require('./createBatchXML'),
+            batchXML = new CreateBatchXML();
 
-        function createBatchXML ( options ) {
-            return batchXML.create(options);
-        }
-
-        function makeRequest ( options, params ) {
+        function ProcessBatchData ( options, params ) {
             options = $.isArray(options) ? options : [options];
             var site = options[0].site,
                 request = $.extend(true, {}, config.settings, {
@@ -587,27 +599,29 @@ define('processBatchData/index',['jquery', 'config', './createBatchXML'],
             return $.ajax(request);
         }
 
-        return {
-            createBatchXML: createBatchXML,
-            makeRequest: makeRequest
-        };
+        $.extend(ProcessBatchData, {
+            createBatchXML: function createBatchXML ( options ) {
+                return batchXML.create(options);
+            }
+        });
+
+        return ProcessBatchData;
     }
 );
 /**
  * Caps main module that defines the public API
  */
-define('caps',['config', 'fn', 'processBatchData/index'],
-    function( config, fn, processBatchData ) {
+define('caps',['require','config','fn','BatchRequest/index','ProcessBatchData/index'],function( require ) {
         
-
-        var VERSION = '0.1.0';
+        var config = require('config');
 
         //Return public API
         return {
-            VERSION: VERSION,
+            version: '0.2.0',
             settings: config.settings,
-            fn: fn,
-            processBatchData: processBatchData
+            fn: require('fn'),
+            BatchRequest: require('BatchRequest/index'),
+            ProcessBatchData: require('ProcessBatchData/index')
         };
     }
 );    //Register in the values from the outer closure for common dependencies  as local almond modules

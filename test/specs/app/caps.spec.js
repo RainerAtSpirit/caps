@@ -30,16 +30,16 @@ describe("caps", function() {
         });
     });
 
-    describe("processBatchData", function() {
+    describe("ProcessBatchData", function() {
 
         it("should be an object", function() {
-            expect(typeof caps.processBatchData).toBe('object');
+            expect(typeof caps.ProcessBatchData).toBe('function');
         });
 
         describe("createBatchXML", function() {
 
             it("should be a function", function() {
-                expect(typeof caps.processBatchData.createBatchXML).toBe('function');
+                expect(typeof caps.ProcessBatchData.createBatchXML).toBe('function');
             });
 
             describe("process single item formats", function() {
@@ -53,7 +53,7 @@ describe("caps", function() {
                 });
 
                 it("single", function() {
-                    batchXML = EquivalentXml.xml(caps.processBatchData.createBatchXML(json));
+                    batchXML = EquivalentXml.xml(caps.ProcessBatchData.createBatchXML(json));
                     resultXML = EquivalentXml.xml(result);
 
                     expect(batchXML).beEquivalentTo(resultXML);
@@ -61,4 +61,12 @@ describe("caps", function() {
             });
         });
     });
+
+    describe("BatchRequest", function() {
+
+        it("should be an object", function() {
+            expect(typeof caps.BatchRequest).toBe('function');
+        });
+    });
+
 });

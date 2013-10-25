@@ -2,7 +2,7 @@
 describe('CreateBatchXML AMD', function() {
     "use strict";
 
-    var CreateBatchXML = require('processBatchData/createBatchXML');
+    var CreateBatchXML = require('ProcessBatchData/createBatchXML');
     var createBatchXML = new CreateBatchXML();
 
     jasmine.getJSONFixtures().fixturesPath = 'test/_fixtures';
