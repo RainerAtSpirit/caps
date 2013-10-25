@@ -3,17 +3,15 @@
  */
 define(function( require ) {
         'use strict';
-        var config = require('config'),
-            fn = require('fn'),
-            processBatchData = require('processBatchData/index'),
-            version = '0.1.0';
+        var config = require('config');
 
         //Return public API
         return {
-            version: version,
+            version: '0.2.0',
             settings: config.settings,
-            fn: fn,
-            processBatchData: processBatchData
+            fn: require('fn'),
+            BatchRequest: require('BatchRequest/index'),
+            ProcessBatchData: require('ProcessBatchData/index')
         };
     }
 );
