@@ -3,8 +3,8 @@ define(function( require ) {
         var $ = require('jquery'),
             fn = require('fn'),
             ctor = function() {
-            this.methods = "";
-        };
+                this.methods = "";
+            };
 
         $.extend(ctor.prototype, {
             create: function createBatchXML ( json ) {
