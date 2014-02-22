@@ -1,6 +1,7 @@
 {
     "singleItem": {
         "json": {
+            "site": "/sites/capsTests",
             "name": "Wizard",
             "batch": {
                 "method": "update",
@@ -12,6 +13,113 @@
             }
         },
         "xml": "<Batch><ows:Batch OnError=\"Continue\" xmlns:ows=\"http://www.corasworks.net/2012/ows\"><Method ID=\"1,Update,Wizard\"><SetList>%Wizard%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">1</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Update via caps]]></SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Roles\"><![CDATA[1;#;#4;#;#6]]></SetVar></Method></ows:Batch></Batch>"
+    },
+    "threeItems":{
+      "json": {
+          "site": "/sites/capsTests",
+          "name": "Test1",
+          "batch": {
+              "method": "create",
+              "items": [
+                  {
+                      "Title": "One"
+                  },
+                  {
+                      "Title": "Two"
+                  },
+                  {
+                      "Title": "Three"
+                  }
+              ]
+          }
+      },
+      "xml": "<Batch><ows:Batch OnError=\"Continue\"  xmlns:ows=\"http://www.corasworks.net/2012/ows\"><Method ID=\"New,Test1\"><SetList>%Test1%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[One]]></SetVar></Method><Method ID=\"New,Test1\"><SetList>%Test1%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Two]]></SetVar></Method><Method ID=\"New,Test1\"><SetList>%Test1%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Three]]></SetVar></Method></ows:Batch></Batch>"
+    },
+    "threeMethods":{
+        "json":     {
+                "site": "/sites/capsTests",
+                "name": "Wizard",
+                "batch": [
+                    {
+                        "method": "update",
+                        "items": [
+                            {
+                                "Id": 1,
+                                "Title": "Updated"
+                            },
+                            {
+                                "Id": 2,
+                                "Title": "Updated as well"
+                            }
+                        ]
+                    },
+                    {
+                        "method": "create",
+                        "items": [
+                            {
+                                "Title": "Create one"
+                            },
+                            {
+                                "Title": "Create two"
+                            }
+                        ]
+                    },
+                    {
+                        "method": "delete",
+                        "items": [
+                            {
+                                "Id": 1
+                            },
+                            {
+                                "Id": 2
+                            }
+                        ]
+                    }
+                ]
+
+            },
+        "xml": "<Batch><ows:Batch OnError=\"Continue\"  xmlns:ows=\"http://www.corasworks.net/2012/ows\"><Method ID=\"1,Update,Wizard\"><SetList>%Wizard%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">1</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Updated]]></SetVar></Method><Method ID=\"2,Update,Wizard\"><SetList>%Wizard%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">2</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Updated as well]]></SetVar></Method><Method ID=\"New,Wizard\"><SetList>%Wizard%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Create one]]></SetVar></Method><Method ID=\"New,Wizard\"><SetList>%Wizard%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Create two]]></SetVar></Method><Method ID=\"1,Delete,Wizard\"><SetList>%Wizard%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">1</SetVar></Method><Method ID=\"2,Delete,Wizard\"><SetList>%Wizard%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">2</SetVar></Method></ows:Batch></Batch>"
+    },
+    "twolists3items" : {
+        "json": [
+            {
+                "site": "/sites/capsTests",
+                "name": "Test1",
+                "batch": {
+                    "method": "create",
+                    "items": [
+                        {
+                            "Title": "One"
+                        },
+                        {
+                            "Title": "Two"
+                        },
+                        {
+                            "Title": "Three"
+                        }
+                    ]
+                }
+            },
+            {
+                  "site": "/sites/capsTests",
+                  "name": "Test2",
+                  "batch": {
+                      "method": "create",
+                      "items": [
+                          {
+                              "Title": "One"
+                          },
+                          {
+                              "Title": "Two"
+                          },
+                          {
+                              "Title": "Three"
+                          }
+                      ]
+                  }
+              }
+        ],
+        "xml": "<Batch><ows:Batch OnError=\"Continue\"  xmlns:ows=\"http://www.corasworks.net/2012/ows\"><Method ID=\"New,Test1\"><SetList>%Test1%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[One]]></SetVar></Method><Method ID=\"New,Test1\"><SetList>%Test1%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Two]]></SetVar></Method><Method ID=\"New,Test1\"><SetList>%Test1%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Three]]></SetVar></Method><Method ID=\"New,Test2\"><SetList>%Test2%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[One]]></SetVar></Method><Method ID=\"New,Test2\"><SetList>%Test2%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Two]]></SetVar></Method><Method ID=\"New,Test2\"><SetList>%Test2%</SetList><SetVar Name=\"Cmd\">Save</SetVar><SetVar Name=\"ID\">New</SetVar><SetVar Name=\"urn:schemas-microsoft-com:office:office#Title\"><![CDATA[Three]]></SetVar></Method></ows:Batch></Batch>"
     }
 }
 

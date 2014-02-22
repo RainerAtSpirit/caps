@@ -23,7 +23,7 @@ describe('CreateBatchXML AMD', function() {
                 expect(typeof createBatchXML.create).toBe('function');
             });
 
-            describe("should convert single item JSON format", function() {
+            describe("single item JSON format", function() {
                 var fixtures, batchXML, resultXML, json, result;
 
                 beforeEach(function() {
@@ -33,7 +33,64 @@ describe('CreateBatchXML AMD', function() {
                     result = fixtures['test.json'].singleItem.xml;
                 });
 
-                it("single", function() {
+                it("should produce a valid batch xml", function() {
+                    batchXML = EquivalentXml.xml(createBatchXML.create(json));
+                    resultXML = EquivalentXml.xml(result);
+
+                    expect(batchXML).beEquivalentTo(resultXML);
+                });
+
+            });
+
+            describe("three items in a single list JSON format", function() {
+                var fixtures, batchXML, resultXML, json, result;
+
+                beforeEach(function() {
+                    batchXML = resultXML = "";
+                    fixtures = loadJSONFixtures('test.json');
+                    json = fixtures['test.json'].threeItems.json;
+                    result = fixtures['test.json'].threeItems.xml;
+                });
+
+                it("should produce a valid batch xml", function() {
+                    batchXML = EquivalentXml.xml(createBatchXML.create(json));
+                    resultXML = EquivalentXml.xml(result);
+
+                    expect(batchXML).beEquivalentTo(resultXML);
+                });
+
+            });
+
+            describe("three methods in a single list JSON format", function() {
+                var fixtures, batchXML, resultXML, json, result;
+
+                beforeEach(function() {
+                    batchXML = resultXML = "";
+                    fixtures = loadJSONFixtures('test.json');
+                    json = fixtures['test.json'].threeMethods.json;
+                    result = fixtures['test.json'].threeMethods.xml;
+                });
+
+                it("should produce a valid batch xml", function() {
+                    batchXML = EquivalentXml.xml(createBatchXML.create(json));
+                    resultXML = EquivalentXml.xml(result);
+
+                    expect(batchXML).beEquivalentTo(resultXML);
+                });
+
+            });
+
+            describe("two lists single methods three items JSON format", function() {
+                          var fixtures, batchXML, resultXML, json, result;
+
+                          beforeEach(function() {
+                              batchXML = resultXML = "";
+                              fixtures = loadJSONFixtures('test.json');
+                              json = fixtures['test.json'].twolists3items.json;
+                              result = fixtures['test.json'].twolists3items.xml;
+                          });
+
+                it("should produce a valid batch xml", function() {
                     batchXML = EquivalentXml.xml(createBatchXML.create(json));
                     resultXML = EquivalentXml.xml(result);
 

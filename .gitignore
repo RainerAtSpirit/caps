@@ -3,3 +3,4 @@ node_modules/
 #test files
 _SpecRunner.html
 .grunt/
+atlassian-ide-plugin.xml
