@@ -438,21 +438,6 @@ var requirejs, require, define;
 
 define("almond", function(){});
 
-define('config',[],function() {
-    
-
-    var serviceUrl = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
-        settings = {
-            url: serviceUrl,
-            cache: true,
-            dataType: 'json',
-            type: 'POST'
-        };
-
-    return {
-        settings: settings
-    };
-});
 define('common',[],function() {
     
 
@@ -492,7 +477,8 @@ define('common',[],function() {
      */
     function getPromise ( options ) {
 
-        var url = options.url || urlCaps,
+        var urlCaps = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
+            url = options.url || urlCaps,
             defaults = {
                 data: null,
                 dataType: 'json'
@@ -525,9 +511,9 @@ define('processBatchData/createBatchXML',['require','jquery','common'],function(
         
         var $ = require('jquery'),
             common = require('common'),
-            ctor, instance;
+            Ctor, instance;
 
-        ctor = function() {
+        Ctor = function() {
             this.methods = "";
         };
 
@@ -580,7 +566,7 @@ define('processBatchData/createBatchXML',['require','jquery','common'],function(
                             methodId: (item.Id ? item.Id + ',' + typeMap[batch.method] : typeMap[batch.method]) +
                                 ',' + listName,
                             list: listName,
-                            cmd: batch === 'delete' ? 'Delete' : 'Save'
+                            cmd: batch.method === 'delete' ? 'Delete' : 'Save'
                         }
                     );
                     self.processProps(item);
@@ -606,73 +592,115 @@ define('processBatchData/createBatchXML',['require','jquery','common'],function(
             }
         };
 
-        $.extend(true, ctor.prototype, common, instance);
+        $.extend(true, Ctor.prototype, common, instance);
 
-        return ctor;
+        return new Ctor();
     }
 );
-define('processBatchData/index',['require','jquery','config','./createBatchXML'],function( require ) {
+define('processBatchData/index',['require','jquery','./createBatchXML'],function( require ) {
         
 
         var $ = require('jquery'),
-            config = require('config'),
-            CreateBatchXML = require('./createBatchXML'),
-            batchXML = new CreateBatchXML();
+            createBatchXML = require('./createBatchXML'),
+            L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+            defaults, instance;
 
-        function processBatchData ( options, params ) {
-            options = $.isArray(options) ? options : [options];
-            var site = options[0].site,
-                request = $.extend(true, {}, config.settings, {
-                    data: {
-                        RequestType: "ProcessBatchData",
-                        SiteUrl: '%WebRoot%/' + site,
-                        ListTitle: $.map(options,function( obj ) {
-                            return obj.name;
-                        }).join(','),
-                        OutputType: 'json',
-                        Batch: batchXML.create(options)
-                    }
-                }, params);
+        defaults = {
+            type: 'POST',
+            data: {
+                RequestType: 'ProcessBatchData',
+                OutputType: 'json'
+            }
+        };
 
-            return $.ajax(request);
+        function ProcessBatchData ( options ) {
+            var siteUrl, listTitle, batch, request;
+
+            options = isValidOption(options);
+
+            siteUrl = isValidSite(options);
+
+            batch = createBatchXML.create(options);
+
+            listTitle = $.map(options,function( obj ) {
+                return obj.name;
+            }).join(',');
+
+            request = $.extend(true, defaults, {
+                data: {
+                    SiteUrl: siteUrl,
+                    ListTitle: listTitle,
+                    Batch: batch
+                }
+            });
+
+            return this.getPromise(request);
         }
 
-        $.extend(processBatchData, {
-            createBatchXML: function createBatchXML ( options ) {
-                return batchXML.create(options);
-            }
-        });
 
-        return processBatchData;
+        return ProcessBatchData;
+
+
+
+        function isValidOption ( options ) {
+
+            //Todo: check if passed in object has a supported format
+            if ( !true ) {
+                throw new Error('caps.processBatchData(). Invalid options');
+            }
+
+            return $.isArray(options) ? options : [options];
+        }
+
+        function isValidSite ( options ) {
+            var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
+                site = options[0].site ? options[0].site : baseUrl,
+                path = site.replace(/^\/+|\/+$/g, '');
+
+            if ( !path ) {
+                throw new Error('caps.processBatchData(). Missing required site property and fallback method L_Menu_BaseUrl is undefined.');
+            }
+
+            return '%WebRoot%' + site;
+        }
     }
 );
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','config','common','batchRequest/index','processBatchData/index'],function( require ) {
+define('caps',['require','common','batchRequest/index','processBatchData/index','processBatchData/createBatchXML'],function( require ) {
         
-        var version = '0.3.1',
-            config = require('config'),
+        var version = '0.3.2',
             common = require('common'),
             batchRequest = require('batchRequest/index'),
             processBatchData = require('processBatchData/index'),
-            Caps, deprecated;
+            Caps, deprecated, fn;
 
         Caps = function() {
             this.version = version;
-            this.settings = config.settings;
             this.batchRequest = batchRequest;
             this.processBatchData = processBatchData;
         };
 
         //Todo: Check with Michael if this could be removed in 1.x.x
         deprecated = {
-            ProcessBatchData : processBatchData,
+            ProcessBatchData: processBatchData,
             BatchRequest: batchRequest
         };
 
-        $.extend(true, Caps.prototype, common, deprecated);
+        /**
+         * fn hosts helper function that we don't want to expose in the caps root namespace
+         */
+        fn = {
+            fn: {
+                createBatchXML: function createBatchXML ( options ) {
+                    var batchXML = require('processBatchData/createBatchXML');
+                    return  batchXML.create(options);
+                }
+            }
+        };
 
+        $.extend(true, Caps.prototype, common, fn, deprecated);
 
         //Return public API
         return new Caps();

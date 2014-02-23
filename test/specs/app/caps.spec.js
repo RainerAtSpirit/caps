@@ -12,6 +12,18 @@ describe("caps", function() {
         expect(typeof caps).toBe('object');
     });
 
+    describe("fn", function() {
+
+        describe("createBatchXML", function() {
+
+            it("should be a function", function() {
+                expect(typeof caps.fn.createBatchXML).toBe('function');
+            });
+
+        });
+
+    });
+
     describe("processBatchData", function() {
 
         it("should be a function", function() {
@@ -20,14 +32,6 @@ describe("caps", function() {
 
         it("should have an alias of ProcessBatchData", function() {
             expect(caps.processBatchData).toBe(caps.ProcessBatchData);
-        });
-
-        describe("createBatchXML", function() {
-
-            it("should be a function", function() {
-                expect(typeof caps.ProcessBatchData.createBatchXML).toBe('function');
-            });
-
         });
     });
 

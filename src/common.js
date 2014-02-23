@@ -37,7 +37,8 @@ define(function() {
      */
     function getPromise ( options ) {
 
-        var url = options.url || urlCaps,
+        var urlCaps = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
+            url = options.url || urlCaps,
             defaults = {
                 data: null,
                 dataType: 'json'

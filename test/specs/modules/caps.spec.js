@@ -8,11 +8,6 @@ describe('caps AMD', function() {
         expect(caps.version).toBeDefined();
     });
 
-    it('should have settings object', function() {
-        expect(typeof caps.settings).toBe('object');
-    });
-
-
     it('should have a processBatchData function', function() {
         expect(typeof caps.processBatchData).toBe('function');
     });
