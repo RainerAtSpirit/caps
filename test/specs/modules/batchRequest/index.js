@@ -8,11 +8,5 @@ describe('CreateBatchXML AMD', function() {
         it("should be a function", function() {
             expect(typeof batchRequest).toBe('function');
         });
-
-        it("should be a object", function() {
-            expect(typeof batchRequest).toBe('object');
-        });
-
-
     });
 });

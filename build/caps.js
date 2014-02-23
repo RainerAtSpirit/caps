@@ -14,9 +14,8 @@
     //almond, and your modules will be inlined here
 
 
-
 /**
- * almond 0.2.6 Copyright (c) 2011-2012, The Dojo Foundation All Rights Reserved.
+ * @license almond 0.2.9 Copyright (c) 2011-2014, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
  */
@@ -33,7 +32,8 @@ var requirejs, require, define;
         config = {},
         defining = {},
         hasOwn = Object.prototype.hasOwnProperty,
-        aps = [].slice;
+        aps = [].slice,
+        jsSuffixRegExp = /\.js$/;
 
     function hasProp(obj, prop) {
         return hasOwn.call(obj, prop);
@@ -48,7 +48,7 @@ var requirejs, require, define;
      * @returns {String} normalized name
      */
     function normalize(name, baseName) {
-        var nameParts, nameSegment, mapValue, foundMap,
+        var nameParts, nameSegment, mapValue, foundMap, lastIndex,
             foundI, foundStarMap, starI, i, j, part,
             baseParts = baseName && baseName.split("/"),
             map = config.map,
@@ -66,8 +66,15 @@ var requirejs, require, define;
                 //"one/two/three.js", but we want the directory, "one/two" for
                 //this normalization.
                 baseParts = baseParts.slice(0, baseParts.length - 1);
+                name = name.split('/');
+                lastIndex = name.length - 1;
 
-                name = baseParts.concat(name.split("/"));
+                // Node .js allowance:
+                if (config.nodeIdCompat && jsSuffixRegExp.test(name[lastIndex])) {
+                    name[lastIndex] = name[lastIndex].replace(jsSuffixRegExp, '');
+                }
+
+                name = baseParts.concat(name);
 
                 //start trimDots
                 for (i = 0; i < name.length; i += 1) {
@@ -276,14 +283,14 @@ var requirejs, require, define;
     main = function (name, deps, callback, relName) {
         var cjsModule, depName, ret, map, i,
             args = [],
+            callbackType = typeof callback,
             usingExports;
 
         //Use name if no relName
         relName = relName || name;
 
         //Call the callback to define the module, if necessary.
-        if (typeof callback === 'function') {
-
+        if (callbackType === 'undefined' || callbackType === 'function') {
             //Pull out the defined dependencies and pass the ordered
             //values to the callback.
             //Default to [require, exports, module] if no deps
@@ -314,7 +321,7 @@ var requirejs, require, define;
                 }
             }
 
-            ret = callback.apply(defined[name], args);
+            ret = callback ? callback.apply(defined[name], args) : undefined;
 
             if (name) {
                 //If setting exports via "module" is in play,
@@ -349,6 +356,13 @@ var requirejs, require, define;
         } else if (!deps.splice) {
             //deps is a config object, not an array.
             config = deps;
+            if (config.deps) {
+                req(config.deps, config.callback);
+            }
+            if (!callback) {
+                return;
+            }
+
             if (callback.splice) {
                 //callback is an array, which means it is a dependency list.
                 //Adjust args if there are dependencies
@@ -393,11 +407,7 @@ var requirejs, require, define;
      * the config return value is used.
      */
     req.config = function (cfg) {
-        config = cfg;
-        if (config.deps) {
-            req(config.deps, config.callback);
-        }
-        return req;
+        return req(cfg);
     };
 
     /**
@@ -443,10 +453,10 @@ define('config',[],function() {
         settings: settings
     };
 });
-define('fn',[],function() {
+define('common',[],function() {
     
 
-    function checkNested( ) {
+    function checkNested () {
         var args = Array.prototype.slice.call(arguments);
         var obj = args.shift();
 
@@ -473,29 +483,55 @@ define('fn',[],function() {
         });
     }
 
+    /**
+     * Simple $.ajax wrapper that expects a valid ajax options object and returns a promise
+     * All caps calls are made via this method.
+     *
+     * @param options {Object}
+     * @returns {*} promise
+     */
+    function getPromise ( options ) {
+
+        var url = options.url || urlCaps,
+            defaults = {
+                data: null,
+                dataType: 'json'
+            };
+
+        // Clean up
+        if ( options.url ) {
+            delete options.url;
+        }
+
+        return $.ajax(url, $.extend(true, defaults, options));
+    }
+
     return {
         checkNested: checkNested,
+        getPromise: getPromise,
         format: format
     };
 });
-//Scaffolding template. See src/ProcessBatchData and test/modules/ProcessBatchData for implementation example
-define('BatchRequest/index',['require'],function( require ) {
+//Scaffolding template. See src/processBatchData and test/modules/processBatchData for implementation example
+define('batchRequest/index',['require'],function( require ) {
         
 
-        function BatchRequest ( options, params ) {}
+        function batchRequest ( options, params ) {}
 
-        return BatchRequest;
+        return batchRequest;
     }
 );
-define('ProcessBatchData/createBatchXML',['require','jquery','fn'],function( require ) {
+define('processBatchData/createBatchXML',['require','jquery','common'],function( require ) {
         
         var $ = require('jquery'),
-            fn = require('fn'),
-            ctor = function() {
-                this.methods = "";
-            };
+            common = require('common'),
+            ctor, instance;
 
-        $.extend(ctor.prototype, {
+        ctor = function() {
+            this.methods = "";
+        };
+
+        instance = {
             create: function createBatchXML ( json ) {
                 var options = $.isArray(json) ? json : [json],
                     self = this,
@@ -536,7 +572,7 @@ define('ProcessBatchData/createBatchXML',['require','jquery','fn'],function( req
 
                 for ( i = 0; i < len; i++ ) {
                     var item = items[i];
-                    self.methods += fn.format(
+                    self.methods += this.format(
                         '<Method ID="{methodId}">' +
                             '<SetList>%{list}%</SetList>' +
                             '<SetVar Name="Cmd">{cmd}</SetVar>',
@@ -555,25 +591,27 @@ define('ProcessBatchData/createBatchXML',['require','jquery','fn'],function( req
                 var self = this,
                     prop;
 
-                self.methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
+                self.methods += this.format('<SetVar Name="ID">{itemId}</SetVar>',
                     {itemId: item.Id || 'New'});
 
                 for ( prop in item ) {
                     if ( item.hasOwnProperty(prop) ) {
                         if ( prop !== 'Id' ) {
-                            self.methods += fn.format(
+                            self.methods += this.format(
                                 '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
                                 prop, item[prop]);
                         }
                     }
                 }
             }
-        });
+        };
+
+        $.extend(true, ctor.prototype, common, instance);
 
         return ctor;
     }
 );
-define('ProcessBatchData/index',['require','jquery','config','./createBatchXML'],function( require ) {
+define('processBatchData/index',['require','jquery','config','./createBatchXML'],function( require ) {
         
 
         var $ = require('jquery'),
@@ -581,7 +619,7 @@ define('ProcessBatchData/index',['require','jquery','config','./createBatchXML']
             CreateBatchXML = require('./createBatchXML'),
             batchXML = new CreateBatchXML();
 
-        function ProcessBatchData ( options, params ) {
+        function processBatchData ( options, params ) {
             options = $.isArray(options) ? options : [options];
             var site = options[0].site,
                 request = $.extend(true, {}, config.settings, {
@@ -599,32 +637,48 @@ define('ProcessBatchData/index',['require','jquery','config','./createBatchXML']
             return $.ajax(request);
         }
 
-        $.extend(ProcessBatchData, {
+        $.extend(processBatchData, {
             createBatchXML: function createBatchXML ( options ) {
                 return batchXML.create(options);
             }
         });
 
-        return ProcessBatchData;
+        return processBatchData;
     }
 );
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','config','fn','BatchRequest/index','ProcessBatchData/index'],function( require ) {
+define('caps',['require','config','common','batchRequest/index','processBatchData/index'],function( require ) {
         
-        var config = require('config');
+        var version = '0.3.1',
+            config = require('config'),
+            common = require('common'),
+            batchRequest = require('batchRequest/index'),
+            processBatchData = require('processBatchData/index'),
+            Caps, deprecated;
+
+        Caps = function() {
+            this.version = version;
+            this.settings = config.settings;
+            this.batchRequest = batchRequest;
+            this.processBatchData = processBatchData;
+        };
+
+        //Todo: Check with Michael if this could be removed in 1.x.x
+        deprecated = {
+            ProcessBatchData : processBatchData,
+            BatchRequest: batchRequest
+        };
+
+        $.extend(true, Caps.prototype, common, deprecated);
+
 
         //Return public API
-        return {
-            version: '0.2.0',
-            settings: config.settings,
-            fn: require('fn'),
-            BatchRequest: require('BatchRequest/index'),
-            ProcessBatchData: require('ProcessBatchData/index')
-        };
+        return new Caps();
     }
-);    //Register in the values from the outer closure for common dependencies  as local almond modules
+);
+    //Register in the values from the outer closure for common dependencies  as local almond modules
     define('jquery', function () {
         return $;
     });
