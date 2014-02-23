@@ -1,12 +1,14 @@
 define(function( require ) {
         'use strict';
         var $ = require('jquery'),
-            fn = require('fn'),
-            ctor = function() {
-                this.methods = "";
-            };
+            common = require('common'),
+            Ctor, instance;
 
-        $.extend(ctor.prototype, {
+        Ctor = function() {
+            this.methods = "";
+        };
+
+        instance = {
             create: function createBatchXML ( json ) {
                 var options = $.isArray(json) ? json : [json],
                     self = this,
@@ -47,7 +49,7 @@ define(function( require ) {
 
                 for ( i = 0; i < len; i++ ) {
                     var item = items[i];
-                    self.methods += fn.format(
+                    self.methods += this.format(
                         '<Method ID="{methodId}">' +
                             '<SetList>%{list}%</SetList>' +
                             '<SetVar Name="Cmd">{cmd}</SetVar>',
@@ -55,7 +57,7 @@ define(function( require ) {
                             methodId: (item.Id ? item.Id + ',' + typeMap[batch.method] : typeMap[batch.method]) +
                                 ',' + listName,
                             list: listName,
-                            cmd: batch === 'delete' ? 'Delete' : 'Save'
+                            cmd: batch.method === 'delete' ? 'Delete' : 'Save'
                         }
                     );
                     self.processProps(item);
@@ -66,21 +68,23 @@ define(function( require ) {
                 var self = this,
                     prop;
 
-                self.methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
+                self.methods += this.format('<SetVar Name="ID">{itemId}</SetVar>',
                     {itemId: item.Id || 'New'});
 
                 for ( prop in item ) {
                     if ( item.hasOwnProperty(prop) ) {
                         if ( prop !== 'Id' ) {
-                            self.methods += fn.format(
+                            self.methods += this.format(
                                 '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
                                 prop, item[prop]);
                         }
                     }
                 }
             }
-        });
+        };
 
-        return ctor;
+        $.extend(true, Ctor.prototype, common, instance);
+
+        return new Ctor();
     }
 );
