@@ -4,7 +4,7 @@ define(function( require ) {
         var $ = require('jquery'),
             createBatchXML = require('./createBatchXML'),
             L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
-            defaults, instance;
+            defaults;
 
         defaults = {
             type: 'POST',
@@ -14,7 +14,7 @@ define(function( require ) {
             }
         };
 
-        function ProcessBatchData ( options ) {
+        function ProcessBatchData ( options , params) {
             var siteUrl, listTitle, batch, request;
 
             options = isValidOption(options);
@@ -27,7 +27,7 @@ define(function( require ) {
                 return obj.name;
             }).join(',');
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, defaults, params, {
                 data: {
                     SiteUrl: siteUrl,
                     ListTitle: listTitle,

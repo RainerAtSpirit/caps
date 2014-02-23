@@ -603,7 +603,7 @@ define('processBatchData/index',['require','jquery','./createBatchXML'],function
         var $ = require('jquery'),
             createBatchXML = require('./createBatchXML'),
             L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
-            defaults, instance;
+            defaults;
 
         defaults = {
             type: 'POST',
@@ -613,7 +613,7 @@ define('processBatchData/index',['require','jquery','./createBatchXML'],function
             }
         };
 
-        function ProcessBatchData ( options ) {
+        function ProcessBatchData ( options , params) {
             var siteUrl, listTitle, batch, request;
 
             options = isValidOption(options);
@@ -626,7 +626,7 @@ define('processBatchData/index',['require','jquery','./createBatchXML'],function
                 return obj.name;
             }).join(',');
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, defaults, params, {
                 data: {
                     SiteUrl: siteUrl,
                     ListTitle: listTitle,
@@ -665,21 +665,163 @@ define('processBatchData/index',['require','jquery','./createBatchXML'],function
         }
     }
 );
+define('getListItems/index',['require','jquery'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetListItems',
+                OutputType: 'json'
+            }
+        };
+
+        function GetListItems ( options, params ) {
+            var siteUrl, listTitle, request;
+
+            options = isValidOption(options);
+            siteUrl = isValidSiteUrl(options);
+            listTitle = isValidListTitle(options);
+
+            request = $.extend(true, defaults, params, {
+                data: {
+                    SiteUrl: siteUrl,
+                    ListTitle: listTitle
+                }
+            });
+
+            return this.getPromise(request);
+
+        }
+
+        return GetListItems;
+
+
+        function isValidOption ( options ) {
+
+            //Todo: check if passed in object has a supported format
+
+            if ( !true ) {
+                throw new Error('caps.getListItems(). Invalid options');
+            }
+
+            return options || {};
+        }
+
+        function isValidSiteUrl ( options ) {
+            var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
+                site = options.siteUrl ? options.siteUrl : baseUrl,
+                path = site.replace(/^\/+|\/+$/g, '');
+
+            if ( !path ) {
+                throw new Error('caps.getListItems(). Missing required site property and fallback method L_Menu_BaseUrl is undefined.');
+            }
+
+            return '%WebRoot%/' + path;
+        }
+
+        function isValidListTitle ( options ) {
+
+            if ( !options.listTitle ) {
+                throw new Error('caps.getListItems(). Missing required title property');
+            }
+
+            return options.listTitle;
+        }
+    }
+);
+define('getListInfo/index',['require','jquery'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetListInfo',
+                OutputType: 'json'
+            }
+        };
+
+        function GetListInfo ( options, params ) {
+            var siteUrl, listTitle, request;
+
+            options = isValidOption(options);
+            siteUrl = isValidSiteUrl(options);
+            listTitle = isValidListTitle(options);
+
+            request = $.extend(true, defaults, params, {
+                data: {
+                    SiteUrl: siteUrl,
+                    ListTitle: listTitle
+                }
+            });
+
+            return this.getPromise(request);
+
+        }
+
+        return GetListInfo;
+
+
+        function isValidOption ( options ) {
+
+            //Todo: check if passed in object has a supported format
+
+            if ( !true ) {
+                throw new Error('caps.getListInfo(). Invalid options');
+            }
+
+            return options || {};
+        }
+
+        function isValidSiteUrl ( options ) {
+            var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
+                site = options.SiteUrl  ? options.SiteUrl  : baseUrl,
+                path = site.replace(/^\/+|\/+$/g, '');
+
+            if ( !path ) {
+                throw new Error('caps.getListInfo(). Missing required "siteUrl" property and fallback method L_Menu_BaseUrl is undefined.');
+            }
+
+            return '%WebRoot%/' + path;
+        }
+
+        function isValidListTitle ( options ) {
+
+            if ( !options.listTitle ) {
+                return '';
+            }
+
+            return options.listTitle;
+        }
+    }
+);
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','common','batchRequest/index','processBatchData/index','processBatchData/createBatchXML'],function( require ) {
+define('caps',['require','common','batchRequest/index','processBatchData/index','getListItems/index','getListInfo/index','processBatchData/createBatchXML'],function( require ) {
         
-        var version = '0.3.2',
+        var version = '0.5.1',
             common = require('common'),
+        // todo: Move to methods once depracated have been removed
             batchRequest = require('batchRequest/index'),
             processBatchData = require('processBatchData/index'),
             Caps, deprecated, fn;
 
         Caps = function() {
+            var self = this;
             this.version = version;
             this.batchRequest = batchRequest;
             this.processBatchData = processBatchData;
+            this.getListItems = require('getListItems/index');
+            this.getListInfo = require('getListInfo/index');
         };
 
         //Todo: Check with Michael if this could be removed in 1.x.x
