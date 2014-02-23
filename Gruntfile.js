@@ -122,16 +122,5 @@ module.exports = function( grunt ) {
     // Default task(s).
     grunt.registerTask('build', ['jshint', 'jasmine:modules', 'clean', 'requirejs', 'uglify', 'jasmine:app']);
     grunt.registerTask('default', ['jasmine:modules', 'jasmine:app']);
-    grunt.registerTask('test', 'start web server for jasmine tests in browser', function() {
-           grunt.task.run('jshint');
-           grunt.task.run('jasmine:modules');
-
-           grunt.event.once('connect.test.listening', function( host, port ) {
-               var specRunnerUrl = 'http://' + host + ':' + port + '/_SpecRunner.html';
-               grunt.log.writeln('Jasmine specs available at: ' + specRunnerUrl);
-               require('open')(specRunnerUrl);
-           });
-
-           grunt.task.run('connect:test:keepalive');
-       });
+    grunt.registerTask('test', ['jasmine:modules']);
 };

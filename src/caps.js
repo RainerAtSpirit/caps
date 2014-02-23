@@ -10,6 +10,9 @@ define(function( require ) {
             processBatchData = require('processBatchData/index'),
             Caps, deprecated, fn;
 
+        // Loading ECMA 5 polyfills
+        require('polyfills');
+
         Caps = function() {
             var self = this;
             this.version = version;

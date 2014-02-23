@@ -1,5 +1,5 @@
 /*global jasmine, describe, beforeEach, it, expect, require, EquivalentXml, loadJSONFixtures */
-describe('CreateBatchXML AMD', function() {
+describe('createBatchXML module', function() {
     "use strict";
 
     var createBatchXML = require('processBatchData/createBatchXML');
