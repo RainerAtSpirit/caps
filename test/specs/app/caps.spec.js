@@ -30,20 +30,6 @@ describe("caps", function() {
             expect(typeof caps.processBatchData).toBe('function');
         });
 
-        it("should have an alias of ProcessBatchData", function() {
-            expect(caps.processBatchData).toBe(caps.ProcessBatchData);
-        });
-    });
-
-    describe("batchRequest", function() {
-
-        it("should be a function", function() {
-            expect(typeof caps.BatchRequest).toBe('function');
-        });
-
-        it("should have an alias of BatchRequest", function() {
-            expect(caps.batchRequest).toBe(caps.BatchRequest);
-        });
     });
 
 });

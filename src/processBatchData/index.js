@@ -2,6 +2,7 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
+            fn = require('common'),
             createBatchXML = require('./createBatchXML'),
             L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
             defaults;
@@ -14,18 +15,16 @@ define(function( require ) {
             }
         };
 
-        function ProcessBatchData ( options , params) {
+        function processBatchData ( options, params ) {
             var siteUrl, listTitle, batch, request;
 
-            options = isValidOption(options);
+            options = validOptions(options);
 
-            siteUrl = isValidSite(options);
+            siteUrl = validSiteUrl(options);
 
-            batch = createBatchXML.create(options);
+            listTitle = validListTitle(options);
 
-            listTitle = $.map(options,function( obj ) {
-                return obj.name;
-            }).join(',');
+            batch = createBatchXML(options);
 
             request = $.extend(true, defaults, params, {
                 data: {
@@ -35,15 +34,12 @@ define(function( require ) {
                 }
             });
 
-            return this.getPromise(request);
+            return fn.getPromise(request);
         }
 
+        return processBatchData;
 
-        return ProcessBatchData;
-
-
-
-        function isValidOption ( options ) {
+        function validOptions ( options ) {
 
             //Todo: check if passed in object has a supported format
             if ( !true ) {
@@ -53,16 +49,31 @@ define(function( require ) {
             return $.isArray(options) ? options : [options];
         }
 
-        function isValidSite ( options ) {
+        function validSiteUrl ( options ) {
             var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
-                site = options[0].site ? options[0].site : baseUrl,
+                site = options[0].siteUrl ? options[0].siteUrl : baseUrl,
                 path = site.replace(/^\/+|\/+$/g, '');
 
             if ( !path ) {
-                throw new Error('caps.processBatchData(). Missing required site property and fallback method L_Menu_BaseUrl is undefined.');
+                throw new Error('caps.processBatchData(). Missing required "siteUrl" property and fallback method L_Menu_BaseUrl is undefined.');
             }
 
             return '%WebRoot%' + site;
+        }
+
+        function validListTitle ( options ) {
+            var listTitle = '';
+
+            listTitle = $.map(options,function( obj ) {
+                return obj.listTitle;
+            }).join(',');
+
+
+            if ( !listTitle ) {
+                throw new Error('caps.processBatchData(). Missing required "listTitle" property.');
+            }
+
+            return listTitle;
         }
     }
 );

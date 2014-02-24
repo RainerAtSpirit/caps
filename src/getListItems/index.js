@@ -2,7 +2,7 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
-            cn = require('common'),
+            fn = require('common'),
             convertFilter2Caml = require('./convertFilter2Caml'),
             L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
             defaults;
@@ -35,7 +35,7 @@ define(function( require ) {
                 data: data
             });
 
-            return cn.getPromise(request);
+            return fn.getPromise(request);
 
         }
 
@@ -81,7 +81,7 @@ define(function( require ) {
 
 
             // filter require options.model.fields
-            if ( camlObj.filter && !cn.checkNested(options.model.fields) ) {
+            if ( camlObj.filter && !fn.checkNested(options.model.fields) ) {
                 throw new Error('caps.getListItems({caml.filter: obj}). Missing required model.fields property.');
             }
 
@@ -124,7 +124,7 @@ define(function( require ) {
                 $.each(camlObj.sort, function( index, sortObj ) {
                     sortDir = (sortObj.dir === 'asc');
 
-                    sort.push(cn.format('<FieldRef Name="{0}" Ascending="{1}"/>',
+                    sort.push(fn.format('<FieldRef Name="{0}" Ascending="{1}"/>',
                         sortObj.field,
                         sortDir)
                     );

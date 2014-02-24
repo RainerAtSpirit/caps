@@ -24,12 +24,8 @@ define(function( require ) {
                 'And': 'And Group="true"'
             };
 
-        function convertFilter2Caml ( options ) {
-            options = options || {};
-
+        function convertFilter2Caml ( oFilter, oFields ) {
             var filter = [],
-                fields = options.fields,
-                oFilter = options.filter,
                 caml = [];
 
             filter.push('<Where>');
@@ -38,7 +34,7 @@ define(function( require ) {
                 filter.push(createExpression(oFilter.filters[0]));
             }
             else {
-                convertBinarySearchTree2Caml(options.filter);
+                convertBinarySearchTree2Caml(oFilter);
                 filter.push(caml.join(''));
             }
             filter.push('</Where>');
@@ -93,7 +89,7 @@ define(function( require ) {
                     val = filterObj.value,
                     operator = camlMap[filterObj.operator],
                     field = filterObj.field,
-                    type = fields[filterObj.field].type;
+                    type = oFields[filterObj.field].type;
 
                 return fn.format(filterExpr, operator, field, type, val);
             }

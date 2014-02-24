@@ -13,13 +13,13 @@ describe('createBatchXML module', function() {
 
     describe("createBatchXML", function() {
 
-        it("should be a object", function() {
-            expect(typeof createBatchXML).toBe('object');
+        it("should be a function", function() {
+            expect(typeof createBatchXML).toBe('function');
         });
 
         describe("create", function() {
             it("should be a function", function() {
-                expect(typeof createBatchXML.create).toBe('function');
+                expect(typeof createBatchXML).toBe('function');
             });
 
             describe("single item JSON format", function() {
@@ -33,7 +33,7 @@ describe('createBatchXML module', function() {
                 });
 
                 it("should produce a valid batch xml", function() {
-                    batchXML = EquivalentXml.xml(createBatchXML.create(json));
+                    batchXML = EquivalentXml.xml(createBatchXML(json));
                     resultXML = EquivalentXml.xml(result);
 
                     expect(batchXML).beEquivalentTo(resultXML);
@@ -52,7 +52,7 @@ describe('createBatchXML module', function() {
                 });
 
                 it("should produce a valid batch xml", function() {
-                    batchXML = EquivalentXml.xml(createBatchXML.create(json));
+                    batchXML = EquivalentXml.xml(createBatchXML(json));
                     resultXML = EquivalentXml.xml(result);
 
                     expect(batchXML).beEquivalentTo(resultXML);
@@ -71,7 +71,7 @@ describe('createBatchXML module', function() {
                 });
 
                 it("should produce a valid batch xml", function() {
-                    batchXML = EquivalentXml.xml(createBatchXML.create(json));
+                    batchXML = EquivalentXml.xml(createBatchXML(json));
                     resultXML = EquivalentXml.xml(result);
 
                     expect(batchXML).beEquivalentTo(resultXML);
@@ -90,7 +90,7 @@ describe('createBatchXML module', function() {
                           });
 
                 it("should produce a valid batch xml", function() {
-                    batchXML = EquivalentXml.xml(createBatchXML.create(json));
+                    batchXML = EquivalentXml.xml(createBatchXML(json));
                     resultXML = EquivalentXml.xml(result);
 
                     expect(batchXML).beEquivalentTo(resultXML);

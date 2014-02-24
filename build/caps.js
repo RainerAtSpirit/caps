@@ -498,56 +498,41 @@ define('common',[],function() {
         format: format
     };
 });
-//Scaffolding template. See src/processBatchData and test/modules/processBatchData for implementation example
-define('batchRequest/index',['require'],function( require ) {
-        
-
-        function batchRequest ( options, params ) {}
-
-        return batchRequest;
-    }
-);
 define('processBatchData/createBatchXML',['require','jquery','common'],function( require ) {
         
         var $ = require('jquery'),
-            common = require('common'),
-            Ctor, instance;
+            fn = require('common');
 
-        Ctor = function() {
-            this.methods = "";
-        };
 
-        instance = {
-            create: function createBatchXML ( json ) {
-                var options = $.isArray(json) ? json : [json],
-                    self = this,
-                    i,
-                    len = options.length;
+        function createBatchXML ( json ) {
+            var options = $.isArray(json) ? json : [json],
+                i,
+                len = options.length,
+                methods = "";
 
-                self.methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
+            methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
 
-                for ( i = 0; i < len; i++ ) {
-                    self.processList(options[i]);
-                }
+            for ( i = 0; i < len; i++ ) {
+                processList(options[i]);
+            }
 
-                self.methods += '</ows:Batch></Batch>';
+            methods += '</ows:Batch></Batch>';
 
-                return self.methods;
-            },
-            processList: function( list ) {
-                var self = this,
-                    batches = $.isArray(list.batch) ? list.batch : [list.batch],
+            return methods;
+
+            function processList ( list ) {
+                var batches = $.isArray(list.batch) ? list.batch : [list.batch],
                     i,
                     len = batches.length;
 
                 for ( i = 0; i < len; i++ ) {
-                    self.processItems(list.name, batches[i]);
+                    processItems(list.name, batches[i]);
                 }
 
-            },
-            processItems: function( listName, batch ) {
-                var self = this,
-                    items = $.isArray(batch.items) ? batch.items : [batch.items],
+            }
+
+            function processItems ( listName, batch ) {
+                var items = $.isArray(batch.items) ? batch.items : [batch.items],
                     i,
                     len = items.length,
                     typeMap = {
@@ -558,7 +543,7 @@ define('processBatchData/createBatchXML',['require','jquery','common'],function(
 
                 for ( i = 0; i < len; i++ ) {
                     var item = items[i];
-                    self.methods += this.format(
+                    methods += fn.format(
                         '<Method ID="{methodId}">' +
                             '<SetList>%{list}%</SetList>' +
                             '<SetVar Name="Cmd">{cmd}</SetVar>',
@@ -569,142 +554,33 @@ define('processBatchData/createBatchXML',['require','jquery','common'],function(
                             cmd: batch.method === 'delete' ? 'Delete' : 'Save'
                         }
                     );
-                    self.processProps(item);
-                    self.methods += '</Method>';
+                    processProps(item);
+                    methods += '</Method>';
                 }
-            },
-            processProps: function( item ) {
-                var self = this,
-                    prop;
+            }
 
-                self.methods += this.format('<SetVar Name="ID">{itemId}</SetVar>',
+            function processProps ( item ) {
+                var prop;
+
+                methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
                     {itemId: item.Id || 'New'});
 
                 for ( prop in item ) {
                     if ( item.hasOwnProperty(prop) ) {
                         if ( prop !== 'Id' ) {
-                            self.methods += this.format(
+                            methods += fn.format(
                                 '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
                                 prop, item[prop]);
                         }
                     }
                 }
             }
-        };
 
-        $.extend(true, Ctor.prototype, common, instance);
+        }
 
-        return new Ctor();
+        return createBatchXML;
     }
 );
-define('processBatchData/index',['require','jquery','./createBatchXML'],function( require ) {
-        
-
-        var $ = require('jquery'),
-            createBatchXML = require('./createBatchXML'),
-            L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
-            defaults;
-
-        defaults = {
-            type: 'POST',
-            data: {
-                RequestType: 'ProcessBatchData',
-                OutputType: 'json'
-            }
-        };
-
-        function ProcessBatchData ( options , params) {
-            var siteUrl, listTitle, batch, request;
-
-            options = isValidOption(options);
-
-            siteUrl = isValidSite(options);
-
-            batch = createBatchXML.create(options);
-
-            listTitle = $.map(options,function( obj ) {
-                return obj.name;
-            }).join(',');
-
-            request = $.extend(true, defaults, params, {
-                data: {
-                    SiteUrl: siteUrl,
-                    ListTitle: listTitle,
-                    Batch: batch
-                }
-            });
-
-            return this.getPromise(request);
-        }
-
-
-        return ProcessBatchData;
-
-
-
-        function isValidOption ( options ) {
-
-            //Todo: check if passed in object has a supported format
-            if ( !true ) {
-                throw new Error('caps.processBatchData(). Invalid options');
-            }
-
-            return $.isArray(options) ? options : [options];
-        }
-
-        function isValidSite ( options ) {
-            var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
-                site = options[0].site ? options[0].site : baseUrl,
-                path = site.replace(/^\/+|\/+$/g, '');
-
-            if ( !path ) {
-                throw new Error('caps.processBatchData(). Missing required site property and fallback method L_Menu_BaseUrl is undefined.');
-            }
-
-            return '%WebRoot%' + site;
-        }
-    }
-);
-define('polyfills',[],function() {
-    
-
-    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
-    if (!Array.prototype.lastIndexOf) {
-      Array.prototype.lastIndexOf = function(searchElement /*, fromIndex*/) {
-
-        if (this == null) {
-          throw new TypeError();
-        }
-
-        var n, k,
-            t = Object(this),
-            len = t.length >>> 0;
-        if (len === 0) {
-          return -1;
-        }
-
-        n = len;
-        if (arguments.length > 1) {
-          n = Number(arguments[1]);
-          if (n != n) {
-            n = 0;
-          }
-          else if (n != 0 && n != (1 / 0) && n != -(1 / 0)) {
-            n = (n > 0 || -1) * Math.floor(Math.abs(n));
-          }
-        }
-
-        for (k = n >= 0
-              ? Math.min(n, len - 1)
-              : len - Math.abs(n); k >= 0; k--) {
-          if (k in t && t[k] === searchElement) {
-            return k;
-          }
-        }
-        return -1;
-      };
-    }
-});
 define('getListItems/convertFilter2Caml',['require','jquery','common'],function( require ) {
         
         var $ = require('jquery'),
@@ -731,12 +607,8 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
                 'And': 'And Group="true"'
             };
 
-        function convertFilter2Caml ( options ) {
-            options = options || {};
-
+        function convertFilter2Caml ( oFilter, oFields ) {
             var filter = [],
-                fields = options.fields,
-                oFilter = options.filter,
                 caml = [];
 
             filter.push('<Where>');
@@ -745,7 +617,7 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
                 filter.push(createExpression(oFilter.filters[0]));
             }
             else {
-                convertBinarySearchTree2Caml(options.filter);
+                convertBinarySearchTree2Caml(oFilter);
                 filter.push(caml.join(''));
             }
             filter.push('</Where>');
@@ -800,7 +672,7 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
                     val = filterObj.value,
                     operator = camlMap[filterObj.operator],
                     field = filterObj.field,
-                    type = fields[filterObj.field].type;
+                    type = oFields[filterObj.field].type;
 
                 return fn.format(filterExpr, operator, field, type, val);
             }
@@ -813,11 +685,130 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
 );
 
 
+define('polyfills',[],function() {
+    
+
+    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
+    if (!Array.prototype.lastIndexOf) {
+      Array.prototype.lastIndexOf = function(searchElement /*, fromIndex*/) {
+
+        if (this == null) {
+          throw new TypeError();
+        }
+
+        var n, k,
+            t = Object(this),
+            len = t.length >>> 0;
+        if (len === 0) {
+          return -1;
+        }
+
+        n = len;
+        if (arguments.length > 1) {
+          n = Number(arguments[1]);
+          if (n != n) {
+            n = 0;
+          }
+          else if (n != 0 && n != (1 / 0) && n != -(1 / 0)) {
+            n = (n > 0 || -1) * Math.floor(Math.abs(n));
+          }
+        }
+
+        for (k = n >= 0
+              ? Math.min(n, len - 1)
+              : len - Math.abs(n); k >= 0; k--) {
+          if (k in t && t[k] === searchElement) {
+            return k;
+          }
+        }
+        return -1;
+      };
+    }
+});
+define('processBatchData/index',['require','jquery','common','./createBatchXML'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('common'),
+            createBatchXML = require('./createBatchXML'),
+            L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+            defaults;
+
+        defaults = {
+            type: 'POST',
+            data: {
+                RequestType: 'ProcessBatchData',
+                OutputType: 'json'
+            }
+        };
+
+        function processBatchData ( options, params ) {
+            var siteUrl, listTitle, batch, request;
+
+            options = validOptions(options);
+
+            siteUrl = validSiteUrl(options);
+
+            listTitle = validListTitle(options);
+
+            batch = createBatchXML(options);
+
+            request = $.extend(true, defaults, params, {
+                data: {
+                    SiteUrl: siteUrl,
+                    ListTitle: listTitle,
+                    Batch: batch
+                }
+            });
+
+            return fn.getPromise(request);
+        }
+
+        return processBatchData;
+
+        function validOptions ( options ) {
+
+            //Todo: check if passed in object has a supported format
+            if ( !true ) {
+                throw new Error('caps.processBatchData(). Invalid options');
+            }
+
+            return $.isArray(options) ? options : [options];
+        }
+
+        function validSiteUrl ( options ) {
+            var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
+                site = options[0].siteUrl ? options[0].siteUrl : baseUrl,
+                path = site.replace(/^\/+|\/+$/g, '');
+
+            if ( !path ) {
+                throw new Error('caps.processBatchData(). Missing required "siteUrl" property and fallback method L_Menu_BaseUrl is undefined.');
+            }
+
+            return '%WebRoot%' + site;
+        }
+
+        function validListTitle ( options ) {
+            var listTitle = '';
+
+            listTitle = $.map(options,function( obj ) {
+                return obj.listTitle;
+            }).join(',');
+
+
+            if ( !listTitle ) {
+                throw new Error('caps.processBatchData(). Missing required "listTitle" property.');
+            }
+
+            return listTitle;
+        }
+    }
+);
 define('getListItems/index',['require','jquery','common','./convertFilter2Caml'],function( require ) {
         
 
         var $ = require('jquery'),
-            cn = require('common'),
+            fn = require('common'),
             convertFilter2Caml = require('./convertFilter2Caml'),
             L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
             defaults;
@@ -850,7 +841,7 @@ define('getListItems/index',['require','jquery','common','./convertFilter2Caml']
                 data: data
             });
 
-            return cn.getPromise(request);
+            return fn.getPromise(request);
 
         }
 
@@ -896,7 +887,7 @@ define('getListItems/index',['require','jquery','common','./convertFilter2Caml']
 
 
             // filter require options.model.fields
-            if ( camlObj.filter && !cn.checkNested(options.model.fields) ) {
+            if ( camlObj.filter && !fn.checkNested(options.model.fields) ) {
                 throw new Error('caps.getListItems({caml.filter: obj}). Missing required model.fields property.');
             }
 
@@ -939,7 +930,7 @@ define('getListItems/index',['require','jquery','common','./convertFilter2Caml']
                 $.each(camlObj.sort, function( index, sortObj ) {
                     sortDir = (sortObj.dir === 'asc');
 
-                    sort.push(cn.format('<FieldRef Name="{0}" Ascending="{1}"/>',
+                    sort.push(fn.format('<FieldRef Name="{0}" Ascending="{1}"/>',
                         sortObj.field,
                         sortDir)
                     );
@@ -1043,50 +1034,38 @@ define('getListInfo/index',['require','jquery'],function( require ) {
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','common','batchRequest/index','processBatchData/index','polyfills','getListItems/index','getListInfo/index','processBatchData/createBatchXML','getListItems/convertFilter2Caml'],function( require ) {
+define('caps',['require','jquery','common','processBatchData/createBatchXML','getListItems/convertFilter2Caml','polyfills','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
         
-        var version = '0.6.1',
+        var $ = require('jquery'),
             common = require('common'),
-        // todo: Move to methods once depracated have been removed
-            batchRequest = require('batchRequest/index'),
-            processBatchData = require('processBatchData/index'),
-            Caps, deprecated, fn;
+            version = '0.9.2',
+            fn;
+
+        // fn mixIns to common methods
+        fn = mixIn({
+            createBatchXML: function createBatchXML ( options ) {
+                var batchXML = require('processBatchData/createBatchXML');
+                return  batchXML.create(options);
+            },
+            convertFilter2Caml: require('getListItems/convertFilter2Caml')
+        });
 
         // Loading ECMA 5 polyfills
         require('polyfills');
 
-        Caps = function() {
-            var self = this;
-            this.version = version;
-            this.batchRequest = batchRequest;
-            this.processBatchData = processBatchData;
-            this.getListItems = require('getListItems/index');
-            this.getListInfo = require('getListInfo/index');
+        // Return public API
+        return  {
+            version: version,
+            processBatchData: require('processBatchData/index'),
+            getListItems: require('getListItems/index'),
+            getListInfo: require('getListInfo/index'),
+            fn: fn
         };
 
-        //Todo: Check with Michael if this could be removed in 1.x.x
-        deprecated = {
-            ProcessBatchData: processBatchData,
-            BatchRequest: batchRequest
-        };
-
-        /**
-         * fn hosts helper function that we don't want to expose in the caps root namespace
-         */
-        fn = {
-            fn: {
-                createBatchXML: function createBatchXML ( options ) {
-                    var batchXML = require('processBatchData/createBatchXML');
-                    return  batchXML.create(options);
-                },
-                convertFilter2Caml: require('getListItems/convertFilter2Caml')
-            }
-        };
-
-        $.extend(true, Caps.prototype, common, fn, deprecated);
-
-        //Return public API
-        return new Caps();
+        //Internal
+        function mixIn ( obj ) {
+            return $.extend({}, common, obj);
+        }
     }
 );
     //Register in the values from the outer closure for common dependencies  as local almond modules

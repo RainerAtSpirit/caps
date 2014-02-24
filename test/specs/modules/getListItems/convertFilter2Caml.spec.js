@@ -97,8 +97,9 @@ describe('getListItems module', function() {
     function useFixture ( node ) {
         jsonFilter = expressions[node].filter;
         camlResult = expressions[node].caml;
-        filterOption = $.extend({}, options, { filter: jsonFilter });
-        convertedXML = EquivalentXml.xml(convert(filterOption));
+
+        convertedXML = EquivalentXml.xml(convert(jsonFilter, options.fields));
+
         resultXML = EquivalentXml.xml(camlResult);
     }
 });

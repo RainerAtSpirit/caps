@@ -12,8 +12,4 @@ describe('caps AMD', function() {
         expect(typeof caps.processBatchData).toBe('function');
     });
 
-    it('should have batchRequest function', function() {
-          expect(typeof caps.batchRequest).toBe('function');
-      });
-
 });
