@@ -1,11 +1,445 @@
 {
-    "options": {
-        "fields": {"_CopySource":{"type":"Text"},"_EditMenuTableEnd":{"type":"Computed"},"_EditMenuTableStart":{"type":"Computed"},"_EditMenuTableStart2":{"type":"Computed"},"_HasCopyDestinations":{"type":"Boolean"},"_IsCurrentVersion":{"type":"Boolean"},"_Level":{"type":"Integer"},"_ModerationComments":{"type":"Note"},"_ModerationStatus":{"type":"ModStat"},"_UIVersion":{"type":"Integer"},"_UIVersionString":{"type":"Text"},"AssignedTo":{"type":"User"},"Attachments":{"type":"Attachments"},"Author":{"type":"User"},"BaseName":{"type":"Computed"},"Body":{"type":"Note"},"ContentType":{"type":"Computed"},"ContentTypeId":{"type":"ContentTypeId"},"Created":{"type":"DateTime"},"Created_x0020_Date":{"type":"Lookup"},"DocIcon":{"type":"Computed"},"DueDate":{"type":"DateTime"},"Edit":{"type":"Computed"},"Editor":{"type":"User"},"EncodedAbsUrl":{"type":"Computed"},"File_x0020_Type":{"type":"Text"},"FileDirRef":{"type":"Lookup"},"FileLeafRef":{"type":"File"},"FileRef":{"type":"Lookup"},"FolderChildCount":{"type":"Lookup"},"FSObjType":{"type":"Lookup"},"GUID":{"type":"Guid"},"HTML_x0020_File_x0020_Type":{"type":"Computed"},"ID":{"type":"Counter"},"InstanceID":{"type":"Integer"},"ItemChildCount":{"type":"Lookup"},"Last_x0020_Modified":{"type":"Lookup"},"LinkFilename":{"type":"Computed"},"LinkFilename2":{"type":"Computed"},"LinkFilenameNoMenu":{"type":"Computed"},"LinkTitle":{"type":"Computed"},"LinkTitle2":{"type":"Computed"},"LinkTitleNoMenu":{"type":"Computed"},"MetaInfo":{"type":"Lookup"},"Modified":{"type":"DateTime"},"Order":{"type":"Number"},"owshiddenversion":{"type":"Integer"},"Parent":{"type":"Lookup"},"PercentComplete":{"type":"Number"},"PermMask":{"type":"Computed"},"Predecessors":{"type":"LookupMulti"},"Priority":{"type":"Choice"},"ProgId":{"type":"Lookup"},"ScopeId":{"type":"Lookup"},"SelectTitle":{"type":"Computed"},"ServerUrl":{"type":"Computed"},"SortBehavior":{"type":"Lookup"},"StartDate":{"type":"DateTime"},"Status":{"type":"Choice"},"SyncClientId":{"type":"Lookup"},"TaskGroup":{"type":"User"},"Title":{"type":"Text"},"UniqueId":{"type":"Lookup"},"WorkflowInstanceID":{"type":"Guid"},"WorkflowVersion":{"type":"Integer"}}
-    },
+    "expressions": {
+        "one": {
+            "startswith": {
+                "filter": {
+                    "filters": [
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "T"
+                        }
+                    ],
+                    "logic": "and"
+                },
+                "caml": "<Where><BeginsWith><FieldRef Name='Title' /><Value Type='Text'>T</Value></BeginsWith></Where>"
+            },
 
-    "single": {
-        "filter": {"filters":[{"field":"Title","operator":"startswith","value":"T"}],"logic":"and"},
-        "caml": "<Where><BeginsWith><FieldRef Name='Title' /><Value Type='Text'>T</Value></BeginsWith></Where>"
+            "AorBorC": {
+                "filter": {
+                    "filters": [
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "a"
+                        },
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "b"
+                        },
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "c"
+                        }
+                    ],
+                    "logic": "or"
+                },
+                "caml": "<Where><Or><Or><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>a</Value></BeginsWith><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>b</Value></BeginsWith></Or><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>c</Value></BeginsWith></Or></Where>"
+            },
+
+            "AandB": {
+                "filter": {
+                    "filters": [
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "t"
+                        },
+                        {
+                            "field": "Title",
+                            "operator": "contains",
+                            "value": "4"
+                        }
+                    ],
+                    "logic": "and"
+                },
+                "caml": "<Where><And><BeginsWith><FieldRef Name='Title' /><Value Type='Text'>t</Value></BeginsWith><Contains><FieldRef Name='Title' /><Value Type='Text'>4</Value></Contains></And></Where>"
+            },
+
+            "AorBorCorD": {
+                "filter": {
+                    "filters": [
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "a"
+                        },
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "b"
+                        },
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "c"
+                        },
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "d"
+                        },
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "e"
+                        }
+                    ],
+                    "logic": "or"
+                },
+                "caml": "<Where><Or><Or><Or><Or><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>a</Value></BeginsWith><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>b</Value></BeginsWith></Or><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>c</Value></BeginsWith></Or><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>d</Value></BeginsWith></Or><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>e</Value></BeginsWith></Or></Where>"
+            }
+        },
+        "two": {
+            "AorB_AndC": {
+                "filter": {
+                    "filters": [
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "t"
+                        },
+                        {
+                            "logic": "or",
+                            "filters": [
+                                {
+                                    "field": "Priority",
+                                    "operator": "contains",
+                                    "value": "1"
+                                },
+                                {
+                                    "field": "Priority",
+                                    "operator": "contains",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    ],
+                    "logic": "and"
+                },
+                "caml": "<Where><And><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>t</Value></BeginsWith><Or Group='true'><Contains><FieldRef Name='Priority'/><Value Type='Choice'>1</Value></Contains><Contains><FieldRef Name='Priority'/><Value Type='Choice'>2</Value></Contains></Or></And></Where>"
+            },
+
+            "Aand_BorC": {
+                "filter": {
+                    "filters": [
+                        {
+                            "field": "Title",
+                            "operator": "startswith",
+                            "value": "t"
+                        },
+                        {
+                            "logic": "or",
+                            "filters": [
+                                {
+                                    "field": "Priority",
+                                    "operator": "contains",
+                                    "value": "1"
+                                },
+                                {
+                                    "field": "Priority",
+                                    "operator": "contains",
+                                    "value": "2"
+                                }
+                            ]
+                        }
+                    ],
+                    "logic": "and"
+                },
+                "caml": "<Where><And><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>t</Value></BeginsWith><Or Group='true'><Contains><FieldRef Name='Priority'/><Value Type='Choice'>1</Value></Contains><Contains><FieldRef Name='Priority'/><Value Type='Choice'>2</Value></Contains></Or></And></Where>"
+            },
+
+            "AorBorC_AndD": {
+                "filter": {
+                    "filters": [
+                        {
+                            "logic": "or",
+                            "filters": [
+                                {
+                                    "field": "Title",
+                                    "operator": "startswith",
+                                    "value": "a"
+                                },
+                                {
+                                    "field": "Title",
+                                    "operator": "startswith",
+                                    "value": "b"
+                                },
+                                {
+                                    "field": "Title",
+                                    "operator": "startswith",
+                                    "value": "c"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "Priority",
+                            "operator": "eq",
+                            "value": "(1) High"
+                        }
+                    ],
+                    "logic": "and"
+                },
+                "caml": "<Where><And><Or Group='true'><Or><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>a</Value></BeginsWith><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>b</Value></BeginsWith></Or><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>c</Value></BeginsWith></Or><Eq><FieldRef Name='Priority'/><Value Type='Choice'>(1) High</Value></Eq></And></Where>"
+            }
+
+        },
+        "three": {
+            "AorB_OrCorD_OrEorF": {
+                "filter": {
+                    "filters": [
+                        {
+                            "logic": "or",
+                            "filters": [
+                                {
+                                    "field": "Title",
+                                    "operator": "startswith",
+                                    "value": "a"
+                                },
+                                {
+                                    "field": "Title",
+                                    "operator": "startswith",
+                                    "value": "b"
+                                }
+                            ]
+                        },
+                        {
+                            "logic": "or",
+                            "filters": [
+                                {
+                                    "field": "Priority",
+                                    "operator": "contains",
+                                    "value": "1"
+                                },
+                                {
+                                    "field": "Priority",
+                                    "operator": "contains",
+                                    "value": "2"
+                                }
+                            ]
+                        },
+                        {
+                            "logic": "or",
+                            "filters": [
+                                {
+                                    "field": "Status",
+                                    "operator": "eq",
+                                    "value": "Not Started"
+                                },
+                                {
+                                    "field": "Status",
+                                    "operator": "eq",
+                                    "value": "In Progress"
+                                }
+                            ]
+                        }
+                    ],
+                    "logic": "and"
+                },
+                "caml": "<Where><And><And><Or Group='true'><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>a</Value></BeginsWith><BeginsWith><FieldRef Name='Title'/><Value Type='Text'>b</Value></BeginsWith></Or><Or Group='true'><Contains><FieldRef Name='Priority'/><Value Type='Choice'>1</Value></Contains><Contains><FieldRef Name='Priority'/><Value Type='Choice'>2</Value></Contains></Or></And><Or Group='true'><Eq><FieldRef Name='Status'/><Value Type='Choice'>Not Started</Value></Eq><Eq><FieldRef Name='Status'/><Value Type='Choice'>In Progress</Value></Eq></Or></And></Where>"
+            }
+        }
+    },
+    "options": {
+        "fields": {
+            "_CopySource": {
+                "type": "Text"
+            },
+            "_EditMenuTableEnd": {
+                "type": "Computed"
+            },
+            "_EditMenuTableStart": {
+                "type": "Computed"
+            },
+            "_EditMenuTableStart2": {
+                "type": "Computed"
+            },
+            "_HasCopyDestinations": {
+                "type": "Boolean"
+            },
+            "_IsCurrentVersion": {
+                "type": "Boolean"
+            },
+            "_Level": {
+                "type": "Integer"
+            },
+            "_ModerationComments": {
+                "type": "Note"
+            },
+            "_ModerationStatus": {
+                "type": "ModStat"
+            },
+            "_UIVersion": {
+                "type": "Integer"
+            },
+            "_UIVersionString": {
+                "type": "Text"
+            },
+            "AssignedTo": {
+                "type": "User"
+            },
+            "Attachments": {
+                "type": "Attachments"
+            },
+            "Author": {
+                "type": "User"
+            },
+            "BaseName": {
+                "type": "Computed"
+            },
+            "Body": {
+                "type": "Note"
+            },
+            "ContentType": {
+                "type": "Computed"
+            },
+            "ContentTypeId": {
+                "type": "ContentTypeId"
+            },
+            "Created": {
+                "type": "DateTime"
+            },
+            "Created_x0020_Date": {
+                "type": "Lookup"
+            },
+            "DocIcon": {
+                "type": "Computed"
+            },
+            "DueDate": {
+                "type": "DateTime"
+            },
+            "Edit": {
+                "type": "Computed"
+            },
+            "Editor": {
+                "type": "User"
+            },
+            "EncodedAbsUrl": {
+                "type": "Computed"
+            },
+            "File_x0020_Type": {
+                "type": "Text"
+            },
+            "FileDirRef": {
+                "type": "Lookup"
+            },
+            "FileLeafRef": {
+                "type": "File"
+            },
+            "FileRef": {
+                "type": "Lookup"
+            },
+            "FolderChildCount": {
+                "type": "Lookup"
+            },
+            "FSObjType": {
+                "type": "Lookup"
+            },
+            "GUID": {
+                "type": "Guid"
+            },
+            "HTML_x0020_File_x0020_Type": {
+                "type": "Computed"
+            },
+            "ID": {
+                "type": "Counter"
+            },
+            "InstanceID": {
+                "type": "Integer"
+            },
+            "ItemChildCount": {
+                "type": "Lookup"
+            },
+            "Last_x0020_Modified": {
+                "type": "Lookup"
+            },
+            "LinkFilename": {
+                "type": "Computed"
+            },
+            "LinkFilename2": {
+                "type": "Computed"
+            },
+            "LinkFilenameNoMenu": {
+                "type": "Computed"
+            },
+            "LinkTitle": {
+                "type": "Computed"
+            },
+            "LinkTitle2": {
+                "type": "Computed"
+            },
+            "LinkTitleNoMenu": {
+                "type": "Computed"
+            },
+            "MetaInfo": {
+                "type": "Lookup"
+            },
+            "Modified": {
+                "type": "DateTime"
+            },
+            "Order": {
+                "type": "Number"
+            },
+            "owshiddenversion": {
+                "type": "Integer"
+            },
+            "Parent": {
+                "type": "Lookup"
+            },
+            "PercentComplete": {
+                "type": "Number"
+            },
+            "PermMask": {
+                "type": "Computed"
+            },
+            "Predecessors": {
+                "type": "LookupMulti"
+            },
+            "Priority": {
+                "type": "Choice"
+            },
+            "ProgId": {
+                "type": "Lookup"
+            },
+            "ScopeId": {
+                "type": "Lookup"
+            },
+            "SelectTitle": {
+                "type": "Computed"
+            },
+            "ServerUrl": {
+                "type": "Computed"
+            },
+            "SortBehavior": {
+                "type": "Lookup"
+            },
+            "StartDate": {
+                "type": "DateTime"
+            },
+            "Status": {
+                "type": "Choice"
+            },
+            "SyncClientId": {
+                "type": "Lookup"
+            },
+            "TaskGroup": {
+                "type": "User"
+            },
+            "Title": {
+                "type": "Text"
+            },
+            "UniqueId": {
+                "type": "Lookup"
+            },
+            "WorkflowInstanceID": {
+                "type": "Guid"
+            },
+            "WorkflowVersion": {
+                "type": "Integer"
+            }
+        }
     }
 }
 
