@@ -2,6 +2,7 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
+            fn = require('common'),
             L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
             defaults;
 
@@ -27,7 +28,7 @@ define(function( require ) {
                 }
             });
 
-            return this.getPromise(request);
+            return fn.getPromise(request);
 
         }
 

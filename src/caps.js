@@ -5,7 +5,7 @@ define(function( require ) {
         'use strict';
         var $ = require('jquery'),
             common = require('common'),
-            version = '0.9.2',
+            version = '0.9.3',
             fn;
 
         // fn mixIns to common methods
