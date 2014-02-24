@@ -438,70 +438,10 @@ var requirejs, require, define;
 
 define("almond", function(){});
 
-define('common',[],function() {
-    
-
-    function checkNested () {
-        var args = Array.prototype.slice.call(arguments);
-        var obj = args.shift();
-
-        for ( var i = 0; i < args.length; i++ ) {
-            if ( !obj.hasOwnProperty(args[i]) ) {
-                return false;
-            }
-            obj = obj[args[i]];
-        }
-        return true;
-    }
-
-    function format ( str, col ) {
-        col = typeof col === 'object' ? col : Array.prototype.slice.call(arguments, 1);
-
-        return str.replace(/\{\{|\}\}|\{(\w+)\}/g, function( m, n ) {
-            if ( m === "{{" ) {
-                return "{";
-            }
-            if ( m === "}}" ) {
-                return "}";
-            }
-            return col[n];
-        });
-    }
-
-    /**
-     * Simple $.ajax wrapper that expects a valid ajax options object and returns a promise
-     * All caps calls are made via this method.
-     *
-     * @param options {Object}
-     * @returns {*} promise
-     */
-    function getPromise ( options ) {
-
-        var urlCaps = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
-            url = options.url || urlCaps,
-            defaults = {
-                data: null,
-                dataType: 'json'
-            };
-
-        // Clean up
-        if ( options.url ) {
-            delete options.url;
-        }
-
-        return $.ajax(url, $.extend(true, defaults, options));
-    }
-
-    return {
-        checkNested: checkNested,
-        getPromise: getPromise,
-        format: format
-    };
-});
 /**
  * Based on Durandal http://www.durandaljs.com 2.0 events module
  * Durandal events originate from backbone.js but also combine some ideas from signals.js as well as some additional improvements.
- * Events can be installed into any object and are installed into the `app` module by default for convenient app-wide eventing.
+ * Events can be installed into any object and are installed into the `caps.app` module by default for convenient app-wide eventing.
  * @module events
  * @requires system
  */
@@ -717,15 +657,75 @@ define('events/index',['require'],function( require ) {
 
     return Events;
 });
-define('events',['require','events/index'],function(require) {
+define('app',['require','events/index'],function(require) {
     
 
     var Events = require('events/index'),
-        events = {};
+        app = {};
 
-    Events.includeIn(events);
+    Events.includeIn(app);
 
-    return events;
+    return app;
+});
+define('common',[],function() {
+    
+
+    function checkNested () {
+        var args = Array.prototype.slice.call(arguments);
+        var obj = args.shift();
+
+        for ( var i = 0; i < args.length; i++ ) {
+            if ( !obj.hasOwnProperty(args[i]) ) {
+                return false;
+            }
+            obj = obj[args[i]];
+        }
+        return true;
+    }
+
+    function format ( str, col ) {
+        col = typeof col === 'object' ? col : Array.prototype.slice.call(arguments, 1);
+
+        return str.replace(/\{\{|\}\}|\{(\w+)\}/g, function( m, n ) {
+            if ( m === "{{" ) {
+                return "{";
+            }
+            if ( m === "}}" ) {
+                return "}";
+            }
+            return col[n];
+        });
+    }
+
+    /**
+     * Simple $.ajax wrapper that expects a valid ajax options object and returns a promise
+     * All caps calls are made via this method.
+     *
+     * @param options {Object}
+     * @returns {*} promise
+     */
+    function getPromise ( options ) {
+
+        var urlCaps = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
+            url = options.url || urlCaps,
+            defaults = {
+                data: null,
+                dataType: 'json'
+            };
+
+        // Clean up
+        if ( options.url ) {
+            delete options.url;
+        }
+
+        return $.ajax(url, $.extend(true, defaults, options));
+    }
+
+    return {
+        checkNested: checkNested,
+        getPromise: getPromise,
+        format: format
+    };
 });
 define('processBatchData/createBatchXML',['require','jquery','common'],function( require ) {
         
@@ -1303,21 +1303,19 @@ define('getListInfo/index',['require','jquery','common'],function( require ) {
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','jquery','common','events','processBatchData/createBatchXML','getListItems/convertFilter2Caml','events/index','polyfills','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
+define('caps',['require','jquery','app','common','processBatchData/createBatchXML','getListItems/convertFilter2Caml','events/index','polyfills','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
         
+
         var $ = require('jquery'),
-            common = require('common'),
-            events = require('events'),
-            version = '0.10.4',
+            app = require('app'),
+            version = '0.11.1',
             fn;
 
-        // fn mixIns to common methods
-        fn = mixIn({
+        // extend common methods with methods available at caps.fn namespace
+        fn = $.extend({}, require('common'), {
             createBatchXML: require('processBatchData/createBatchXML'),
             convertFilter2Caml: require('getListItems/convertFilter2Caml'),
-
-            //Including the Events constructor NOT the global events object
-            Events:  require('events/index')
+            Events: require('events/index')
         });
 
         // Loading ECMA 5 polyfills
@@ -1330,13 +1328,8 @@ define('caps',['require','jquery','common','events','processBatchData/createBatc
             getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),
             fn: fn,
-            events: events
+            app: app
         };
-
-        //Internal
-        function mixIn ( obj ) {
-            return $.extend({}, common, obj);
-        }
     }
 );
     //Register in the values from the outer closure for common dependencies  as local almond modules

@@ -3,19 +3,17 @@
  */
 define(function( require ) {
         'use strict';
+
         var $ = require('jquery'),
-            common = require('common'),
-            events = require('events'),
-            version = '0.10.4',
+            app = require('app'),
+            version = '0.11.1',
             fn;
 
-        // fn mixIns to common methods
-        fn = mixIn({
+        // extend common methods with methods available at caps.fn namespace
+        fn = $.extend({}, require('common'), {
             createBatchXML: require('processBatchData/createBatchXML'),
             convertFilter2Caml: require('getListItems/convertFilter2Caml'),
-
-            //Including the Events constructor NOT the global events object
-            Events:  require('events/index')
+            Events: require('events/index')
         });
 
         // Loading ECMA 5 polyfills
@@ -28,12 +26,7 @@ define(function( require ) {
             getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),
             fn: fn,
-            events: events
+            app: app
         };
-
-        //Internal
-        function mixIn ( obj ) {
-            return $.extend({}, common, obj);
-        }
     }
 );

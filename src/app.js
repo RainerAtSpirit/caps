@@ -2,9 +2,9 @@ define(function(require) {
     'use strict';
 
     var Events = require('events/index'),
-        events = {};
+        app = {};
 
-    Events.includeIn(events);
+    Events.includeIn(app);
 
-    return events;
+    return app;
 });
