@@ -1,6 +1,15 @@
 /*global module, require */
 module.exports = function( grunt ) {
     "use strict";
+    // Livereload and connect variables
+    var LIVERELOAD_PORT = 35729,
+        lrSnippet = require('connect-livereload')({
+            port: LIVERELOAD_PORT
+        }),
+        mountFolder = function( connect, dir ) {
+            return connect.static(require('path').resolve(dir));
+        };
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -11,21 +20,30 @@ module.exports = function( grunt ) {
             build: {
                 options: {
                     port: 9001,
-                    base: 'build',
-                    open: true,
-                    keepalive: true
+                    hostname: 'localhost',
+                    base: 'build'
                 }
             },
-            test: {
+            dev: {
                 options: {
-                    port: 8889,
-                    base: './',
-                    keepalive: true
+                    port: 8999,
+                    hostname: 'localhost',
+                    middleware: function( connect ) {
+                        return [lrSnippet, mountFolder(connect, '.')];
+                    }
                 }
             }
         },
+        open: {
+            dev: {
+                path: 'http://localhost:<%= connect.dev.options.port %>/_SpecRunner.html'
+            },
+            build: {
+                path: 'http://localhost:<%= connect.build.options.port %>'
+            }
+        },
         jasmine: {
-            app: {
+            build: {
                 src: 'build/caps.js',
                 options: {
                     vendor: [
@@ -38,7 +56,7 @@ module.exports = function( grunt ) {
                     keepRunner: true
                 }
             },
-            modules: {
+            dev: {
                 src: 'src/**/*.js',
                 options: {
                     specs: 'test/specs/modules/**/*spec.js',
@@ -95,17 +113,18 @@ module.exports = function( grunt ) {
                 dest: 'build/<%= pkg.name %>.min.js'
             }
         },
+
         watch: {
-            options: {
-                livereload: true
-            },
-            app: {
+            build: {
                 files: ['build/caps.js', 'test/specs/app/**/*spec.js'],
                 tasks: ['jasmine:app']
             },
-            modules: {
+            dev: {
                 files: ['Gruntfile.js', 'src/**/*.js', 'test/specs/modules/**/*spec.js'],
-                tasks: ['jasmine:modules']
+                tasks: ['jasmine:dev'],
+                options: {
+                    livereload: true
+                }
             }
         }
     });
@@ -117,10 +136,10 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks("grunt-contrib-watch");
+    grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks("grunt-requirejs");
 
     // Default task(s).
-    grunt.registerTask('build', ['jshint', 'jasmine:modules', 'clean', 'requirejs', 'uglify', 'jasmine:app']);
-    grunt.registerTask('default', ['jasmine:modules', 'jasmine:app']);
-    grunt.registerTask('test', ['jasmine:modules']);
+    grunt.registerTask('build', ['jshint', 'jasmine:dev', 'clean', 'requirejs', 'uglify', 'jasmine:build']);
+    grunt.registerTask('default', ['jshint', 'connect:dev:livereload', 'open:dev', 'watch:dev']);
 };

@@ -36,7 +36,8 @@ define(function( require ) {
                 createBatchXML: function createBatchXML ( options ) {
                     var batchXML = require('processBatchData/createBatchXML');
                     return  batchXML.create(options);
-                }
+                },
+                convertFilter2Caml: require('getListItems/convertFilter2Caml')
             }
         };
 

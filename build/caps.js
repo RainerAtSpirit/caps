@@ -665,6 +665,46 @@ define('processBatchData/index',['require','jquery','./createBatchXML'],function
         }
     }
 );
+define('polyfills',[],function() {
+    
+
+    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
+    if (!Array.prototype.lastIndexOf) {
+      Array.prototype.lastIndexOf = function(searchElement /*, fromIndex*/) {
+
+        if (this == null) {
+          throw new TypeError();
+        }
+
+        var n, k,
+            t = Object(this),
+            len = t.length >>> 0;
+        if (len === 0) {
+          return -1;
+        }
+
+        n = len;
+        if (arguments.length > 1) {
+          n = Number(arguments[1]);
+          if (n != n) {
+            n = 0;
+          }
+          else if (n != 0 && n != (1 / 0) && n != -(1 / 0)) {
+            n = (n > 0 || -1) * Math.floor(Math.abs(n));
+          }
+        }
+
+        for (k = n >= 0
+              ? Math.min(n, len - 1)
+              : len - Math.abs(n); k >= 0; k--) {
+          if (k in t && t[k] === searchElement) {
+            return k;
+          }
+        }
+        return -1;
+      };
+    }
+});
 define('getListItems/index',['require','jquery'],function( require ) {
         
 
@@ -795,6 +835,7 @@ define('getListInfo/index',['require','jquery'],function( require ) {
 
         function isValidListTitle ( options ) {
 
+            // GetListInfo returns info for all lists if called without listTitle
             if ( !options.listTitle ) {
                 return '';
             }
@@ -803,10 +844,118 @@ define('getListInfo/index',['require','jquery'],function( require ) {
         }
     }
 );
+define('getListItems/convertFilter2Caml',['require','jquery','common'],function( require ) {
+        
+        var $ = require('jquery'),
+            fn = require('common'),
+            instance,
+            camlMap = {
+                'eq': 'Eq',
+                'neq': 'Neq',
+                'lt': 'Lt',
+                'lte': 'Leq',
+                'gt': 'Gt',
+                'gte': 'Geq',
+                'startswith': 'BeginsWith',
+                'contains': 'Contains'
+            },
+            logicMap = {
+                'and': 'And',
+                'or': 'Or',
+                'And': 'And',
+                'Or': 'Or'
+            },
+            groupMap = {
+                'Or': 'Or Group="true"',
+                'And': 'And Group="true"'
+            };
+
+        function convertFilter2Caml ( options ) {
+            options = options || {};
+
+            var filter = [],
+                fields = options.fields,
+                oFilter = options.filter,
+                caml = [];
+
+            filter.push('<Where>');
+
+            if ( oFilter && oFilter.filters.length === 1 && oFilter.filters[0].field ) {
+                filter.push(createExpression(oFilter.filters[0]));
+            }
+            else {
+                convertBinarySearchTree2Caml(options.filter);
+                filter.push(caml.join(''));
+            }
+            filter.push('</Where>');
+
+            return (filter.join(''));
+
+            // Internal
+            function convertBinarySearchTree2Caml ( filter, filterID ) {
+                var fID = '',
+                    rfilters = filter.filters,
+                    logic = logicMap[filter.logic || 'And'],
+                    groupID;
+
+                groupID = (typeof filterID !== 'undefined') ? parseInt(filterID.substring(filterID.lastIndexOf('.') + 1), 10) : 0;
+
+                if ( groupID > 0 && groupID % 2 === 0 ) {
+                    caml.unshift(caml[0]);
+                    caml.push(caml[0].replace('<', '</'));
+                }
+                caml.push(fn.format('<{0}>', (typeof filterID !== 'undefined') ? groupMap[logic] : logic));
+
+                $.each(rfilters, function( idx, currFilter ) {
+
+                    fID = filterID ? filterID + '.' + idx.toString() : idx.toString();
+
+                    if ( typeof currFilter.logic !== 'undefined' ) {
+                        convertBinarySearchTree2Caml(currFilter, fID);
+                    }
+                    else {
+                        if ( idx > 1 ) {
+                            var insertIdx = caml.lastIndexOf('<' + groupMap[logic] + '>') + 1;
+
+                            if ( insertIdx === -1 ) {
+                                caml.unshift(fn.format('<{0}>', logic));
+                            }
+                            else {
+                                caml.splice(insertIdx, 0, fn.format('<{0}>', logic));
+                            }
+
+                            caml.push(fn.format('</{0}>', logic));
+                        }
+                        caml.push(createExpression(currFilter));
+                    }
+                });
+
+                caml.push(fn.format('</{0}>', logic));
+            }
+
+            function createExpression ( filterObj ) {
+                filterObj = $.isArray(filterObj) ? filterObj[0] : filterObj;
+                var filterExpr = "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
+                    val = filterObj.value,
+                    operator = camlMap[filterObj.operator],
+                    field = filterObj.field,
+                    type = fields[filterObj.field].type;
+
+                return fn.format(filterExpr, operator, field, type, val);
+            }
+
+        }
+
+        return convertFilter2Caml;
+
+    }
+);
+
+
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','common','batchRequest/index','processBatchData/index','getListItems/index','getListInfo/index','processBatchData/createBatchXML'],function( require ) {
+define('caps',['require','common','batchRequest/index','processBatchData/index','polyfills','getListItems/index','getListInfo/index','processBatchData/createBatchXML','getListItems/convertFilter2Caml'],function( require ) {
         
         var version = '0.5.1',
             common = require('common'),
@@ -814,6 +963,9 @@ define('caps',['require','common','batchRequest/index','processBatchData/index',
             batchRequest = require('batchRequest/index'),
             processBatchData = require('processBatchData/index'),
             Caps, deprecated, fn;
+
+        // Loading ECMA 5 polyfills
+        require('polyfills');
 
         Caps = function() {
             var self = this;
@@ -838,7 +990,8 @@ define('caps',['require','common','batchRequest/index','processBatchData/index',
                 createBatchXML: function createBatchXML ( options ) {
                     var batchXML = require('processBatchData/createBatchXML');
                     return  batchXML.create(options);
-                }
+                },
+                convertFilter2Caml: require('getListItems/convertFilter2Caml')
             }
         };
 
