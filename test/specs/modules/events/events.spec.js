@@ -1,8 +1,8 @@
 /*global jasmine, describe, beforeEach, it, expect, require, xdescribe, xit */
-describe('Events AMD', function() {
+describe('Events', function() {
     "use strict";
 
-    var Events = require('events');
+    var Events = require('events/index');
 
     describe('on and trigger', function() {
         var obj = { counter: 0 };

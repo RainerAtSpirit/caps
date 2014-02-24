@@ -498,193 +498,6 @@ define('common',[],function() {
         format: format
     };
 });
-define('processBatchData/createBatchXML',['require','jquery','common'],function( require ) {
-        
-        var $ = require('jquery'),
-            fn = require('common');
-
-
-        function createBatchXML ( json ) {
-            var options = $.isArray(json) ? json : [json],
-                i,
-                len = options.length,
-                methods = "";
-
-            methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
-
-            for ( i = 0; i < len; i++ ) {
-                processList(options[i]);
-            }
-
-            methods += '</ows:Batch></Batch>';
-
-            return methods;
-
-            function processList ( list ) {
-                var batches = $.isArray(list.batch) ? list.batch : [list.batch],
-                    i,
-                    len = batches.length;
-
-                for ( i = 0; i < len; i++ ) {
-                    processItems(list.name, batches[i]);
-                }
-
-            }
-
-            function processItems ( listName, batch ) {
-                var items = $.isArray(batch.items) ? batch.items : [batch.items],
-                    i,
-                    len = items.length,
-                    typeMap = {
-                        'create': 'New',
-                        'update': 'Update',
-                        'delete': 'Delete'
-                    };
-
-                for ( i = 0; i < len; i++ ) {
-                    var item = items[i];
-                    methods += fn.format(
-                        '<Method ID="{methodId}">' +
-                            '<SetList>%{list}%</SetList>' +
-                            '<SetVar Name="Cmd">{cmd}</SetVar>',
-                        {
-                            methodId: (item.Id ? item.Id + ',' + typeMap[batch.method] : typeMap[batch.method]) +
-                                ',' + listName,
-                            list: listName,
-                            cmd: batch.method === 'delete' ? 'Delete' : 'Save'
-                        }
-                    );
-                    processProps(item);
-                    methods += '</Method>';
-                }
-            }
-
-            function processProps ( item ) {
-                var prop;
-
-                methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
-                    {itemId: item.Id || 'New'});
-
-                for ( prop in item ) {
-                    if ( item.hasOwnProperty(prop) ) {
-                        if ( prop !== 'Id' ) {
-                            methods += fn.format(
-                                '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
-                                prop, item[prop]);
-                        }
-                    }
-                }
-            }
-
-        }
-
-        return createBatchXML;
-    }
-);
-define('getListItems/convertFilter2Caml',['require','jquery','common'],function( require ) {
-        
-        var $ = require('jquery'),
-            fn = require('common'),
-            instance,
-            camlMap = {
-                'eq': 'Eq',
-                'neq': 'Neq',
-                'lt': 'Lt',
-                'lte': 'Leq',
-                'gt': 'Gt',
-                'gte': 'Geq',
-                'startswith': 'BeginsWith',
-                'contains': 'Contains'
-            },
-            logicMap = {
-                'and': 'And',
-                'or': 'Or',
-                'And': 'And',
-                'Or': 'Or'
-            },
-            groupMap = {
-                'Or': 'Or Group="true"',
-                'And': 'And Group="true"'
-            };
-
-        function convertFilter2Caml ( oFilter, oFields ) {
-            var filter = [],
-                caml = [];
-
-            filter.push('<Where>');
-
-            if ( oFilter && oFilter.filters.length === 1 && oFilter.filters[0].field ) {
-                filter.push(createExpression(oFilter.filters[0]));
-            }
-            else {
-                convertBinarySearchTree2Caml(oFilter);
-                filter.push(caml.join(''));
-            }
-            filter.push('</Where>');
-
-            return (filter.join(''));
-
-            // Internal
-            function convertBinarySearchTree2Caml ( filter, filterID ) {
-                var fID = '',
-                    rfilters = filter.filters,
-                    logic = logicMap[filter.logic || 'And'],
-                    groupID;
-
-                groupID = (typeof filterID !== 'undefined') ? parseInt(filterID.substring(filterID.lastIndexOf('.') + 1), 10) : 0;
-
-                if ( groupID > 0 && groupID % 2 === 0 ) {
-                    caml.unshift(caml[0]);
-                    caml.push(caml[0].replace('<', '</'));
-                }
-                caml.push(fn.format('<{0}>', (typeof filterID !== 'undefined') ? groupMap[logic] : logic));
-
-                $.each(rfilters, function( idx, currFilter ) {
-
-                    fID = filterID ? filterID + '.' + idx.toString() : idx.toString();
-
-                    if ( typeof currFilter.logic !== 'undefined' ) {
-                        convertBinarySearchTree2Caml(currFilter, fID);
-                    }
-                    else {
-                        if ( idx > 1 ) {
-                            var insertIdx = caml.lastIndexOf('<' + groupMap[logic] + '>') + 1;
-
-                            if ( insertIdx === -1 ) {
-                                caml.unshift(fn.format('<{0}>', logic));
-                            }
-                            else {
-                                caml.splice(insertIdx, 0, fn.format('<{0}>', logic));
-                            }
-
-                            caml.push(fn.format('</{0}>', logic));
-                        }
-                        caml.push(createExpression(currFilter));
-                    }
-                });
-
-                caml.push(fn.format('</{0}>', logic));
-            }
-
-            function createExpression ( filterObj ) {
-                filterObj = $.isArray(filterObj) ? filterObj[0] : filterObj;
-                var filterExpr = "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
-                    val = filterObj.value,
-                    operator = camlMap[filterObj.operator],
-                    field = filterObj.field,
-                    type = oFields[filterObj.field].type;
-
-                return fn.format(filterExpr, operator, field, type, val);
-            }
-
-        }
-
-        return convertFilter2Caml;
-
-    }
-);
-
-
 /**
  * Based on Durandal http://www.durandaljs.com 2.0 events module
  * Durandal events originate from backbone.js but also combine some ideas from signals.js as well as some additional improvements.
@@ -692,7 +505,7 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
  * @module events
  * @requires system
  */
-define('events',['require'],function( require ) {
+define('events/index',['require'],function( require ) {
     
     var keys = Object.keys,
         eventSplitter = /\s+/,
@@ -904,6 +717,203 @@ define('events',['require'],function( require ) {
 
     return Events;
 });
+define('events',['require','events/index'],function(require) {
+    
+
+    var Events = require('events/index'),
+        events = {};
+
+    Events.includeIn(events);
+
+    return events;
+});
+define('processBatchData/createBatchXML',['require','jquery','common'],function( require ) {
+        
+        var $ = require('jquery'),
+            fn = require('common');
+
+
+        function createBatchXML ( json ) {
+            var options = $.isArray(json) ? json : [json],
+                i,
+                len = options.length,
+                methods = "";
+
+            methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
+
+            for ( i = 0; i < len; i++ ) {
+                processList(options[i]);
+            }
+
+            methods += '</ows:Batch></Batch>';
+
+            return methods;
+
+            function processList ( list ) {
+                var batches = $.isArray(list.batch) ? list.batch : [list.batch],
+                    i,
+                    len = batches.length;
+
+                for ( i = 0; i < len; i++ ) {
+                    processItems(list.name, batches[i]);
+                }
+
+            }
+
+            function processItems ( listName, batch ) {
+                var items = $.isArray(batch.items) ? batch.items : [batch.items],
+                    i,
+                    len = items.length,
+                    typeMap = {
+                        'create': 'New',
+                        'update': 'Update',
+                        'delete': 'Delete'
+                    };
+
+                for ( i = 0; i < len; i++ ) {
+                    var item = items[i];
+                    methods += fn.format(
+                        '<Method ID="{methodId}">' +
+                            '<SetList>%{list}%</SetList>' +
+                            '<SetVar Name="Cmd">{cmd}</SetVar>',
+                        {
+                            methodId: (item.Id ? item.Id + ',' + typeMap[batch.method] : typeMap[batch.method]) +
+                                ',' + listName,
+                            list: listName,
+                            cmd: batch.method === 'delete' ? 'Delete' : 'Save'
+                        }
+                    );
+                    processProps(item);
+                    methods += '</Method>';
+                }
+            }
+
+            function processProps ( item ) {
+                var prop;
+
+                methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
+                    {itemId: item.Id || 'New'});
+
+                for ( prop in item ) {
+                    if ( item.hasOwnProperty(prop) ) {
+                        if ( prop !== 'Id' ) {
+                            methods += fn.format(
+                                '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
+                                prop, item[prop]);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return createBatchXML;
+    }
+);
+define('getListItems/convertFilter2Caml',['require','jquery','common'],function( require ) {
+        
+        var $ = require('jquery'),
+            fn = require('common'),
+            instance,
+            camlMap = {
+                'eq': 'Eq',
+                'neq': 'Neq',
+                'lt': 'Lt',
+                'lte': 'Leq',
+                'gt': 'Gt',
+                'gte': 'Geq',
+                'startswith': 'BeginsWith',
+                'contains': 'Contains'
+            },
+            logicMap = {
+                'and': 'And',
+                'or': 'Or',
+                'And': 'And',
+                'Or': 'Or'
+            },
+            groupMap = {
+                'Or': 'Or Group="true"',
+                'And': 'And Group="true"'
+            };
+
+        function convertFilter2Caml ( oFilter, oFields ) {
+            var filter = [],
+                caml = [];
+
+            filter.push('<Where>');
+
+            if ( oFilter && oFilter.filters.length === 1 && oFilter.filters[0].field ) {
+                filter.push(createExpression(oFilter.filters[0]));
+            }
+            else {
+                convertBinarySearchTree2Caml(oFilter);
+                filter.push(caml.join(''));
+            }
+            filter.push('</Where>');
+
+            return (filter.join(''));
+
+            // Internal
+            function convertBinarySearchTree2Caml ( filter, filterID ) {
+                var fID = '',
+                    rfilters = filter.filters,
+                    logic = logicMap[filter.logic || 'And'],
+                    groupID;
+
+                groupID = (typeof filterID !== 'undefined') ? parseInt(filterID.substring(filterID.lastIndexOf('.') + 1), 10) : 0;
+
+                if ( groupID > 0 && groupID % 2 === 0 ) {
+                    caml.unshift(caml[0]);
+                    caml.push(caml[0].replace('<', '</'));
+                }
+                caml.push(fn.format('<{0}>', (typeof filterID !== 'undefined') ? groupMap[logic] : logic));
+
+                $.each(rfilters, function( idx, currFilter ) {
+
+                    fID = filterID ? filterID + '.' + idx.toString() : idx.toString();
+
+                    if ( typeof currFilter.logic !== 'undefined' ) {
+                        convertBinarySearchTree2Caml(currFilter, fID);
+                    }
+                    else {
+                        if ( idx > 1 ) {
+                            var insertIdx = caml.lastIndexOf('<' + groupMap[logic] + '>') + 1;
+
+                            if ( insertIdx === -1 ) {
+                                caml.unshift(fn.format('<{0}>', logic));
+                            }
+                            else {
+                                caml.splice(insertIdx, 0, fn.format('<{0}>', logic));
+                            }
+
+                            caml.push(fn.format('</{0}>', logic));
+                        }
+                        caml.push(createExpression(currFilter));
+                    }
+                });
+
+                caml.push(fn.format('</{0}>', logic));
+            }
+
+            function createExpression ( filterObj ) {
+                filterObj = $.isArray(filterObj) ? filterObj[0] : filterObj;
+                var filterExpr = "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
+                    val = filterObj.value,
+                    operator = camlMap[filterObj.operator],
+                    field = filterObj.field,
+                    type = oFields[filterObj.field].type;
+
+                return fn.format(filterExpr, operator, field, type, val);
+            }
+
+        }
+
+        return convertFilter2Caml;
+
+    }
+);
+
+
 define('polyfills',[],function() {
     
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
@@ -1293,11 +1303,12 @@ define('getListInfo/index',['require','jquery','common'],function( require ) {
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','jquery','common','processBatchData/createBatchXML','getListItems/convertFilter2Caml','events','polyfills','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
+define('caps',['require','jquery','common','events','processBatchData/createBatchXML','getListItems/convertFilter2Caml','events/index','polyfills','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
         
         var $ = require('jquery'),
             common = require('common'),
-            version = '0.10.1',
+            events = require('events'),
+            version = '0.10.3',
             fn;
 
         // fn mixIns to common methods
@@ -1307,7 +1318,9 @@ define('caps',['require','jquery','common','processBatchData/createBatchXML','ge
                 return  batchXML.create(options);
             },
             convertFilter2Caml: require('getListItems/convertFilter2Caml'),
-            Events:  require('events')
+
+            //Including the Events constructor NOT global the events object
+            Events:  require('events/index')
         });
 
         // Loading ECMA 5 polyfills
@@ -1319,7 +1332,8 @@ define('caps',['require','jquery','common','processBatchData/createBatchXML','ge
             processBatchData: require('processBatchData/index'),
             getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),
-            fn: fn
+            fn: fn,
+            events: events
         };
 
         //Internal

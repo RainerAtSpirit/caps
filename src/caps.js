@@ -5,7 +5,8 @@ define(function( require ) {
         'use strict';
         var $ = require('jquery'),
             common = require('common'),
-            version = '0.10.1',
+            events = require('events'),
+            version = '0.10.3',
             fn;
 
         // fn mixIns to common methods
@@ -15,7 +16,9 @@ define(function( require ) {
                 return  batchXML.create(options);
             },
             convertFilter2Caml: require('getListItems/convertFilter2Caml'),
-            Events:  require('events')
+
+            //Including the Events constructor NOT global the events object
+            Events:  require('events/index')
         });
 
         // Loading ECMA 5 polyfills
@@ -27,7 +30,8 @@ define(function( require ) {
             processBatchData: require('processBatchData/index'),
             getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),
-            fn: fn
+            fn: fn,
+            events: events
         };
 
         //Internal
