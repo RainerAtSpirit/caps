@@ -6,18 +6,15 @@ define(function( require ) {
         var $ = require('jquery'),
             common = require('common'),
             events = require('events'),
-            version = '0.10.3',
+            version = '0.10.4',
             fn;
 
         // fn mixIns to common methods
         fn = mixIn({
-            createBatchXML: function createBatchXML ( options ) {
-                var batchXML = require('processBatchData/createBatchXML');
-                return  batchXML.create(options);
-            },
+            createBatchXML: require('processBatchData/createBatchXML'),
             convertFilter2Caml: require('getListItems/convertFilter2Caml'),
 
-            //Including the Events constructor NOT global the events object
+            //Including the Events constructor NOT the global events object
             Events:  require('events/index')
         });
 
