@@ -961,10 +961,11 @@ define('getListItems/index',['require','jquery','common','./convertFilter2Caml']
 
     }
 );
-define('getListInfo/index',['require','jquery'],function( require ) {
+define('getListInfo/index',['require','jquery','common'],function( require ) {
         
 
         var $ = require('jquery'),
+            fn = require('common'),
             L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
             defaults;
 
@@ -990,7 +991,7 @@ define('getListInfo/index',['require','jquery'],function( require ) {
                 }
             });
 
-            return this.getPromise(request);
+            return fn.getPromise(request);
 
         }
 
@@ -1038,7 +1039,7 @@ define('caps',['require','jquery','common','processBatchData/createBatchXML','ge
         
         var $ = require('jquery'),
             common = require('common'),
-            version = '0.9.2',
+            version = '0.9.3',
             fn;
 
         // fn mixIns to common methods
