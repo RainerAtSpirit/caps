@@ -3,7 +3,7 @@
  */
 define(function( require ) {
         'use strict';
-        var version = '0.5.1',
+        var version = '0.6.1',
             common = require('common'),
         // todo: Move to methods once depracated have been removed
             batchRequest = require('batchRequest/index'),

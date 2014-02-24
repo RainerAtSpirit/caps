@@ -2,6 +2,8 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
+            cn = require('common'),
+            convertFilter2Caml = require('./convertFilter2Caml'),
             L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
             defaults;
 
@@ -13,28 +15,33 @@ define(function( require ) {
             }
         };
 
-        function GetListItems ( options, params ) {
-            var siteUrl, listTitle, request;
+        function getListItems ( options, params ) {
+            var siteUrl, listTitle, data, request;
 
-            options = isValidOption(options);
-            siteUrl = isValidSiteUrl(options);
-            listTitle = isValidListTitle(options);
+            options = validOptions(options);
+
+            //Mandatory data properties
+            data = {
+                SiteUrl: validSiteUrl(options),
+                ListTitle: validListTitle(options)
+            };
+
+            //todo: what about sort, paging, query options?
+            if ( options.caml ) {
+                data.CAML = validCaml(options);
+            }
 
             request = $.extend(true, defaults, params, {
-                data: {
-                    SiteUrl: siteUrl,
-                    ListTitle: listTitle
-                }
+                data: data
             });
 
-            return this.getPromise(request);
+            return cn.getPromise(request);
 
         }
 
-        return GetListItems;
+        return getListItems;
 
-
-        function isValidOption ( options ) {
+        function validOptions ( options ) {
 
             //Todo: check if passed in object has a supported format
 
@@ -45,7 +52,7 @@ define(function( require ) {
             return options || {};
         }
 
-        function isValidSiteUrl ( options ) {
+        function validSiteUrl ( options ) {
             var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
                 site = options.siteUrl ? options.siteUrl : baseUrl,
                 path = site.replace(/^\/+|\/+$/g, '');
@@ -57,7 +64,7 @@ define(function( require ) {
             return '%WebRoot%/' + path;
         }
 
-        function isValidListTitle ( options ) {
+        function validListTitle ( options ) {
 
             if ( !options.listTitle ) {
                 throw new Error('caps.getListItems(). Missing required title property');
@@ -65,5 +72,86 @@ define(function( require ) {
 
             return options.listTitle;
         }
+
+        function validCaml ( options ) {
+            var result = [],
+                sortDir = true,
+                PID = '',
+                camlObj = options.caml;
+
+
+            // filter require options.model.fields
+            if ( camlObj.filter && !cn.checkNested(options.model.fields) ) {
+                throw new Error('caps.getListItems({caml.filter: obj}). Missing required model.fields property.');
+            }
+
+            result.push('<Query>');
+
+            if ( camlObj.sort ) {
+                result.push(sortQuery(camlObj));
+            }
+
+            if ( camlObj.filter ) {
+                var obj = {
+                    filter: camlObj.filter,
+                    fields: options.model.fields
+                };
+
+                result.push(convertFilter2Caml(obj));
+            }
+
+            result.push('</Query>');
+
+//            if ( camlObj.pageSize ) {
+//                   result.push(cn.format('<RowLimit>{0}</RowLimit>',
+//                       camlObj.pageSize));
+//            }
+
+
+            result.push(queryOptions(camlObj));
+
+            return result.join('');
+
+            //Internal
+
+            function sortQuery ( camlObj ) {
+                var sort = [];
+
+                camlObj.sort = $.isArray(camlObj.sort) ? camlObj.sort : [camlObj.sort];
+
+                sort.push('<OrderBy>');
+
+                $.each(camlObj.sort, function( index, sortObj ) {
+                    sortDir = (sortObj.dir === 'asc');
+
+                    sort.push(cn.format('<FieldRef Name="{0}" Ascending="{1}"/>',
+                        sortObj.field,
+                        sortDir)
+                    );
+                });
+
+                sort.push('</OrderBy>');
+
+                return sort.join('');
+            }
+
+            function queryOptions (camlObj) {
+                var query = [];
+
+
+                //todo: QueryOption JSON format?
+                query.push('<QueryOptions>');
+                query.push('<DateInUtc>True</DateInUtc>');
+                query.push('<ExpandUserField>True</ExpandUserField>');
+
+                //todo: Should paging support be build into caps?
+                query.push('</QueryOptions>');
+
+
+                return query.join('');
+            }
+
+        }
+
     }
 );
