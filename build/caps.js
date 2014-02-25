@@ -699,7 +699,9 @@ define('getListItems/convert2Caml',['require','common','./convertFilter2Caml'],f
             convertFilter2Caml = require('./convertFilter2Caml');
 
         function convertCaml ( caml, model ) {
-            var result = [];
+            model = model || {};
+
+            var result = [], fields;
 
             // filter require options.model.fields
             if ( caml.filter && (!model || !fn.checkNested(model.fields)) ) {
