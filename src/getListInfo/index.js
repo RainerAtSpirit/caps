@@ -3,7 +3,7 @@ define(function( require ) {
 
         var $ = require('jquery'),
             fn = require('common'),
-            L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+            validate = require('validate'),
             defaults;
 
         defaults = {
@@ -14,53 +14,33 @@ define(function( require ) {
             }
         };
 
-        function GetListInfo ( options, params ) {
-            var siteUrl, listTitle, request;
+        /**
+         *
+         * @param options {object} getListInfo configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getListInfo ( options, params ) {
+            options = options || {};
 
-            options = isValidOption(options);
-            siteUrl = isValidSiteUrl(options);
-            listTitle = isValidListTitle(options);
+            var request;
 
-            request = $.extend(true, defaults, params, {
+            request = $.extend(true, defaults, {
                 data: {
-                    SiteUrl: siteUrl,
-                    ListTitle: listTitle
+                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'GetListInfo'),
+                    ListTitle: getListTitle(options)
                 }
-            });
+            }, params);
 
             return fn.getPromise(request);
-
         }
 
-        return GetListInfo;
+        return getListInfo;
 
 
-        function isValidOption ( options ) {
+        // GetListInfo returns info for all lists if called without listTitle
+        function getListTitle ( options ) {
 
-            //Todo: check if passed in object has a supported format
-
-            if ( !true ) {
-                throw new Error('caps.getListInfo(). Invalid options');
-            }
-
-            return options || {};
-        }
-
-        function isValidSiteUrl ( options ) {
-            var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
-                site = options.SiteUrl  ? options.SiteUrl  : baseUrl,
-                path = site.replace(/^\/+|\/+$/g, '');
-
-            if ( !path ) {
-                throw new Error('caps.getListInfo(). Missing required "siteUrl" property and fallback method L_Menu_BaseUrl is undefined.');
-            }
-
-            return '%WebRoot%/' + path;
-        }
-
-        function isValidListTitle ( options ) {
-
-            // GetListInfo returns info for all lists if called without listTitle
             if ( !options.listTitle ) {
                 return '';
             }

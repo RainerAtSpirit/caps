@@ -5,8 +5,7 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
-            app = require('app'),
-            version = '0.11.1',
+            version = '0.12.1',
             fn;
 
         // extend common methods with methods available at caps.fn namespace
@@ -22,11 +21,11 @@ define(function( require ) {
         // Return public API
         return  {
             version: version,
+            app: require('app'),
             processBatchData: require('processBatchData/index'),
             getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),
-            fn: fn,
-            app: app
+            fn: fn
         };
     }
 );

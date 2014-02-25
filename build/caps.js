@@ -438,235 +438,6 @@ var requirejs, require, define;
 
 define("almond", function(){});
 
-/**
- * Based on Durandal http://www.durandaljs.com 2.0 events module
- * Durandal events originate from backbone.js but also combine some ideas from signals.js as well as some additional improvements.
- * Events can be installed into any object and are installed into the `caps.app` module by default for convenient app-wide eventing.
- * @module events
- * @requires system
- */
-define('events/index',['require'],function( require ) {
-    
-    var keys = Object.keys,
-        eventSplitter = /\s+/,
-        Events = function() {
-        },
-
-        /**
-         * Represents an event subscription.
-         * @class Subscription
-         */
-            Subscription = function( owner, events ) {
-            this.owner = owner;
-            this.events = events;
-        };
-
-    /**
-     * Attaches a callback to the event subscription.
-     * @method then
-     * @param {function} callback The callback function to invoke when the event is triggered.
-     * @param {object} [context] An object to use as `this` when invoking the `callback`.
-     * @chainable
-     */
-    Subscription.prototype.then = function( callback, context ) {
-        this.callback = callback || this.callback;
-        this.context = context || this.context;
-
-        if ( !this.callback ) {
-            return this;
-        }
-
-        this.owner.on(this.events, this.callback, this.context);
-        return this;
-    };
-
-    /**
-     * Attaches a callback to the event subscription.
-     * @method on
-     * @param {function} [callback] The callback function to invoke when the event is triggered. If `callback` is not provided, the previous callback will be re-activated.
-     * @param {object} [context] An object to use as `this` when invoking the `callback`.
-     * @chainable
-     */
-    Subscription.prototype.on = Subscription.prototype.then;
-
-    /**
-     * Cancels the subscription.
-     * @method off
-     * @chainable
-     */
-    Subscription.prototype.off = function() {
-        this.owner.off(this.events, this.callback, this.context);
-        return this;
-    };
-
-    /**
-     * Creates an object with eventing capabilities.
-     * @class Events
-     */
-
-    /**
-     * Creates a subscription or registers a callback for the specified event.
-     * @method on
-     * @param {string} events One or more events, separated by white space.
-     * @param {function} [callback] The callback function to invoke when the event is triggered. If `callback` is not provided, a subscription instance is returned.
-     * @param {object} [context] An object to use as `this` when invoking the `callback`.
-     * @return {Subscription|Events} A subscription is returned if no callback is supplied, otherwise the events object is returned for chaining.
-     */
-    Events.prototype.on = function on( events, callback, context ) {
-        var calls, event, list;
-
-        if ( !callback ) {
-            return new Subscription(this, events);
-        }
-        else {
-            calls = this.callbacks || (this.callbacks = {});
-            events = events.split(eventSplitter);
-
-            /*jshint boss:true */
-            while ( event = events.shift() ) {
-                list = calls[event] || (calls[event] = []);
-                list.push(callback, context);
-            }
-
-            return this;
-        }
-    };
-
-    /**
-     * Removes the callbacks for the specified events.
-     * @method off
-     * @param {string} [events] One or more events, separated by white space to turn off. If no events are specified, then the callbacks will be removed.
-     * @param {function} [callback] The callback function to remove. If `callback` is not provided, all callbacks for the specified events will be removed.
-     * @param {object} [context] The object that was used as `this`. Callbacks with this context will be removed.
-     * @chainable
-     */
-    Events.prototype.off = function off( events, callback, context ) {
-        var event, calls, list, i;
-
-        // No events
-        if ( !(calls = this.callbacks) ) {
-            return this;
-        }
-
-        //removing all
-        if ( !(events || callback || context) ) {
-            delete this.callbacks;
-            return this;
-        }
-
-        events = events ? events.split(eventSplitter) : keys(calls);
-
-        /*jshint boss:true */
-        // Loop through the callback list, splicing where appropriate.
-        while ( event = events.shift() ) {
-            if ( !(list = calls[event]) || !(callback || context) ) {
-                delete calls[event];
-                continue;
-            }
-
-            for ( i = list.length - 2; i >= 0; i -= 2 ) {
-                if ( !(callback && list[i] !== callback || context && list[i + 1] !== context) ) {
-                    list.splice(i, 2);
-                }
-            }
-        }
-
-        return this;
-    };
-
-    /**
-     * Triggers the specified events.
-     * @method trigger
-     * @param {string} [events] One or more events, separated by white space to trigger.
-     * @chainable
-     */
-    Events.prototype.trigger = function trigger( events ) {
-        var event, calls, list, i, length, args, all, rest;
-        if ( !(calls = this.callbacks) ) {
-            return this;
-        }
-
-        rest = [];
-        events = events.split(eventSplitter);
-        for ( i = 1, length = arguments.length; i < length; i++ ) {
-            rest[i - 1] = arguments[i];
-        }
-
-        /*jshint boss:true */
-        // For each event, walk through the list of callbacks twice, first to
-        // trigger the event, then to trigger any `"all"` callbacks.
-        while ( event = events.shift() ) {
-            // Copy callback lists to prevent modification.
-            if ( all = calls.all ) {
-                all = all.slice();
-            }
-
-            if ( list = calls[event] ) {
-                list = list.slice();
-            }
-
-            // Execute event callbacks.
-            if ( list ) {
-                for ( i = 0, length = list.length; i < length; i += 2 ) {
-                    list[i].apply(list[i + 1] || this, rest);
-                }
-            }
-
-            // Execute "all" callbacks.
-            if ( all ) {
-                args = [event].concat(rest);
-                for ( i = 0, length = all.length; i < length; i += 2 ) {
-                    all[i].apply(all[i + 1] || this, args);
-                }
-            }
-        }
-
-        return this;
-    };
-
-    /**
-     * Creates a function that will trigger the specified events when called. Simplifies proxying jQuery (or other) events through to the events object.
-     * @method proxy
-     * @param {string} events One or more events, separated by white space to trigger by invoking the returned function.
-     * @return {function} Calling the function will invoke the previously specified events on the events object.
-     */
-    Events.prototype.proxy = function proxy( events ) {
-        var that = this;
-        return (function( arg ) {
-            that.trigger(events, arg);
-        });
-    };
-
-    /**
-     * Creates an object with eventing capabilities.
-     * @class EventsModule
-     * @static
-     */
-
-    /**
-     * Adds eventing capabilities to the specified object.
-     * @method includeIn
-     * @param {object} targetObject The object to add eventing capabilities to.
-     */
-    Events.includeIn = function( targetObject ) {
-        targetObject.on = Events.prototype.on;
-        targetObject.off = Events.prototype.off;
-        targetObject.trigger = Events.prototype.trigger;
-        targetObject.proxy = Events.prototype.proxy;
-    };
-
-    return Events;
-});
-define('app',['require','events/index'],function(require) {
-    
-
-    var Events = require('events/index'),
-        app = {};
-
-    Events.includeIn(app);
-
-    return app;
-});
 define('common',[],function() {
     
 
@@ -914,6 +685,225 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
 );
 
 
+/**
+ * Based on Durandal http://www.durandaljs.com 2.0 events module
+ * Durandal events originate from backbone.js but also combine some ideas from signals.js as well as some additional improvements.
+ * Events can be installed into any object and are installed into the `caps.app` module by default for convenient app-wide eventing.
+ * @module events
+ * @requires system
+ */
+define('events/index',['require'],function( require ) {
+    
+    var keys = Object.keys,
+        eventSplitter = /\s+/,
+        Events = function() {
+        },
+
+        /**
+         * Represents an event subscription.
+         * @class Subscription
+         */
+            Subscription = function( owner, events ) {
+            this.owner = owner;
+            this.events = events;
+        };
+
+    /**
+     * Attaches a callback to the event subscription.
+     * @method then
+     * @param {function} callback The callback function to invoke when the event is triggered.
+     * @param {object} [context] An object to use as `this` when invoking the `callback`.
+     * @chainable
+     */
+    Subscription.prototype.then = function( callback, context ) {
+        this.callback = callback || this.callback;
+        this.context = context || this.context;
+
+        if ( !this.callback ) {
+            return this;
+        }
+
+        this.owner.on(this.events, this.callback, this.context);
+        return this;
+    };
+
+    /**
+     * Attaches a callback to the event subscription.
+     * @method on
+     * @param {function} [callback] The callback function to invoke when the event is triggered. If `callback` is not provided, the previous callback will be re-activated.
+     * @param {object} [context] An object to use as `this` when invoking the `callback`.
+     * @chainable
+     */
+    Subscription.prototype.on = Subscription.prototype.then;
+
+    /**
+     * Cancels the subscription.
+     * @method off
+     * @chainable
+     */
+    Subscription.prototype.off = function() {
+        this.owner.off(this.events, this.callback, this.context);
+        return this;
+    };
+
+    /**
+     * Creates an object with eventing capabilities.
+     * @class Events
+     */
+
+    /**
+     * Creates a subscription or registers a callback for the specified event.
+     * @method on
+     * @param {string} events One or more events, separated by white space.
+     * @param {function} [callback] The callback function to invoke when the event is triggered. If `callback` is not provided, a subscription instance is returned.
+     * @param {object} [context] An object to use as `this` when invoking the `callback`.
+     * @return {Subscription|Events} A subscription is returned if no callback is supplied, otherwise the events object is returned for chaining.
+     */
+    Events.prototype.on = function on( events, callback, context ) {
+        var calls, event, list;
+
+        if ( !callback ) {
+            return new Subscription(this, events);
+        }
+        else {
+            calls = this.callbacks || (this.callbacks = {});
+            events = events.split(eventSplitter);
+
+            /*jshint boss:true */
+            while ( event = events.shift() ) {
+                list = calls[event] || (calls[event] = []);
+                list.push(callback, context);
+            }
+
+            return this;
+        }
+    };
+
+    /**
+     * Removes the callbacks for the specified events.
+     * @method off
+     * @param {string} [events] One or more events, separated by white space to turn off. If no events are specified, then the callbacks will be removed.
+     * @param {function} [callback] The callback function to remove. If `callback` is not provided, all callbacks for the specified events will be removed.
+     * @param {object} [context] The object that was used as `this`. Callbacks with this context will be removed.
+     * @chainable
+     */
+    Events.prototype.off = function off( events, callback, context ) {
+        var event, calls, list, i;
+
+        // No events
+        if ( !(calls = this.callbacks) ) {
+            return this;
+        }
+
+        //removing all
+        if ( !(events || callback || context) ) {
+            delete this.callbacks;
+            return this;
+        }
+
+        events = events ? events.split(eventSplitter) : keys(calls);
+
+        /*jshint boss:true */
+        // Loop through the callback list, splicing where appropriate.
+        while ( event = events.shift() ) {
+            if ( !(list = calls[event]) || !(callback || context) ) {
+                delete calls[event];
+                continue;
+            }
+
+            for ( i = list.length - 2; i >= 0; i -= 2 ) {
+                if ( !(callback && list[i] !== callback || context && list[i + 1] !== context) ) {
+                    list.splice(i, 2);
+                }
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Triggers the specified events.
+     * @method trigger
+     * @param {string} [events] One or more events, separated by white space to trigger.
+     * @chainable
+     */
+    Events.prototype.trigger = function trigger( events ) {
+        var event, calls, list, i, length, args, all, rest;
+        if ( !(calls = this.callbacks) ) {
+            return this;
+        }
+
+        rest = [];
+        events = events.split(eventSplitter);
+        for ( i = 1, length = arguments.length; i < length; i++ ) {
+            rest[i - 1] = arguments[i];
+        }
+
+        /*jshint boss:true */
+        // For each event, walk through the list of callbacks twice, first to
+        // trigger the event, then to trigger any `"all"` callbacks.
+        while ( event = events.shift() ) {
+            // Copy callback lists to prevent modification.
+            if ( all = calls.all ) {
+                all = all.slice();
+            }
+
+            if ( list = calls[event] ) {
+                list = list.slice();
+            }
+
+            // Execute event callbacks.
+            if ( list ) {
+                for ( i = 0, length = list.length; i < length; i += 2 ) {
+                    list[i].apply(list[i + 1] || this, rest);
+                }
+            }
+
+            // Execute "all" callbacks.
+            if ( all ) {
+                args = [event].concat(rest);
+                for ( i = 0, length = all.length; i < length; i += 2 ) {
+                    all[i].apply(all[i + 1] || this, args);
+                }
+            }
+        }
+
+        return this;
+    };
+
+    /**
+     * Creates a function that will trigger the specified events when called. Simplifies proxying jQuery (or other) events through to the events object.
+     * @method proxy
+     * @param {string} events One or more events, separated by white space to trigger by invoking the returned function.
+     * @return {function} Calling the function will invoke the previously specified events on the events object.
+     */
+    Events.prototype.proxy = function proxy( events ) {
+        var that = this;
+        return (function( arg ) {
+            that.trigger(events, arg);
+        });
+    };
+
+    /**
+     * Creates an object with eventing capabilities.
+     * @class EventsModule
+     * @static
+     */
+
+    /**
+     * Adds eventing capabilities to the specified object.
+     * @method includeIn
+     * @param {object} targetObject The object to add eventing capabilities to.
+     */
+    Events.includeIn = function( targetObject ) {
+        targetObject.on = Events.prototype.on;
+        targetObject.off = Events.prototype.off;
+        targetObject.trigger = Events.prototype.trigger;
+        targetObject.proxy = Events.prototype.proxy;
+    };
+
+    return Events;
+});
 define('polyfills',[],function() {
     
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
@@ -993,13 +983,76 @@ define('polyfills',[],function() {
         };
     }
 });
-define('processBatchData/index',['require','jquery','common','./createBatchXML'],function( require ) {
+define('app',['require','events/index'],function(require) {
+    
+
+    var Events = require('events/index'),
+        app = {};
+
+    Events.includeIn(app);
+
+    return app;
+});
+define('validate',['require','common'],function( require ) {
+    
+    var fn = require('common'),
+        L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+        messages = {
+            getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
+            getListTitle: 'caps.{0}(). Missing required "listTitle" property'
+        };
+
+    /**
+     * Check if listTitle exists and throw error
+     * @param listTitle {string}
+     * @param funcName {string} function name for error message
+     * @returns {*} listTitle
+     */
+    function getListTitle ( listTitle, funcName ) {
+        var errMessage = messages.getListTitle;
+            errMessage = fn.format(errMessage, funcName || '');
+
+              if ( !listTitle ) {
+                  throw new Error(errMessage);
+              }
+
+              return listTitle;
+          }
+
+    /**
+     * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
+     * @param siteUrl {string}
+     * @param funcName {string}
+     * @returns {string} siteUrl
+     */
+    function getSiteUrl ( siteUrl, funcName ) {
+
+        var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
+            errMessage = messages.getSiteUrl,
+            site = siteUrl ? siteUrl : baseUrl,
+            path = site.replace(/^\/+|\/+$/g, '');
+
+        errMessage = fn.format(errMessage, funcName || '');
+
+        if ( !path ) {
+            throw new Error(errMessage);
+        }
+
+        return '%WebRoot%/' + path;
+    }
+
+    return {
+        getListTitle: getListTitle,
+        getSiteUrl: getSiteUrl
+    };
+});
+define('processBatchData/index',['require','jquery','common','validate','./createBatchXML'],function( require ) {
         
 
         var $ = require('jquery'),
             fn = require('common'),
+            validate = require('validate'),
             createBatchXML = require('./createBatchXML'),
-            L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
             defaults;
 
         defaults = {
@@ -1010,59 +1063,43 @@ define('processBatchData/index',['require','jquery','common','./createBatchXML']
             }
         };
 
+        /**
+         *
+         * @param options {object} processBatchData configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
         function processBatchData ( options, params ) {
+            options = options || {};
+
             var siteUrl, listTitle, batch, request;
 
-            options = validOptions(options);
+            siteUrl = validate.getSiteUrl(options.siteUrl, 'processBatchData');
 
-            siteUrl = validSiteUrl(options);
+            listTitle = getListTitle(options);
 
-            listTitle = validListTitle(options);
+            batch = createBatchXML(validateBatch(options));
 
-            batch = createBatchXML(options);
-
-            request = $.extend(true, defaults, params, {
+            request = $.extend(true, defaults, {
                 data: {
                     SiteUrl: siteUrl,
                     ListTitle: listTitle,
                     Batch: batch
                 }
-            });
+            }, params);
 
             return fn.getPromise(request);
         }
 
         return processBatchData;
 
-        function validOptions ( options ) {
-
-            //Todo: check if passed in object has a supported format
-            if ( !true ) {
-                throw new Error('caps.processBatchData(). Invalid options');
-            }
-
-            return $.isArray(options) ? options : [options];
-        }
-
-        function validSiteUrl ( options ) {
-            var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
-                site = options[0].siteUrl ? options[0].siteUrl : baseUrl,
-                path = site.replace(/^\/+|\/+$/g, '');
-
-            if ( !path ) {
-                throw new Error('caps.processBatchData(). Missing required "siteUrl" property and fallback method L_Menu_BaseUrl is undefined.');
-            }
-
-            return '%WebRoot%' + site;
-        }
-
-        function validListTitle ( options ) {
+        //Internal
+        function getListTitle ( options ) {
             var listTitle = '';
 
             listTitle = $.map(options,function( obj ) {
                 return obj.listTitle;
             }).join(',');
-
 
             if ( !listTitle ) {
                 throw new Error('caps.processBatchData(). Missing required "listTitle" property.');
@@ -1070,15 +1107,24 @@ define('processBatchData/index',['require','jquery','common','./createBatchXML']
 
             return listTitle;
         }
+
+        function validateBatch ( options ) {
+
+            if ( !options && !options.batch ) {
+                throw new Error('caps.processBatchData(). Missing required "batch" property.');
+            }
+
+            return options.batch;
+        }
     }
 );
-define('getListItems/index',['require','jquery','common','./convertFilter2Caml'],function( require ) {
+define('getListItems/index',['require','jquery','common','validate','./convertFilter2Caml'],function( require ) {
         
 
         var $ = require('jquery'),
             fn = require('common'),
+            validate = require('validate'),
             convertFilter2Caml = require('./convertFilter2Caml'),
-            L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
             defaults;
 
         defaults = {
@@ -1089,70 +1135,64 @@ define('getListItems/index',['require','jquery','common','./convertFilter2Caml']
             }
         };
 
+        /**
+         *
+         * @param options {object} getListItems configuration object
+         * @param params {objects} ajax settings overwriting default and options
+         * @returns {*} promise
+         */
         function getListItems ( options, params ) {
-            var siteUrl, listTitle, data, request;
+            options = options || {};
 
-            options = validOptions(options);
+            var data, request, getListItemsPromise;
 
-            //Mandatory data properties
             data = {
-                SiteUrl: validSiteUrl(options),
-                ListTitle: validListTitle(options)
+                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListItems'),
+                ListTitle: validate.getListTitle(options.listTitle, 'getListItems')
             };
 
-            //todo: what about sort, paging, query options?
             if ( options.caml ) {
-                data.CAML = validCaml(options);
+                data.CAML = getCaml(options);
             }
 
-            request = $.extend(true, defaults, params, {
+            request = $.extend(true, defaults, {
                 data: data
-            });
+            }, params);
 
-            return fn.getPromise(request);
 
+            getListItemsPromise = fn.getPromise(request);
+
+            if (options.itemsAsArray){
+                getListItemsPromise.then((function(result){
+                    return getItemsArray(result);
+                }))();
+            }
+
+            return getListItemsPromise;
         }
 
         return getListItems;
 
-        function validOptions ( options ) {
+        // Internal
 
-            //Todo: check if passed in object has a supported format
+        function getItemsArray ( json ) {
+            var hasItems = fn.checkNested(json.NewDataSet.GetListItems.listitems["rs:data"]["z:row"]),
+                items;
 
-            if ( !true ) {
-                throw new Error('caps.getListItems(). Invalid options');
+            if ( hasItems ) {
+                items = json.NewDataSet.GetListItems.listitems["rs:data"]["z:row"];
+                items = $.isArray(items) ? items : [items];
             }
 
-            return options || {};
+            return items;
+
         }
 
-        function validSiteUrl ( options ) {
-            var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
-                site = options.siteUrl ? options.siteUrl : baseUrl,
-                path = site.replace(/^\/+|\/+$/g, '');
-
-            if ( !path ) {
-                throw new Error('caps.getListItems(). Missing required site property and fallback method L_Menu_BaseUrl is undefined.');
-            }
-
-            return '%WebRoot%/' + path;
-        }
-
-        function validListTitle ( options ) {
-
-            if ( !options.listTitle ) {
-                throw new Error('caps.getListItems(). Missing required title property');
-            }
-
-            return options.listTitle;
-        }
-
-        function validCaml ( options ) {
+        function getCaml ( options ) {
             var result = [],
                 sortDir = true,
                 PID = '',
                 camlObj = options.caml;
-
 
             // filter require options.model.fields
             if ( camlObj.filter && !fn.checkNested(options.model.fields) ) {
@@ -1181,7 +1221,6 @@ define('getListItems/index',['require','jquery','common','./convertFilter2Caml']
 //                       camlObj.pageSize));
 //            }
 
-
             result.push(queryOptions(camlObj));
 
             return result.join('');
@@ -1209,9 +1248,8 @@ define('getListItems/index',['require','jquery','common','./convertFilter2Caml']
                 return sort.join('');
             }
 
-            function queryOptions (camlObj) {
+            function queryOptions ( camlObj ) {
                 var query = [];
-
 
                 //todo: QueryOption JSON format?
                 query.push('<QueryOptions>');
@@ -1221,7 +1259,6 @@ define('getListItems/index',['require','jquery','common','./convertFilter2Caml']
                 //todo: Should paging support be build into caps?
                 query.push('</QueryOptions>');
 
-
                 return query.join('');
             }
 
@@ -1229,12 +1266,12 @@ define('getListItems/index',['require','jquery','common','./convertFilter2Caml']
 
     }
 );
-define('getListInfo/index',['require','jquery','common'],function( require ) {
+define('getListInfo/index',['require','jquery','common','validate'],function( require ) {
         
 
         var $ = require('jquery'),
             fn = require('common'),
-            L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+            validate = require('validate'),
             defaults;
 
         defaults = {
@@ -1245,53 +1282,33 @@ define('getListInfo/index',['require','jquery','common'],function( require ) {
             }
         };
 
-        function GetListInfo ( options, params ) {
-            var siteUrl, listTitle, request;
+        /**
+         *
+         * @param options {object} getListInfo configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getListInfo ( options, params ) {
+            options = options || {};
 
-            options = isValidOption(options);
-            siteUrl = isValidSiteUrl(options);
-            listTitle = isValidListTitle(options);
+            var request;
 
-            request = $.extend(true, defaults, params, {
+            request = $.extend(true, defaults, {
                 data: {
-                    SiteUrl: siteUrl,
-                    ListTitle: listTitle
+                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'GetListInfo'),
+                    ListTitle: getListTitle(options)
                 }
-            });
+            }, params);
 
             return fn.getPromise(request);
-
         }
 
-        return GetListInfo;
+        return getListInfo;
 
 
-        function isValidOption ( options ) {
+        // GetListInfo returns info for all lists if called without listTitle
+        function getListTitle ( options ) {
 
-            //Todo: check if passed in object has a supported format
-
-            if ( !true ) {
-                throw new Error('caps.getListInfo(). Invalid options');
-            }
-
-            return options || {};
-        }
-
-        function isValidSiteUrl ( options ) {
-            var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
-                site = options.SiteUrl  ? options.SiteUrl  : baseUrl,
-                path = site.replace(/^\/+|\/+$/g, '');
-
-            if ( !path ) {
-                throw new Error('caps.getListInfo(). Missing required "siteUrl" property and fallback method L_Menu_BaseUrl is undefined.');
-            }
-
-            return '%WebRoot%/' + path;
-        }
-
-        function isValidListTitle ( options ) {
-
-            // GetListInfo returns info for all lists if called without listTitle
             if ( !options.listTitle ) {
                 return '';
             }
@@ -1303,12 +1320,11 @@ define('getListInfo/index',['require','jquery','common'],function( require ) {
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','jquery','app','common','processBatchData/createBatchXML','getListItems/convertFilter2Caml','events/index','polyfills','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
+define('caps',['require','jquery','common','processBatchData/createBatchXML','getListItems/convertFilter2Caml','events/index','polyfills','app','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
         
 
         var $ = require('jquery'),
-            app = require('app'),
-            version = '0.11.1',
+            version = '0.12.1',
             fn;
 
         // extend common methods with methods available at caps.fn namespace
@@ -1324,11 +1340,11 @@ define('caps',['require','jquery','app','common','processBatchData/createBatchXM
         // Return public API
         return  {
             version: version,
+            app: require('app'),
             processBatchData: require('processBatchData/index'),
             getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),
-            fn: fn,
-            app: app
+            fn: fn
         };
     }
 );
