@@ -89,7 +89,14 @@ define(function( require ) {
                     val = filterObj.value,
                     operator = camlMap[filterObj.operator],
                     field = filterObj.field,
-                    type = oFields[filterObj.field].type;
+                    type;
+
+                // Check if we got a valid fields definition
+                if ( !oFields[filterObj.field] ) {
+                    throw new Error(fn.format('caps.convertFilter2Caml(). Missing model.fields defintion for {0}', filterObj.field));
+                }
+
+                type = oFields[filterObj.field].type;
 
                 return fn.format(filterExpr, operator, field, type, val);
             }

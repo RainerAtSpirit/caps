@@ -672,7 +672,14 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
                     val = filterObj.value,
                     operator = camlMap[filterObj.operator],
                     field = filterObj.field,
-                    type = oFields[filterObj.field].type;
+                    type;
+
+                // Check if we got a valid fields definition
+                if ( !oFields[filterObj.field] ) {
+                    throw new Error(fn.format('caps.convertFilter2Caml(). Missing model.fields defintion for {0}', filterObj.field));
+                }
+
+                type = oFields[filterObj.field].type;
 
                 return fn.format(filterExpr, operator, field, type, val);
             }
@@ -680,6 +687,137 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
         }
 
         return convertFilter2Caml;
+
+    }
+);
+
+
+define('getListItems/convert2Caml',['require','common','./convertFilter2Caml'],function( require ) {
+        
+
+        var fn = require('common'),
+            convertFilter2Caml = require('./convertFilter2Caml');
+
+        function convertCaml ( caml, model ) {
+            var result = [];
+
+            // filter require options.model.fields
+            if ( caml.filter && (!model || !fn.checkNested(model.fields)) ) {
+                throw new Error('caps.getListItems({caml.filter}). Required param model.fields missing.');
+            }
+
+            result.push(getQuery(caml.sort, caml.filter, model.fields));
+
+            result.push(getViewFields(caml.viewFields));
+
+            result.push(getRowLimit(caml.rowLimit));
+
+            result.push(getQueryOptions(caml.queryOptions));
+
+            return result.join('');
+
+        }
+
+        return convertCaml;
+
+        //Internal
+        function getRowLimit ( rowLimit ) {
+            var result = "";
+
+            if ( rowLimit ) {
+                result = fn.format('<RowLimit>{0}</RowLimit>',
+                    rowLimit);
+            }
+
+            return result;
+        }
+
+        function getQuery ( sort, filter, fields ) {
+            var result = [];
+            result.push('<Query>');
+
+            if ( sort ) {
+                result.push(getOrderBy(sort));
+            }
+
+            if ( filter ) {
+                result.push(convertFilter2Caml(filter, fields));
+            }
+
+            result.push('</Query>');
+
+            return result.join('');
+
+            function getOrderBy ( sort ) {
+                var result = [];
+
+                sort = $.isArray(sort) ? sort : [sort];
+
+                result.push('<OrderBy>');
+
+                $.each(sort, function( index, sortObj ) {
+                    var sortDir = (sortObj.dir === 'asc');
+
+                    result.push(fn.format('<FieldRef Name="{0}" Ascending="{1}"/>',
+                        sortObj.field,
+                        sortDir)
+                    );
+                });
+
+                result.push('</OrderBy>');
+
+                return result.join('');
+            }
+
+        }
+
+        function getViewFields ( viewFields ) {
+            var result = [];
+
+            if ( !viewFields ) {
+                return '';
+            }
+
+            viewFields = $.isArray(viewFields) ? viewFields : viewFields.split(',');
+
+            result.push('<ViewFields>');
+
+            $.each(viewFields, function( index, field ) {
+
+                result.push(fn.format('<FieldRef Name="{0}" />',
+                    field)
+                );
+            });
+
+            result.push('</ViewFields>');
+
+            return result.join('');
+        }
+
+        function getQueryOptions (queryOptions) {
+            var result = [],
+                settings,
+                // http://msdn.microsoft.com/en-us/library/dd966064%28v=office.12%29.aspx
+                defaults = {
+                    DateInUtc: true,
+                    IncludeMandatoryColumns: false,
+                    ExpandUserField: false
+                };
+
+            settings = $.extend({}, defaults, queryOptions);
+
+            result.push('<QueryOptions>');
+
+            $.each(settings, function(prop, value){
+                result.push(fn.format('<{0}>{1}</{0}>', prop, value));
+            });
+
+
+            //todo: Should paging support be build into caps?
+            result.push('</QueryOptions>');
+
+            return result.join('');
+        }
 
     }
 );
@@ -983,16 +1121,6 @@ define('polyfills',[],function() {
         };
     }
 });
-define('app',['require','events/index'],function(require) {
-    
-
-    var Events = require('events/index'),
-        app = {};
-
-    Events.includeIn(app);
-
-    return app;
-});
 define('validate',['require','common'],function( require ) {
     
     var fn = require('common'),
@@ -1118,13 +1246,13 @@ define('processBatchData/index',['require','jquery','common','validate','./creat
         }
     }
 );
-define('getListItems/index',['require','jquery','common','validate','./convertFilter2Caml'],function( require ) {
+define('getListItems/index',['require','jquery','common','validate','./convert2Caml'],function( require ) {
         
 
         var $ = require('jquery'),
             fn = require('common'),
             validate = require('validate'),
-            convertFilter2Caml = require('./convertFilter2Caml'),
+            convert2Caml = require('./convert2Caml'),
             defaults;
 
         defaults = {
@@ -1144,7 +1272,7 @@ define('getListItems/index',['require','jquery','common','validate','./convertFi
         function getListItems ( options, params ) {
             options = options || {};
 
-            var data, request, getListItemsPromise;
+            var data, request;
 
             data = {
                 SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListItems'),
@@ -1152,117 +1280,18 @@ define('getListItems/index',['require','jquery','common','validate','./convertFi
             };
 
             if ( options.caml ) {
-                data.CAML = getCaml(options);
+                data.CAML = convert2Caml(options.caml, options.model);
             }
 
             request = $.extend(true, defaults, {
                 data: data
             }, params);
 
+            return fn.getPromise(request);
 
-            getListItemsPromise = fn.getPromise(request);
-
-            if (options.itemsAsArray){
-                getListItemsPromise.then((function(result){
-                    return getItemsArray(result);
-                }))();
-            }
-
-            return getListItemsPromise;
         }
 
         return getListItems;
-
-        // Internal
-
-        function getItemsArray ( json ) {
-            var hasItems = fn.checkNested(json.NewDataSet.GetListItems.listitems["rs:data"]["z:row"]),
-                items;
-
-            if ( hasItems ) {
-                items = json.NewDataSet.GetListItems.listitems["rs:data"]["z:row"];
-                items = $.isArray(items) ? items : [items];
-            }
-
-            return items;
-
-        }
-
-        function getCaml ( options ) {
-            var result = [],
-                sortDir = true,
-                PID = '',
-                camlObj = options.caml;
-
-            // filter require options.model.fields
-            if ( camlObj.filter && !fn.checkNested(options.model.fields) ) {
-                throw new Error('caps.getListItems({caml.filter: obj}). Missing required model.fields property.');
-            }
-
-            result.push('<Query>');
-
-            if ( camlObj.sort ) {
-                result.push(sortQuery(camlObj));
-            }
-
-            if ( camlObj.filter ) {
-                var obj = {
-                    filter: camlObj.filter,
-                    fields: options.model.fields
-                };
-
-                result.push(convertFilter2Caml(obj));
-            }
-
-            result.push('</Query>');
-
-//            if ( camlObj.pageSize ) {
-//                   result.push(cn.format('<RowLimit>{0}</RowLimit>',
-//                       camlObj.pageSize));
-//            }
-
-            result.push(queryOptions(camlObj));
-
-            return result.join('');
-
-            //Internal
-
-            function sortQuery ( camlObj ) {
-                var sort = [];
-
-                camlObj.sort = $.isArray(camlObj.sort) ? camlObj.sort : [camlObj.sort];
-
-                sort.push('<OrderBy>');
-
-                $.each(camlObj.sort, function( index, sortObj ) {
-                    sortDir = (sortObj.dir === 'asc');
-
-                    sort.push(fn.format('<FieldRef Name="{0}" Ascending="{1}"/>',
-                        sortObj.field,
-                        sortDir)
-                    );
-                });
-
-                sort.push('</OrderBy>');
-
-                return sort.join('');
-            }
-
-            function queryOptions ( camlObj ) {
-                var query = [];
-
-                //todo: QueryOption JSON format?
-                query.push('<QueryOptions>');
-                query.push('<DateInUtc>True</DateInUtc>');
-                query.push('<ExpandUserField>True</ExpandUserField>');
-
-                //todo: Should paging support be build into caps?
-                query.push('</QueryOptions>');
-
-                return query.join('');
-            }
-
-        }
 
     }
 );
@@ -1320,16 +1349,17 @@ define('getListInfo/index',['require','jquery','common','validate'],function( re
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','jquery','common','processBatchData/createBatchXML','getListItems/convertFilter2Caml','events/index','polyfills','app','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
+define('caps',['require','jquery','common','processBatchData/createBatchXML','getListItems/convert2Caml','getListItems/convertFilter2Caml','events/index','polyfills','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
         
 
         var $ = require('jquery'),
-            version = '0.12.1',
+            version = '0.14.1',
             fn;
 
         // extend common methods with methods available at caps.fn namespace
         fn = $.extend({}, require('common'), {
             createBatchXML: require('processBatchData/createBatchXML'),
+            convert2Caml: require('getListItems/convert2Caml'),
             convertFilter2Caml: require('getListItems/convertFilter2Caml'),
             Events: require('events/index')
         });
@@ -1340,7 +1370,6 @@ define('caps',['require','jquery','common','processBatchData/createBatchXML','ge
         // Return public API
         return  {
             version: version,
-            app: require('app'),
             processBatchData: require('processBatchData/index'),
             getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),

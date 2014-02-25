@@ -5,12 +5,13 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
-            version = '0.12.1',
+            version = '0.14.1',
             fn;
 
         // extend common methods with methods available at caps.fn namespace
         fn = $.extend({}, require('common'), {
             createBatchXML: require('processBatchData/createBatchXML'),
+            convert2Caml: require('getListItems/convert2Caml'),
             convertFilter2Caml: require('getListItems/convertFilter2Caml'),
             Events: require('events/index')
         });
@@ -21,7 +22,6 @@ define(function( require ) {
         // Return public API
         return  {
             version: version,
-            app: require('app'),
             processBatchData: require('processBatchData/index'),
             getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),
