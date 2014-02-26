@@ -5,7 +5,7 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
-            version = '0.16.1';
+            version = '0.16.4';
 
         // ECMA 5 polyfills
         require('helper/polyfills');

@@ -23,16 +23,18 @@ define(function( require ) {
                 'And': 'And Group="true"'
             };
 
-        /**
-         *
-         * @param filter {object} filter configuration
-         * @param fields {object} fields object
-         * @returns {string}
-         */
         function convertFilter2Caml ( filter, fields ) {
             var where = [],
                 caml = [];
 
+            if ( !filter ) {
+                throw new Error('caps.convertFilter2Caml(). Missing required filter argument');
+            }
+
+            if ( !fields ) {
+                throw new Error('caps.convertFilter2Caml(). Missing required fields argument');
+             }
+           
             where.push('<Where>');
 
             if ( filter && filter.filters.length === 1 && filter.filters[0].field ) {

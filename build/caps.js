@@ -687,16 +687,18 @@ define('getListItems/convertFilter2Caml',['require','jquery','fn/common'],functi
                 'And': 'And Group="true"'
             };
 
-        /**
-         *
-         * @param filter {object} filter configuration
-         * @param fields {object} fields object
-         * @returns {string}
-         */
         function convertFilter2Caml ( filter, fields ) {
             var where = [],
                 caml = [];
 
+            if ( !filter ) {
+                throw new Error('caps.convertFilter2Caml(). Missing required filter argument');
+            }
+
+            if ( !fields ) {
+                throw new Error('caps.convertFilter2Caml(). Missing required fields argument');
+             }
+           
             where.push('<Where>');
 
             if ( filter && filter.filters.length === 1 && filter.filters[0].field ) {
@@ -887,42 +889,39 @@ define('getListItems/convert2Caml',['require','fn/common','./convertFilter2Caml'
             return result.join('');
         }
 
-        function getQueryOptions (queryOptions) {
+        function getQueryOptions ( queryOptions ) {
             var result = [],
                 settings,
                 defaults;
 
-                // Todo: Add getter/setter
-                // http://msdn.microsoft.com/en-us/library/dd966064%28v=office.12%29.aspx
-                defaults = {
-                    DateInUtc: null,
-                    Folder: null,
-                    Paging: null,
-                    IncludeMandatoryColumns: null,
-                    MeetingInstanceID: null,
-                    ViewAttributes: null,
-                    RecurrencePatternXMLVersion: null,
-                    RecurrenceOrderBy: null,
-                    IncludePermissions: null,
-                    ExpandUserField: null,
-                    IncludeAttachmentUrls: null,
-                    IncludeAttachmentVersion: null,
-                    RemoveInvalidXmlCharacters: null,
-                    OptimizeFor: null,
-                    ExtraIds: null,
-                    OptimizeLookups: null
-                };
+            // Todo: Add getter/setter
+            // http://msdn.microsoft.com/en-us/library/dd966064%28v=office.12%29.aspx
+            defaults = {
+                /*     DateInUtc: null,
+                 Folder: null,
+                 Paging: null,
+                 IncludeMandatoryColumns: null,
+                 MeetingInstanceID: null,
+                 ViewAttributes: null,
+                 RecurrencePatternXMLVersion: null,
+                 RecurrenceOrderBy: null,
+                 IncludePermissions: null,
+                 ExpandUserField: null,
+                 IncludeAttachmentUrls: null,
+                 IncludeAttachmentVersion: null,
+                 RemoveInvalidXmlCharacters: null,
+                 OptimizeFor: null,
+                 ExtraIds: null,
+                 OptimizeLookups: null*/
+            };
 
             settings = $.extend({}, defaults, queryOptions);
 
             result.push('<QueryOptions>');
 
-            $.each(settings, function(prop, value){
-                if (value){
-                    result.push(fn.format('<{0}>{1}</{0}>', prop, value));
-                }
+            $.each(settings, function( prop, value ) {
+                result.push(fn.format('<{0}>{1}</{0}>', prop, value));
             });
-
 
             //todo: Should paging support be build into caps?
             result.push('</QueryOptions>');
@@ -1394,7 +1393,7 @@ define('caps',['require','jquery','helper/polyfills','fn/index','getListInfo/ind
         
 
         var $ = require('jquery'),
-            version = '0.16.1';
+            version = '0.16.4';
 
         // ECMA 5 polyfills
         require('helper/polyfills');
