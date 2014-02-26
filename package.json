@@ -19,7 +19,7 @@
     "connect-livereload": "~0.3.2"
   },
   "scripts": {
-    "test": "grunt --verbose"
+    "test": "grunt travis --verbose"
   },
   "keywords": [],
   "author": "Rainer Wittmann",
