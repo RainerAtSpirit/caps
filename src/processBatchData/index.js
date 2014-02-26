@@ -2,8 +2,8 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
-            fn = require('common'),
-            validate = require('validate'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
             createBatchXML = require('./createBatchXML'),
             defaults;
 

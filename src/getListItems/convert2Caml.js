@@ -1,9 +1,15 @@
 define(function( require ) {
         'use strict';
 
-        var fn = require('common'),
+        var fn = require('fn/common'),
             convertFilter2Caml = require('./convertFilter2Caml');
 
+        /**
+         *
+         * @param caml {object} caml configuration
+         * @param model {object} model object required by caml.filter
+         * @returns {string}
+         */
         function convertCaml ( caml, model ) {
             model = model || {};
 
@@ -105,11 +111,27 @@ define(function( require ) {
         function getQueryOptions (queryOptions) {
             var result = [],
                 settings,
+                defaults;
+
+                // Todo: Add getter/setter
                 // http://msdn.microsoft.com/en-us/library/dd966064%28v=office.12%29.aspx
                 defaults = {
-                    DateInUtc: true,
-                    IncludeMandatoryColumns: false,
-                    ExpandUserField: false
+                    DateInUtc: null,
+                    Folder: null,
+                    Paging: null,
+                    IncludeMandatoryColumns: null,
+                    MeetingInstanceID: null,
+                    ViewAttributes: null,
+                    RecurrencePatternXMLVersion: null,
+                    RecurrenceOrderBy: null,
+                    IncludePermissions: null,
+                    ExpandUserField: null,
+                    IncludeAttachmentUrls: null,
+                    IncludeAttachmentVersion: null,
+                    RemoveInvalidXmlCharacters: null,
+                    OptimizeFor: null,
+                    ExtraIds: null,
+                    OptimizeLookups: null
                 };
 
             settings = $.extend({}, defaults, queryOptions);
@@ -117,7 +139,9 @@ define(function( require ) {
             result.push('<QueryOptions>');
 
             $.each(settings, function(prop, value){
-                result.push(fn.format('<{0}>{1}</{0}>', prop, value));
+                if (value){
+                    result.push(fn.format('<{0}>{1}</{0}>', prop, value));
+                }
             });
 
 

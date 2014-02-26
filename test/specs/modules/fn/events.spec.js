@@ -2,7 +2,7 @@
 describe('Events', function() {
     "use strict";
 
-    var Events = require('events/index');
+    var Events = require('fn/events');
 
     describe('on and trigger', function() {
         var obj = { counter: 0 };

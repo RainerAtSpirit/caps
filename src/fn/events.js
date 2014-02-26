@@ -1,9 +1,8 @@
 /**
  * Based on Durandal http://www.durandaljs.com 2.0 events module
  * Durandal events originate from backbone.js but also combine some ideas from signals.js as well as some additional improvements.
- * Events can be installed into any object and are installed into the `caps.app` module by default for convenient app-wide eventing.
+ * caps.fn.Events can be installed into any object, but they are not installed by default.
  * @module events
- * @requires system
  */
 define(function( require ) {
     "use strict";

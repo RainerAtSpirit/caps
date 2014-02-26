@@ -1,6 +1,7 @@
 define(function() {
     'use strict';
-// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+
+    //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
     if ( !Object.keys ) {
         Object.keys = (function() {
             var hasOwnProperty = Object.prototype.hasOwnProperty,
@@ -40,7 +41,7 @@ define(function() {
             };
         }());
     }
-    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
     if ( !Array.prototype.lastIndexOf ) {
         Array.prototype.lastIndexOf = function( searchElement /*, fromIndex*/ ) {
 

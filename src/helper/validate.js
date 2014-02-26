@@ -1,6 +1,6 @@
 define(function( require ) {
     'use strict';
-    var fn = require('common'),
+    var fn = require('fn/common'),
         L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
         messages = {
             getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',

@@ -2,8 +2,8 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
-            fn = require('common'),
-            validate = require('validate'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
             defaults;
 
         defaults = {
@@ -41,11 +41,7 @@ define(function( require ) {
         // GetListInfo returns info for all lists if called without listTitle
         function getListTitle ( options ) {
 
-            if ( !options.listTitle ) {
-                return '';
-            }
-
-            return options.listTitle;
+            return options.listTitle || '';
         }
     }
 );

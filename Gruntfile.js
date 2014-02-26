@@ -94,8 +94,8 @@ module.exports = function( grunt ) {
                     exclude: ['jquery'],
                     out: 'build/caps.js',
                     wrap: {
-                        startFile: 'src/wrap/start.frag',
-                        endFile: 'src/wrap/end.frag'
+                        startFile: 'src/helper/wrap/start.frag',
+                        endFile: 'src/helper/wrap/end.frag'
                     }
                 }
             }
@@ -141,6 +141,6 @@ module.exports = function( grunt ) {
 
     // Default task(s).
     grunt.registerTask('build', ['jshint', 'jasmine:dev', 'clean', 'requirejs', 'uglify', 'jasmine:build']);
-    grunt.registerTask('default', ['jshint','jasmine:dev']);
+    grunt.registerTask('default', ['jshint','jasmine:dev', 'watch:dev']);
     grunt.registerTask('test', ['jshint','jasmine:dev', 'connect:dev:livereload', 'open:dev', 'watch:dev']);
 };

@@ -1,8 +1,7 @@
 define(function( require ) {
         'use strict';
         var $ = require('jquery'),
-            fn = require('common'),
-            instance,
+            fn = require('fn/common'),
             camlMap = {
                 'eq': 'Eq',
                 'neq': 'Neq',
@@ -24,22 +23,28 @@ define(function( require ) {
                 'And': 'And Group="true"'
             };
 
-        function convertFilter2Caml ( oFilter, oFields ) {
-            var filter = [],
+        /**
+         *
+         * @param filter {object} filter configuration
+         * @param fields {object} fields object
+         * @returns {string}
+         */
+        function convertFilter2Caml ( filter, fields ) {
+            var where = [],
                 caml = [];
 
-            filter.push('<Where>');
+            where.push('<Where>');
 
-            if ( oFilter && oFilter.filters.length === 1 && oFilter.filters[0].field ) {
-                filter.push(createExpression(oFilter.filters[0]));
+            if ( filter && filter.filters.length === 1 && filter.filters[0].field ) {
+                where.push(createExpression(filter.filters[0]));
             }
             else {
-                convertBinarySearchTree2Caml(oFilter);
-                filter.push(caml.join(''));
+                convertBinarySearchTree2Caml(filter);
+                where.push(caml.join(''));
             }
-            filter.push('</Where>');
+            where.push('</Where>');
 
-            return (filter.join(''));
+            return (where.join(''));
 
             // Internal
             function convertBinarySearchTree2Caml ( filter, filterID ) {
@@ -92,11 +97,11 @@ define(function( require ) {
                     type;
 
                 // Check if we got a valid fields definition
-                if ( !oFields[filterObj.field] ) {
+                if ( !fields[filterObj.field] ) {
                     throw new Error(fn.format('caps.convertFilter2Caml(). Missing model.fields defintion for {0}', filterObj.field));
                 }
 
-                type = oFields[filterObj.field].type;
+                type = fields[filterObj.field].type;
 
                 return fn.format(filterExpr, operator, field, type, val);
             }
@@ -104,7 +109,6 @@ define(function( require ) {
         }
 
         return convertFilter2Caml;
-
     }
 );
 

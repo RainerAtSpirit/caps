@@ -5,27 +5,18 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
-            version = '0.14.1',
-            fn;
+            version = '0.16.1';
 
-        // extend common methods with methods available at caps.fn namespace
-        fn = $.extend({}, require('common'), {
-            createBatchXML: require('processBatchData/createBatchXML'),
-            convert2Caml: require('getListItems/convert2Caml'),
-            convertFilter2Caml: require('getListItems/convertFilter2Caml'),
-            Events: require('events/index')
-        });
+        // ECMA 5 polyfills
+        require('helper/polyfills');
 
-        // Loading ECMA 5 polyfills
-        require('polyfills');
-
-        // Return public API
+        // caps API
         return  {
+            fn: require('fn/index'),
             version: version,
-            processBatchData: require('processBatchData/index'),
-            getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),
-            fn: fn
+            getListItems: require('getListItems/index'),
+            processBatchData: require('processBatchData/index')
         };
     }
 );

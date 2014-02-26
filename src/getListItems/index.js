@@ -2,8 +2,8 @@ define(function( require ) {
         'use strict';
 
         var $ = require('jquery'),
-            fn = require('common'),
-            validate = require('validate'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
             convert2Caml = require('./convert2Caml'),
             defaults;
 
@@ -18,7 +18,7 @@ define(function( require ) {
         /**
          *
          * @param options {object} getListItems configuration object
-         * @param params {objects} ajax settings overwriting default and options
+         * @param params {objects} ajax settings overwriting defaults and options
          * @returns {*} promise
          */
         function getListItems ( options, params ) {
@@ -44,6 +44,5 @@ define(function( require ) {
         }
 
         return getListItems;
-
     }
 );

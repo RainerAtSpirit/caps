@@ -438,7 +438,87 @@ var requirejs, require, define;
 
 define("almond", function(){});
 
-define('common',[],function() {
+define('helper/polyfills',[],function() {
+    
+
+    //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+    if ( !Object.keys ) {
+        Object.keys = (function() {
+            var hasOwnProperty = Object.prototype.hasOwnProperty,
+                hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
+                dontEnums = [
+                    'toString',
+                    'toLocaleString',
+                    'valueOf',
+                    'hasOwnProperty',
+                    'isPrototypeOf',
+                    'propertyIsEnumerable',
+                    'constructor'
+                ],
+                dontEnumsLength = dontEnums.length;
+
+            return function( obj ) {
+                if ( typeof obj !== 'object' && (typeof obj !== 'function' || obj === null) ) {
+                    throw new TypeError('Object.keys called on non-object');
+                }
+
+                var result = [], prop, i;
+
+                for ( prop in obj ) {
+                    if ( hasOwnProperty.call(obj, prop) ) {
+                        result.push(prop);
+                    }
+                }
+
+                if ( hasDontEnumBug ) {
+                    for ( i = 0; i < dontEnumsLength; i++ ) {
+                        if ( hasOwnProperty.call(obj, dontEnums[i]) ) {
+                            result.push(dontEnums[i]);
+                        }
+                    }
+                }
+                return result;
+            };
+        }());
+    }
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
+    if ( !Array.prototype.lastIndexOf ) {
+        Array.prototype.lastIndexOf = function( searchElement /*, fromIndex*/ ) {
+
+            if ( this == null ) {
+                throw new TypeError();
+            }
+
+            var n, k,
+                t = Object(this),
+                len = t.length >>> 0;
+            if ( len === 0 ) {
+                return -1;
+            }
+
+            n = len;
+            if ( arguments.length > 1 ) {
+                n = Number(arguments[1]);
+                if ( n != n ) {
+                    n = 0;
+                }
+                else if ( n != 0 && n != (1 / 0) && n != -(1 / 0) ) {
+                    n = (n > 0 || -1) * Math.floor(Math.abs(n));
+                }
+            }
+
+            for ( k = n >= 0
+                ? Math.min(n, len - 1)
+                : len - Math.abs(n); k >= 0; k-- ) {
+                if ( k in t && t[k] === searchElement ) {
+                    return k;
+                }
+            }
+            return -1;
+        };
+    }
+});
+define('fn/common',[],function() {
     
 
     function checkNested () {
@@ -498,15 +578,16 @@ define('common',[],function() {
         format: format
     };
 });
-define('processBatchData/createBatchXML',['require','jquery','common'],function( require ) {
+define('processBatchData/createBatchXML',['require','jquery','fn/common'],function( require ) {
         
         var $ = require('jquery'),
-            fn = require('common');
+            fn = require('fn/common');
 
 
-        function createBatchXML ( json ) {
-            var options = $.isArray(json) ? json : [json],
-                i,
+        function createBatchXML ( options ) {
+                options = $.isArray(options) ? options : [options];
+
+                var i,
                 len = options.length,
                 methods = "";
 
@@ -581,11 +662,10 @@ define('processBatchData/createBatchXML',['require','jquery','common'],function(
         return createBatchXML;
     }
 );
-define('getListItems/convertFilter2Caml',['require','jquery','common'],function( require ) {
+define('getListItems/convertFilter2Caml',['require','jquery','fn/common'],function( require ) {
         
         var $ = require('jquery'),
-            fn = require('common'),
-            instance,
+            fn = require('fn/common'),
             camlMap = {
                 'eq': 'Eq',
                 'neq': 'Neq',
@@ -607,22 +687,28 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
                 'And': 'And Group="true"'
             };
 
-        function convertFilter2Caml ( oFilter, oFields ) {
-            var filter = [],
+        /**
+         *
+         * @param filter {object} filter configuration
+         * @param fields {object} fields object
+         * @returns {string}
+         */
+        function convertFilter2Caml ( filter, fields ) {
+            var where = [],
                 caml = [];
 
-            filter.push('<Where>');
+            where.push('<Where>');
 
-            if ( oFilter && oFilter.filters.length === 1 && oFilter.filters[0].field ) {
-                filter.push(createExpression(oFilter.filters[0]));
+            if ( filter && filter.filters.length === 1 && filter.filters[0].field ) {
+                where.push(createExpression(filter.filters[0]));
             }
             else {
-                convertBinarySearchTree2Caml(oFilter);
-                filter.push(caml.join(''));
+                convertBinarySearchTree2Caml(filter);
+                where.push(caml.join(''));
             }
-            filter.push('</Where>');
+            where.push('</Where>');
 
-            return (filter.join(''));
+            return (where.join(''));
 
             // Internal
             function convertBinarySearchTree2Caml ( filter, filterID ) {
@@ -675,11 +761,11 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
                     type;
 
                 // Check if we got a valid fields definition
-                if ( !oFields[filterObj.field] ) {
+                if ( !fields[filterObj.field] ) {
                     throw new Error(fn.format('caps.convertFilter2Caml(). Missing model.fields defintion for {0}', filterObj.field));
                 }
 
-                type = oFields[filterObj.field].type;
+                type = fields[filterObj.field].type;
 
                 return fn.format(filterExpr, operator, field, type, val);
             }
@@ -687,17 +773,22 @@ define('getListItems/convertFilter2Caml',['require','jquery','common'],function(
         }
 
         return convertFilter2Caml;
-
     }
 );
 
 
-define('getListItems/convert2Caml',['require','common','./convertFilter2Caml'],function( require ) {
+define('getListItems/convert2Caml',['require','fn/common','./convertFilter2Caml'],function( require ) {
         
 
-        var fn = require('common'),
+        var fn = require('fn/common'),
             convertFilter2Caml = require('./convertFilter2Caml');
 
+        /**
+         *
+         * @param caml {object} caml configuration
+         * @param model {object} model object required by caml.filter
+         * @returns {string}
+         */
         function convertCaml ( caml, model ) {
             model = model || {};
 
@@ -799,11 +890,27 @@ define('getListItems/convert2Caml',['require','common','./convertFilter2Caml'],f
         function getQueryOptions (queryOptions) {
             var result = [],
                 settings,
+                defaults;
+
+                // Todo: Add getter/setter
                 // http://msdn.microsoft.com/en-us/library/dd966064%28v=office.12%29.aspx
                 defaults = {
-                    DateInUtc: true,
-                    IncludeMandatoryColumns: false,
-                    ExpandUserField: false
+                    DateInUtc: null,
+                    Folder: null,
+                    Paging: null,
+                    IncludeMandatoryColumns: null,
+                    MeetingInstanceID: null,
+                    ViewAttributes: null,
+                    RecurrencePatternXMLVersion: null,
+                    RecurrenceOrderBy: null,
+                    IncludePermissions: null,
+                    ExpandUserField: null,
+                    IncludeAttachmentUrls: null,
+                    IncludeAttachmentVersion: null,
+                    RemoveInvalidXmlCharacters: null,
+                    OptimizeFor: null,
+                    ExtraIds: null,
+                    OptimizeLookups: null
                 };
 
             settings = $.extend({}, defaults, queryOptions);
@@ -811,7 +918,9 @@ define('getListItems/convert2Caml',['require','common','./convertFilter2Caml'],f
             result.push('<QueryOptions>');
 
             $.each(settings, function(prop, value){
-                result.push(fn.format('<{0}>{1}</{0}>', prop, value));
+                if (value){
+                    result.push(fn.format('<{0}>{1}</{0}>', prop, value));
+                }
             });
 
 
@@ -828,11 +937,10 @@ define('getListItems/convert2Caml',['require','common','./convertFilter2Caml'],f
 /**
  * Based on Durandal http://www.durandaljs.com 2.0 events module
  * Durandal events originate from backbone.js but also combine some ideas from signals.js as well as some additional improvements.
- * Events can be installed into any object and are installed into the `caps.app` module by default for convenient app-wide eventing.
+ * caps.fn.Events can be installed into any object, but they are not installed by default.
  * @module events
- * @requires system
  */
-define('events/index',['require'],function( require ) {
+define('fn/events',['require'],function( require ) {
     
     var keys = Object.keys,
         eventSplitter = /\s+/,
@@ -1044,88 +1152,24 @@ define('events/index',['require'],function( require ) {
 
     return Events;
 });
-define('polyfills',[],function() {
+define('fn/index',['require','./common','processBatchData/createBatchXML','getListItems/convert2Caml','getListItems/convertFilter2Caml','./events'],function( require ) {
     
-// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
-    if ( !Object.keys ) {
-        Object.keys = (function() {
-            var hasOwnProperty = Object.prototype.hasOwnProperty,
-                hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
-                dontEnums = [
-                    'toString',
-                    'toLocaleString',
-                    'valueOf',
-                    'hasOwnProperty',
-                    'isPrototypeOf',
-                    'propertyIsEnumerable',
-                    'constructor'
-                ],
-                dontEnumsLength = dontEnums.length;
 
-            return function( obj ) {
-                if ( typeof obj !== 'object' && (typeof obj !== 'function' || obj === null) ) {
-                    throw new TypeError('Object.keys called on non-object');
-                }
+    var fn;
 
-                var result = [], prop, i;
+    // extend common methods with methods available at caps.fn namespace
+    fn = $.extend({}, require('./common'), {
+        createBatchXML: require('processBatchData/createBatchXML'),
+        convert2Caml: require('getListItems/convert2Caml'),
+        convertFilter2Caml: require('getListItems/convertFilter2Caml'),
+        Events: require('./events')
+    });
 
-                for ( prop in obj ) {
-                    if ( hasOwnProperty.call(obj, prop) ) {
-                        result.push(prop);
-                    }
-                }
-
-                if ( hasDontEnumBug ) {
-                    for ( i = 0; i < dontEnumsLength; i++ ) {
-                        if ( hasOwnProperty.call(obj, dontEnums[i]) ) {
-                            result.push(dontEnums[i]);
-                        }
-                    }
-                }
-                return result;
-            };
-        }());
-    }
-    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
-    if ( !Array.prototype.lastIndexOf ) {
-        Array.prototype.lastIndexOf = function( searchElement /*, fromIndex*/ ) {
-
-            if ( this == null ) {
-                throw new TypeError();
-            }
-
-            var n, k,
-                t = Object(this),
-                len = t.length >>> 0;
-            if ( len === 0 ) {
-                return -1;
-            }
-
-            n = len;
-            if ( arguments.length > 1 ) {
-                n = Number(arguments[1]);
-                if ( n != n ) {
-                    n = 0;
-                }
-                else if ( n != 0 && n != (1 / 0) && n != -(1 / 0) ) {
-                    n = (n > 0 || -1) * Math.floor(Math.abs(n));
-                }
-            }
-
-            for ( k = n >= 0
-                ? Math.min(n, len - 1)
-                : len - Math.abs(n); k >= 0; k-- ) {
-                if ( k in t && t[k] === searchElement ) {
-                    return k;
-                }
-            }
-            return -1;
-        };
-    }
+    return fn;
 });
-define('validate',['require','common'],function( require ) {
+define('helper/validate',['require','fn/common'],function( require ) {
     
-    var fn = require('common'),
+    var fn = require('fn/common'),
         L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
         messages = {
             getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
@@ -1176,12 +1220,107 @@ define('validate',['require','common'],function( require ) {
         getSiteUrl: getSiteUrl
     };
 });
-define('processBatchData/index',['require','jquery','common','validate','./createBatchXML'],function( require ) {
+define('getListInfo/index',['require','jquery','fn/common','helper/validate'],function( require ) {
         
 
         var $ = require('jquery'),
-            fn = require('common'),
-            validate = require('validate'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetListInfo',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getListInfo configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getListInfo ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'GetListInfo'),
+                    ListTitle: getListTitle(options)
+                }
+            }, params);
+
+            return fn.getPromise(request);
+        }
+
+        return getListInfo;
+
+
+        // GetListInfo returns info for all lists if called without listTitle
+        function getListTitle ( options ) {
+
+            return options.listTitle || '';
+        }
+    }
+);
+define('getListItems/index',['require','jquery','fn/common','helper/validate','./convert2Caml'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            convert2Caml = require('./convert2Caml'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetListItems',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getListItems configuration object
+         * @param params {objects} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getListItems ( options, params ) {
+            options = options || {};
+
+            var data, request;
+
+            data = {
+                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListItems'),
+                ListTitle: validate.getListTitle(options.listTitle, 'getListItems')
+            };
+
+            if ( options.caml ) {
+                data.CAML = convert2Caml(options.caml, options.model);
+            }
+
+            request = $.extend(true, defaults, {
+                data: data
+            }, params);
+
+            return fn.getPromise(request);
+
+        }
+
+        return getListItems;
+    }
+);
+define('processBatchData/index',['require','jquery','fn/common','helper/validate','./createBatchXML'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
             createBatchXML = require('./createBatchXML'),
             defaults;
 
@@ -1248,134 +1387,25 @@ define('processBatchData/index',['require','jquery','common','validate','./creat
         }
     }
 );
-define('getListItems/index',['require','jquery','common','validate','./convert2Caml'],function( require ) {
-        
-
-        var $ = require('jquery'),
-            fn = require('common'),
-            validate = require('validate'),
-            convert2Caml = require('./convert2Caml'),
-            defaults;
-
-        defaults = {
-            type: 'GET',
-            data: {
-                RequestType: 'GetListItems',
-                OutputType: 'json'
-            }
-        };
-
-        /**
-         *
-         * @param options {object} getListItems configuration object
-         * @param params {objects} ajax settings overwriting default and options
-         * @returns {*} promise
-         */
-        function getListItems ( options, params ) {
-            options = options || {};
-
-            var data, request;
-
-            data = {
-                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListItems'),
-                ListTitle: validate.getListTitle(options.listTitle, 'getListItems')
-            };
-
-            if ( options.caml ) {
-                data.CAML = convert2Caml(options.caml, options.model);
-            }
-
-            request = $.extend(true, defaults, {
-                data: data
-            }, params);
-
-            return fn.getPromise(request);
-
-        }
-
-        return getListItems;
-
-    }
-);
-define('getListInfo/index',['require','jquery','common','validate'],function( require ) {
-        
-
-        var $ = require('jquery'),
-            fn = require('common'),
-            validate = require('validate'),
-            defaults;
-
-        defaults = {
-            type: 'GET',
-            data: {
-                RequestType: 'GetListInfo',
-                OutputType: 'json'
-            }
-        };
-
-        /**
-         *
-         * @param options {object} getListInfo configuration object
-         * @param params {object} ajax settings overwriting defaults and options
-         * @returns {*} promise
-         */
-        function getListInfo ( options, params ) {
-            options = options || {};
-
-            var request;
-
-            request = $.extend(true, defaults, {
-                data: {
-                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'GetListInfo'),
-                    ListTitle: getListTitle(options)
-                }
-            }, params);
-
-            return fn.getPromise(request);
-        }
-
-        return getListInfo;
-
-
-        // GetListInfo returns info for all lists if called without listTitle
-        function getListTitle ( options ) {
-
-            if ( !options.listTitle ) {
-                return '';
-            }
-
-            return options.listTitle;
-        }
-    }
-);
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','jquery','common','processBatchData/createBatchXML','getListItems/convert2Caml','getListItems/convertFilter2Caml','events/index','polyfills','processBatchData/index','getListItems/index','getListInfo/index'],function( require ) {
+define('caps',['require','jquery','helper/polyfills','fn/index','getListInfo/index','getListItems/index','processBatchData/index'],function( require ) {
         
 
         var $ = require('jquery'),
-            version = '0.14.1',
-            fn;
+            version = '0.16.1';
 
-        // extend common methods with methods available at caps.fn namespace
-        fn = $.extend({}, require('common'), {
-            createBatchXML: require('processBatchData/createBatchXML'),
-            convert2Caml: require('getListItems/convert2Caml'),
-            convertFilter2Caml: require('getListItems/convertFilter2Caml'),
-            Events: require('events/index')
-        });
+        // ECMA 5 polyfills
+        require('helper/polyfills');
 
-        // Loading ECMA 5 polyfills
-        require('polyfills');
-
-        // Return public API
+        // caps API
         return  {
+            fn: require('fn/index'),
             version: version,
-            processBatchData: require('processBatchData/index'),
-            getListItems: require('getListItems/index'),
             getListInfo: require('getListInfo/index'),
-            fn: fn
+            getListItems: require('getListItems/index'),
+            processBatchData: require('processBatchData/index')
         };
     }
 );

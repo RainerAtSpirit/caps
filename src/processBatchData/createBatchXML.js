@@ -1,12 +1,13 @@
 define(function( require ) {
         'use strict';
         var $ = require('jquery'),
-            fn = require('common');
+            fn = require('fn/common');
 
 
-        function createBatchXML ( json ) {
-            var options = $.isArray(json) ? json : [json],
-                i,
+        function createBatchXML ( options ) {
+                options = $.isArray(options) ? options : [options];
+
+                var i,
                 len = options.length,
                 methods = "";
 
