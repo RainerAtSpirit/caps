@@ -245,199 +245,199 @@
     "options": {
         "fields": {
             "_CopySource": {
-                "type": "Text"
+                "Type": "Text"
             },
             "_EditMenuTableEnd": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "_EditMenuTableStart": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "_EditMenuTableStart2": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "_HasCopyDestinations": {
-                "type": "Boolean"
+                "Type": "Boolean"
             },
             "_IsCurrentVersion": {
-                "type": "Boolean"
+                "Type": "Boolean"
             },
             "_Level": {
-                "type": "Integer"
+                "Type": "Integer"
             },
             "_ModerationComments": {
-                "type": "Note"
+                "Type": "Note"
             },
             "_ModerationStatus": {
-                "type": "ModStat"
+                "Type": "ModStat"
             },
             "_UIVersion": {
-                "type": "Integer"
+                "Type": "Integer"
             },
             "_UIVersionString": {
-                "type": "Text"
+                "Type": "Text"
             },
             "AssignedTo": {
-                "type": "User"
+                "Type": "User"
             },
             "Attachments": {
-                "type": "Attachments"
+                "Type": "Attachments"
             },
             "Author": {
-                "type": "User"
+                "Type": "User"
             },
             "BaseName": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "Body": {
-                "type": "Note"
+                "Type": "Note"
             },
             "ContentType": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "ContentTypeId": {
-                "type": "ContentTypeId"
+                "Type": "ContentTypeId"
             },
             "Created": {
-                "type": "DateTime"
+                "Type": "DateTime"
             },
             "Created_x0020_Date": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "DocIcon": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "DueDate": {
-                "type": "DateTime"
+                "Type": "DateTime"
             },
             "Edit": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "Editor": {
-                "type": "User"
+                "Type": "User"
             },
             "EncodedAbsUrl": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "File_x0020_Type": {
-                "type": "Text"
+                "Type": "Text"
             },
             "FileDirRef": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "FileLeafRef": {
-                "type": "File"
+                "Type": "File"
             },
             "FileRef": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "FolderChildCount": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "FSObjType": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "GUID": {
-                "type": "Guid"
+                "Type": "Guid"
             },
             "HTML_x0020_File_x0020_Type": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "ID": {
-                "type": "Counter"
+                "Type": "Counter"
             },
             "InstanceID": {
-                "type": "Integer"
+                "Type": "Integer"
             },
             "ItemChildCount": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "Last_x0020_Modified": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "LinkFilename": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "LinkFilename2": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "LinkFilenameNoMenu": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "LinkTitle": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "LinkTitle2": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "LinkTitleNoMenu": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "MetaInfo": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "Modified": {
-                "type": "DateTime"
+                "Type": "DateTime"
             },
             "Order": {
-                "type": "Number"
+                "Type": "Number"
             },
             "owshiddenversion": {
-                "type": "Integer"
+                "Type": "Integer"
             },
             "Parent": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "PercentComplete": {
-                "type": "Number"
+                "Type": "Number"
             },
             "PermMask": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "Predecessors": {
-                "type": "LookupMulti"
+                "Type": "LookupMulti"
             },
             "Priority": {
-                "type": "Choice"
+                "Type": "Choice"
             },
             "ProgId": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "ScopeId": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "SelectTitle": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "ServerUrl": {
-                "type": "Computed"
+                "Type": "Computed"
             },
             "SortBehavior": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "StartDate": {
-                "type": "DateTime"
+                "Type": "DateTime"
             },
             "Status": {
-                "type": "Choice"
+                "Type": "Choice"
             },
             "SyncClientId": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "TaskGroup": {
-                "type": "User"
+                "Type": "User"
             },
             "Title": {
-                "type": "Text"
+                "Type": "Text"
             },
             "UniqueId": {
-                "type": "Lookup"
+                "Type": "Lookup"
             },
             "WorkflowInstanceID": {
-                "type": "Guid"
+                "Type": "Guid"
             },
             "WorkflowVersion": {
-                "type": "Integer"
+                "Type": "Integer"
             }
         }
     }

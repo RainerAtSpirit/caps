@@ -103,7 +103,7 @@ define(function( require ) {
                     throw new Error(fn.format('caps.convertFilter2Caml(). Missing model.fields defintion for {0}', filterObj.field));
                 }
 
-                type = fields[filterObj.field].type;
+                type = fields[filterObj.field].Type;
 
                 return fn.format(filterExpr, operator, field, type, val);
             }
