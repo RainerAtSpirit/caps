@@ -1,6 +1,17 @@
 define(function() {
     'use strict';
 
+    /**
+     * Check for existence of nested object keys
+     * http://stackoverflow.com/questions/2631001/javascript-test-for-existence-of-nested-object-key
+     *
+     * @example
+     * var test = {level1:{level2:{level3:'level3'}} };
+     * checkNested(test, 'level1', 'level2', 'level3'); // true
+     * checkNested(test, 'level1', 'level2', 'foo'); // false
+     *
+     * @returns {boolean}
+     */
     function checkNested () {
         var args = Array.prototype.slice.call(arguments);
         var obj = args.shift();
@@ -52,9 +63,17 @@ define(function() {
         return $.ajax(url, $.extend(true, defaults, options));
     }
 
+    function getSiteUrl ( relDir ) {
+        relDir = relDir || '/AppPages';
+
+        return typeof L_Menu_BaseUrl !== 'undefined' ? L_Menu_BaseUrl : location.pathname.split(relDir)[0];
+    }
+
     return {
         checkNested: checkNested,
+        format: format,
         getPromise: getPromise,
-        format: format
+        getSiteUrl: getSiteUrl
+
     };
 });
