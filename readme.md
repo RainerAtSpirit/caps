@@ -11,7 +11,7 @@ that allow easier access to `_layouts/CorasWorksApps/CorasWorksApplicationServic
 
 e.g. compare the following ajax request
 ```javascript
-$.ajax('/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',{
+$.ajax('/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx', {
     data: {
         RequestType: 'GetListInfo',
         OutPutType: 'json',
@@ -22,7 +22,9 @@ $.ajax('/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',{
 ```
 
 with it's equivalent caps request.
+```javascript
 caps.getListInfo({listTitle: 'Test1'})
+```
 
 
 
