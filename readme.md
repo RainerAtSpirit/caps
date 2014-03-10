@@ -6,8 +6,9 @@
 
 ### Quick start: simply grab the latest release from the build directory.
 
-Include `caps.min.js` into your page and start using it. caps is a utility library
-that allow easier access to `_layouts/CorasWorksApps/CorasWorksApplicationService.ashx` methods.
+Include `caps.min.js` into your page and start using it via the globally exposed `caps` namespace. `caps` is a utility
+library that makes it easier accessing `_layouts/CorasWorksApps/CorasWorksApplicationService.ashx` methods from
+JavaScript.
 
 e.g. compare the following ajax request
 ```javascript
@@ -18,18 +19,18 @@ $.ajax('/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx', {
         SiteUrl: '/MT/capsjs',
         ListTitle: 'Test1'
     }
-});
+})
+.then(...);
 ```
 
-with it's equivalent caps request.
+with the equivalent caps request.
 ```javascript
 caps.getListInfo({listTitle: 'Test1'})
+.then(...)
 ```
 
 
-
-
-### Quick start CapsJS core developer:
+### Quick start capsJS core developer:
 
 1. install node from http://nodejs.org
 2. install grunt using `npm install -g grunt-cli`
@@ -38,7 +39,7 @@ caps.getListInfo({listTitle: 'Test1'})
 5. run `grunt` run tests in the test directory
 
 ###Contributing
-Write tests in `test/srcSpecs` that describes the desired functionality and implement in `src/`.
+Write tests in `test/specs/modules` that describes the desired functionality and implement it in `src/`.
 No pull requests will be accepted without associating tests.
 
 In absence of a formal style guide, follow the existing code style as close as possible.
