@@ -1,12 +1,33 @@
 #capsJS
 [![Build Status](https://travis-ci.org/RainerAtSpirit/caps.png?branch=master)](https://travis-ci.org/RainerAtSpirit/caps)
->  **2013/10/24** Preliminary release
+>  **2013/03/10** Preliminary release. Not all caps methods are implemented yet.
 
-### Quick start
+## JavaScript library for CorasWorks Application Service (CAPS) developer
 
-**End-user, system-builder** simply grab the latest release from the build directory.
+### Quick start: simply grab the latest release from the build directory.
 
-**Caps architects**:
+Include `caps.min.js` into your page and start using it. caps is a utility library
+that allow easier access to `_layouts/CorasWorksApps/CorasWorksApplicationService.ashx` methods.
+
+e.g. compare the following ajax request
+```javascript
+$.ajax('/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',{
+    data: {
+        RequestType: 'GetListInfo',
+        OutPutType: 'json',
+        SiteUrl: '/MT/capsjs',
+        ListTitle: 'Test1'
+    }
+});
+```
+
+with it's equivalent caps request.
+caps.getListInfo({listTitle: 'Test1'})
+
+
+
+
+### Quick start CapsJS core developer:
 
 1. install node from http://nodejs.org
 2. install grunt using `npm install -g grunt-cli`
@@ -14,11 +35,11 @@
 4. run `npm install` in repo's root directory to install grunt's dependencies
 5. run `grunt` run tests in the test directory
 
-###Adding caps methods
-Start by copying a existing method folder in `test/srcSpecs` and write some initial tests.
-Copy an existing method folder in `src` and add the required functionality.
-Helper function should go into `src/fn.js`, whenever done add the new method to `src/caps.js`
+###Contributing
+Write tests in `test/srcSpecs` that describes the desired functionality and implement in `src/`.
+No pull requests will be accepted without associating tests.
 
+In absence of a formal style guide, follow the existing code style as close as possible.
 
 ###Building the app
 Experimental: There's a `grunt build` task that builds an optimized version in the build directory.
