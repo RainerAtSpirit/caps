@@ -1,3 +1,5 @@
+/*global caps */
+
 define(function( require ) {
     'use strict';
     var fn = require('fn/common'),
@@ -15,14 +17,14 @@ define(function( require ) {
      */
     function getListTitle ( listTitle, funcName ) {
         var errMessage = messages.getListTitle;
-            errMessage = fn.format(errMessage, funcName || '');
+        errMessage = fn.format(errMessage, funcName || '');
 
-              if ( !listTitle ) {
-                  throw new Error(errMessage);
-              }
+        if ( !listTitle ) {
+            throw new Error(errMessage);
+        }
 
-              return listTitle;
-          }
+        return listTitle;
+    }
 
     /**
      * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
@@ -46,8 +48,48 @@ define(function( require ) {
         return '%WebRoot%/' + path;
     }
 
+    function processResponse ( request, response ) {
+        var method = request.data.RequestType;
+
+        // reject defer if response has an error payload
+
+        return $.Deferred(function( deferred ) {
+            var problem = hasError(request, response);
+
+            if ( problem ) {
+                return deferred.reject(problem);
+            }
+
+            deferred.resolve(response);
+        }).promise();
+
+        function hasError ( request, response ) {
+            var problem = null;
+
+
+            // some methods e.g. GetListInfo reply with NewDataSet'methodName].ErrorInfo
+            if ( fn.checkNested(response, 'NewDataSet', method, 'ErrorInfo') ) {
+                problem = response.NewDataSet[method].ErrorInfo;
+
+                // trigger on global caps error channel
+                caps.trigger('error', problem, request, response);
+            }
+
+            // some methods e.g. GetActionDefinitions reply with NewDataSet.ErrorInfo
+            if ( fn.checkNested(response, 'NewDataSet', 'ErrorInfo') ) {
+                problem = response.NewDataSet.ErrorInfo;
+
+                // trigger on global caps error channel
+                caps.trigger('error', problem, request, response);
+            }
+
+            return problem;
+        }
+    }
+
     return {
         getListTitle: getListTitle,
-        getSiteUrl: getSiteUrl
+        getSiteUrl: getSiteUrl,
+        processResponse: processResponse
     };
 });

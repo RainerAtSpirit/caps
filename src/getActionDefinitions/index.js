@@ -4,39 +4,33 @@ define(function( require ) {
         var $ = require('jquery'),
             fn = require('fn/common'),
             validate = require('helper/validate'),
-            convert2Caml = require('./convert2Caml'),
             defaults;
 
         defaults = {
             type: 'GET',
             data: {
-                RequestType: 'GetListItems',
-                OutputType: 'json'
+                RequestType: 'GetActionDefinitions',
+                OutputType: 'json',
+                DetailLevels: 1
             }
         };
 
         /**
          *
-         * @param options {object} getListItems configuration object
-         * @param params {objects} ajax settings overwriting defaults and options
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
          * @returns {*} promise
          */
-        function getListItems ( options, params ) {
+        function getActionDefinitions ( options, params ) {
             options = options || {};
 
-            var data, request;
-
-            data = {
-                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListItems'),
-                ListTitle: validate.getListTitle(options.listTitle, 'getListItems')
-            };
-
-            if ( options.caml ) {
-                data.CAML = convert2Caml(options.caml, options.model);
-            }
+            var request;
 
             request = $.extend(true, defaults, {
-                data: data
+                data: {
+                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'getActionDefinitions'),
+                    ListTitle: validate.getListTitle(options.listTitle)
+                }
             }, params);
 
             return fn.getPromise(request)
@@ -50,6 +44,6 @@ define(function( require ) {
                 });
         }
 
-        return getListItems;
+        return getActionDefinitions;
     }
 );

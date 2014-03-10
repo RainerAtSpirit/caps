@@ -1185,6 +1185,8 @@ define('fn/index',['require','./common','processBatchData/createBatchXML','getLi
 
     return fn;
 });
+/*global caps */
+
 define('helper/validate',['require','fn/common'],function( require ) {
     
     var fn = require('fn/common'),
@@ -1202,14 +1204,14 @@ define('helper/validate',['require','fn/common'],function( require ) {
      */
     function getListTitle ( listTitle, funcName ) {
         var errMessage = messages.getListTitle;
-            errMessage = fn.format(errMessage, funcName || '');
+        errMessage = fn.format(errMessage, funcName || '');
 
-              if ( !listTitle ) {
-                  throw new Error(errMessage);
-              }
+        if ( !listTitle ) {
+            throw new Error(errMessage);
+        }
 
-              return listTitle;
-          }
+        return listTitle;
+    }
 
     /**
      * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
@@ -1233,11 +1235,239 @@ define('helper/validate',['require','fn/common'],function( require ) {
         return '%WebRoot%/' + path;
     }
 
+    function processResponse ( request, response ) {
+        var method = request.data.RequestType;
+
+        // reject defer if response has an error payload
+
+        return $.Deferred(function( deferred ) {
+            var problem = hasError(request, response);
+
+            if ( problem ) {
+                return deferred.reject(problem);
+            }
+
+            deferred.resolve(response);
+        }).promise();
+
+        function hasError ( request, response ) {
+            var problem = null;
+
+
+            // some methods e.g. GetListInfo reply with NewDataSet'methodName].ErrorInfo
+            if ( fn.checkNested(response, 'NewDataSet', method, 'ErrorInfo') ) {
+                problem = response.NewDataSet[method].ErrorInfo;
+
+                // trigger on global caps error channel
+                caps.trigger('error', problem, request, response);
+            }
+
+            // some methods e.g. GetActionDefinitions reply with NewDataSet.ErrorInfo
+            if ( fn.checkNested(response, 'NewDataSet', 'ErrorInfo') ) {
+                problem = response.NewDataSet.ErrorInfo;
+
+                // trigger on global caps error channel
+                caps.trigger('error', problem, request, response);
+            }
+
+            return problem;
+        }
+    }
+
     return {
         getListTitle: getListTitle,
-        getSiteUrl: getSiteUrl
+        getSiteUrl: getSiteUrl,
+        processResponse: processResponse
     };
 });
+define('checkVariables/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'CheckVariables',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function checkVariables ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return checkVariables;
+    }
+);
+define('getActionDefinitions/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetActionDefinitions',
+                OutputType: 'json',
+                DetailLevels: 1
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getActionDefinitions ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'getActionDefinitions'),
+                    ListTitle: validate.getListTitle(options.listTitle)
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getActionDefinitions;
+    }
+);
+define('getActivatedSolutions/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetActivatedSolutions',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getListInfo configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getActivatedSolutions ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getActivatedSolutions')
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getActivatedSolutions;
+    }
+);
+define('getGlobalVariables/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetGlobalVariables',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getGlobalVariables ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getGlobalVariables;
+    }
+);
 define('getListInfo/index',['require','jquery','fn/common','helper/validate'],function( require ) {
         
 
@@ -1267,16 +1497,23 @@ define('getListInfo/index',['require','jquery','fn/common','helper/validate'],fu
 
             request = $.extend(true, defaults, {
                 data: {
-                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'GetListInfo'),
+                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListInfo'),
                     ListTitle: getListTitle(options)
                 }
             }, params);
 
-            return fn.getPromise(request);
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
         }
 
         return getListInfo;
-
 
         // GetListInfo returns info for all lists if called without listTitle
         function getListTitle ( options ) {
@@ -1326,11 +1563,347 @@ define('getListItems/index',['require','jquery','fn/common','helper/validate','.
                 data: data
             }, params);
 
-            return fn.getPromise(request);
+            return fn.getPromise(request)
+                .then(function( response ) {
 
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
         }
 
         return getListItems;
+    }
+);
+define('getServerInfo/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetServerInfo',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getServerInfo ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getServerInfo;
+    }
+);
+define('getSiteCollection/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetSiteCollection',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getSiteCollection ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getSiteCollection;
+    }
+);
+define('getSiteInfo/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetSiteInfo',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getSiteInfo ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getSiteInfo;
+    }
+);
+define('getSiteUsers/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetSiteUser',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getSiteUsers ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getSiteUsers;
+    }
+);
+define('getVersion/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetVersion',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getVersion ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getVersion;
+    }
+);
+define('getWebPartPageTemplates/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetWebPartPageTemplates',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getWebPartPageTemplates ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getWebPartPageTemplates;
+    }
+);
+define('getWebPartProperties/index',['require','jquery','fn/common','helper/validate'],function( require ) {
+        
+
+        var $ = require('jquery'),
+            fn = require('fn/common'),
+            validate = require('helper/validate'),
+            defaults;
+
+        defaults = {
+            type: 'GET',
+            data: {
+                RequestType: 'GetWebPartProperties',
+                OutputType: 'json'
+            }
+        };
+
+        /**
+         *
+         * @param options {object} getActionDefinitions configuration object
+         * @param params {object} ajax settings overwriting defaults and options
+         * @returns {*} promise
+         */
+        function getWebPartProperties ( options, params ) {
+            options = options || {};
+
+            var request;
+
+            request = $.extend(true, defaults, {
+                data: {
+
+                }
+            }, params);
+
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
+        }
+
+        return getWebPartProperties;
     }
 );
 define('processBatchData/index',['require','jquery','fn/common','helper/validate','./createBatchXML'],function( require ) {
@@ -1408,12 +1981,12 @@ define('processBatchData/index',['require','jquery','fn/common','helper/validate
 /**
  * Caps main module that defines the public API
  */
-define('caps',['require','jquery','fn/events','helper/polyfills','fn/index','getListInfo/index','getListItems/index','processBatchData/index'],function( require ) {
+define('caps',['require','jquery','fn/events','helper/polyfills','fn/index','checkVariables/index','getActionDefinitions/index','getActivatedSolutions/index','getGlobalVariables/index','getListInfo/index','getListItems/index','getServerInfo/index','getSiteCollection/index','getSiteInfo/index','getSiteUsers/index','getVersion/index','getWebPartPageTemplates/index','getWebPartProperties/index','processBatchData/index'],function( require ) {
         
 
         var $ = require('jquery'),
             Events = require('fn/events'),
-            version = '0.17.1',
+            version = '0.19.1',
             caps;
 
         // ECMA 5 polyfills
@@ -1422,8 +1995,19 @@ define('caps',['require','jquery','fn/events','helper/polyfills','fn/index','get
         caps = {
             fn: require('fn/index'),
             version: version,
+            checkVariables: require('checkVariables/index'),
+            getActionDefinitions: require('getActionDefinitions/index'),
+            getActivatedSolutions: require('getActivatedSolutions/index'),
+            getGlobalVariables: require('getGlobalVariables/index'),
             getListInfo: require('getListInfo/index'),
             getListItems: require('getListItems/index'),
+            getServerInfo: require('getServerInfo/index'),
+            getSiteCollection: require('getSiteCollection/index'),
+            getSiteInfo: require('getSiteInfo/index'),
+            getSiteUsers: require('getSiteUsers/index'),
+            getVersion: require('getVersion/index'),
+            getWebPartPageTemplates: require('getWebPartPageTemplates/index'),
+            getWebPartProperties: require('getWebPartProperties/index'),
             processBatchData: require('processBatchData/index')
         };
 

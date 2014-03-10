@@ -78,12 +78,108 @@ describe("caps", function() {
 
         });
 
-        describe("version", function() {
+    });
 
-            it("should be a string", function() {
-                expect(typeof caps.fn.string).toBe('string');
-            });
+    describe("checkVariables", function() {
 
+        it("should be a function", function() {
+            expect(typeof caps.checkVariables).toBe('function');
+        });
+
+    });
+
+    describe("getActionDefinitions", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getActionDefinitions).toBe('function');
+        });
+
+    });
+
+    describe("getActivatedSolutions", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getActivatedSolutions).toBe('function');
+        });
+
+    });
+
+    describe("getGlobalVariables", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getGlobalVariables).toBe('function');
+        });
+
+    });
+
+    describe("getListInfo", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getListInfo).toBe('function');
+        });
+
+    });
+
+    describe("getListItems", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getListItems).toBe('function');
+        });
+
+    });
+
+    describe("getServerInfo", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getServerInfo).toBe('function');
+        });
+
+    });
+
+    describe("getSiteCollection", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getSiteCollection).toBe('function');
+        });
+
+    });
+
+    describe("getSiteInfo", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getSiteInfo).toBe('function');
+        });
+
+    });
+
+    describe("getSiteUsers", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getSiteUsers).toBe('function');
+        });
+
+    });
+
+    describe("getVersion", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getVersion).toBe('function');
+        });
+
+    });
+
+    describe("getWebPartPageTemplates", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getWebPartPageTemplates).toBe('function');
+        });
+
+    });
+
+    describe("getWebPartProperties", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getWebPartProperties).toBe('function');
         });
 
     });
@@ -96,7 +192,7 @@ describe("caps", function() {
 
     });
 
-    describe("caps events", function() {
+    describe("events", function() {
 
         it(".on should be a function", function() {
             expect(typeof caps.on).toBe('function');
@@ -112,6 +208,14 @@ describe("caps", function() {
 
         it(".trigger should be a function", function() {
             expect(typeof caps.trigger).toBe('function');
+        });
+
+    });
+
+    describe("version", function() {
+
+        it("should be a string", function() {
+            expect(typeof caps.version).toBe('string');
         });
 
     });

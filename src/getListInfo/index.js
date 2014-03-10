@@ -27,16 +27,23 @@ define(function( require ) {
 
             request = $.extend(true, defaults, {
                 data: {
-                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'GetListInfo'),
+                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListInfo'),
                     ListTitle: getListTitle(options)
                 }
             }, params);
 
-            return fn.getPromise(request);
+            return fn.getPromise(request)
+                .then(function( response ) {
+
+                    // Advanced processing for json
+                    if ( request.data.OutputType === 'json' ) {
+                        return validate.processResponse(request, response);
+                    }
+
+                });
         }
 
         return getListInfo;
-
 
         // GetListInfo returns info for all lists if called without listTitle
         function getListTitle ( options ) {

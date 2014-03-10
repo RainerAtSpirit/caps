@@ -6,7 +6,7 @@ define(function( require ) {
 
         var $ = require('jquery'),
             Events = require('fn/events'),
-            version = '0.17.1',
+            version = '0.19.1',
             caps;
 
         // ECMA 5 polyfills
@@ -15,8 +15,19 @@ define(function( require ) {
         caps = {
             fn: require('fn/index'),
             version: version,
+            checkVariables: require('checkVariables/index'),
+            getActionDefinitions: require('getActionDefinitions/index'),
+            getActivatedSolutions: require('getActivatedSolutions/index'),
+            getGlobalVariables: require('getGlobalVariables/index'),
             getListInfo: require('getListInfo/index'),
             getListItems: require('getListItems/index'),
+            getServerInfo: require('getServerInfo/index'),
+            getSiteCollection: require('getSiteCollection/index'),
+            getSiteInfo: require('getSiteInfo/index'),
+            getSiteUsers: require('getSiteUsers/index'),
+            getVersion: require('getVersion/index'),
+            getWebPartPageTemplates: require('getWebPartPageTemplates/index'),
+            getWebPartProperties: require('getWebPartProperties/index'),
             processBatchData: require('processBatchData/index')
         };
 
