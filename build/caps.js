@@ -1224,7 +1224,9 @@ define('helper/validate',['require','fn/common'],function( require ) {
         var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
             errMessage = messages.getSiteUrl,
             site = siteUrl ? siteUrl : baseUrl,
-            path = site.replace(/^\/+|\/+$/g, '');
+            path = site.replace(/^\/+|\/+$/g, ''),
+            containsGlobal = path.match(/\[.+?\]/g),
+            containsVariable = path.match(/\%.+?\%/g);
 
         errMessage = fn.format(errMessage, funcName || '');
 
@@ -1232,7 +1234,13 @@ define('helper/validate',['require','fn/common'],function( require ) {
             throw new Error(errMessage);
         }
 
-        return '%WebRoot%/' + path;
+        // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
+
+        if ( !containsGlobal && !containsVariable ) {
+            path = '%WebRoot%/' + path;
+        }
+
+        return path;
     }
 
     function processResponse ( request, response ) {
@@ -1252,7 +1260,6 @@ define('helper/validate',['require','fn/common'],function( require ) {
 
         function hasError ( request, response ) {
             var problem = null;
-
 
             // some methods e.g. GetListInfo reply with NewDataSet'methodName].ErrorInfo
             if ( fn.checkNested(response, 'NewDataSet', method, 'ErrorInfo') ) {
