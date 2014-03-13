@@ -25,7 +25,7 @@ define(function( require ) {
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }

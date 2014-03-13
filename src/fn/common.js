@@ -60,7 +60,7 @@ define(function() {
             delete options.url;
         }
 
-        return $.ajax(url, $.extend(true, defaults, options));
+        return $.ajax(url, $.extend(true, {}, defaults, options));
     }
 
     function getSiteUrl ( relDir ) {

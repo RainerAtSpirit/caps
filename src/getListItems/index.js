@@ -35,7 +35,7 @@ define(function( require ) {
                 data.CAML = convert2Caml(options.caml, options.model);
             }
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: data
             }, params);
 

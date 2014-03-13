@@ -32,7 +32,7 @@ define(function( require ) {
 
             batch = createBatchXML(validateBatch(options));
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
                     SiteUrl: siteUrl,
                     ListTitle: listTitle,
