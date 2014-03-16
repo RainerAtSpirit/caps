@@ -31,15 +31,7 @@ define(function( require ) {
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getWebPartProperties;

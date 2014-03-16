@@ -56,47 +56,8 @@ define(function( require ) {
         return path;
     }
 
-    function processResponse ( request, response ) {
-        var method = request.data.RequestType;
-
-        // reject defer if response has an error payload
-
-        return $.Deferred(function( deferred ) {
-            var problem = hasError(request, response);
-
-            if ( problem ) {
-                return deferred.reject(problem);
-            }
-
-            deferred.resolve(response);
-        }).promise();
-
-        function hasError ( request, response ) {
-            var problem = null;
-
-            // some methods e.g. GetListInfo reply with NewDataSet'methodName].ErrorInfo
-            if ( fn.checkNested(response, 'NewDataSet', method, 'ErrorInfo') ) {
-                problem = response.NewDataSet[method].ErrorInfo;
-
-                // trigger on global caps error channel
-                caps.trigger('error', problem, request, response);
-            }
-
-            // some methods e.g. GetActionDefinitions reply with NewDataSet.ErrorInfo
-            if ( fn.checkNested(response, 'NewDataSet', 'ErrorInfo') ) {
-                problem = response.NewDataSet.ErrorInfo;
-
-                // trigger on global caps error channel
-                caps.trigger('error', problem, request, response);
-            }
-
-            return problem;
-        }
-    }
-
     return {
         getListTitle: getListTitle,
-        getSiteUrl: getSiteUrl,
-        processResponse: processResponse
+        getSiteUrl: getSiteUrl
     };
 });

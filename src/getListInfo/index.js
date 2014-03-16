@@ -32,15 +32,8 @@ define(function( require ) {
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
+            return fn.getPromise(request);
 
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
         }
 
         return getListInfo;

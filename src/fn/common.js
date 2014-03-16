@@ -1,5 +1,8 @@
-define(function() {
+/* global caps */
+define(function( require ) {
     'use strict';
+
+    var L_Menu_BaseUrl = window.L_Menu_BaseUrl;
 
     /**
      * Check for existence of nested object keys
@@ -50,6 +53,7 @@ define(function() {
 
         var urlCaps = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
             url = options.url || urlCaps,
+            request,
             defaults = {
                 data: null,
                 dataType: 'json'
@@ -60,7 +64,16 @@ define(function() {
             delete options.url;
         }
 
-        return $.ajax(url, $.extend(true, {}, defaults, options));
+        request = $.extend(true, {}, defaults, options);
+
+        return $.ajax(url, request)
+            .then(function( response ) {
+
+                // Advanced processing for OutputType json
+                if ( request.data.OutputType === 'json' ) {
+                    return processResponse(request, response);
+                }
+            });
     }
 
     function getSiteUrl ( relDir ) {
@@ -76,4 +89,47 @@ define(function() {
         getSiteUrl: getSiteUrl
 
     };
+
+    //Internal
+    function processResponse ( request, response ) {
+        var method = request.data.RequestType;
+
+        // reject defer if response has an error payload
+
+        return $.Deferred(function( deferred ) {
+            var problem = hasError(request, response);
+
+            if ( problem ) {
+                return deferred.reject(problem);
+            }
+
+            deferred.resolve(response);
+        }).promise();
+
+        function hasError ( request, response ) {
+            var problem = null;
+
+            // some methods e.g. GetListInfo reply with NewDataSet'methodName].ErrorInfo
+            if ( checkNested(response, 'NewDataSet', method, 'ErrorInfo') ) {
+                problem = response.NewDataSet[method].ErrorInfo;
+            }
+
+            // some methods e.g. GetActionDefinitions reply with NewDataSet.ErrorInfo
+            if ( checkNested(response, 'NewDataSet', 'ErrorInfo') ) {
+                problem = response.NewDataSet.ErrorInfo;
+            }
+
+            // some methods reply with ErrorInfo
+            if ( checkNested(response, 'ErrorInfo') ) {
+                problem = response.ErrorInfo;
+            }
+
+            if ( problem ) {
+                // trigger on global caps error channel
+                caps.trigger('error', problem, request, response);
+            }
+
+            return problem;
+        }
+    }
 });

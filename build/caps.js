@@ -736,8 +736,11 @@ define('helper/polyfills',[],function() {
         };
     }
 });
-define('fn/common',[],function() {
+/* global caps */
+define('fn/common',['require'],function( require ) {
     
+
+    var L_Menu_BaseUrl = window.L_Menu_BaseUrl;
 
     /**
      * Check for existence of nested object keys
@@ -788,6 +791,7 @@ define('fn/common',[],function() {
 
         var urlCaps = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
             url = options.url || urlCaps,
+            request,
             defaults = {
                 data: null,
                 dataType: 'json'
@@ -798,7 +802,16 @@ define('fn/common',[],function() {
             delete options.url;
         }
 
-        return $.ajax(url, $.extend(true, defaults, options));
+        request = $.extend(true, {}, defaults, options);
+
+        return $.ajax(url, request)
+            .then(function( response ) {
+
+                // Advanced processing for OutputType json
+                if ( request.data.OutputType === 'json' ) {
+                    return processResponse(request, response);
+                }
+            });
     }
 
     function getSiteUrl ( relDir ) {
@@ -814,6 +827,49 @@ define('fn/common',[],function() {
         getSiteUrl: getSiteUrl
 
     };
+
+    //Internal
+    function processResponse ( request, response ) {
+        var method = request.data.RequestType;
+
+        // reject defer if response has an error payload
+
+        return $.Deferred(function( deferred ) {
+            var problem = hasError(request, response);
+
+            if ( problem ) {
+                return deferred.reject(problem);
+            }
+
+            deferred.resolve(response);
+        }).promise();
+
+        function hasError ( request, response ) {
+            var problem = null;
+
+            // some methods e.g. GetListInfo reply with NewDataSet'methodName].ErrorInfo
+            if ( checkNested(response, 'NewDataSet', method, 'ErrorInfo') ) {
+                problem = response.NewDataSet[method].ErrorInfo;
+            }
+
+            // some methods e.g. GetActionDefinitions reply with NewDataSet.ErrorInfo
+            if ( checkNested(response, 'NewDataSet', 'ErrorInfo') ) {
+                problem = response.NewDataSet.ErrorInfo;
+            }
+
+            // some methods reply with ErrorInfo
+            if ( checkNested(response, 'ErrorInfo') ) {
+                problem = response.ErrorInfo;
+            }
+
+            if ( problem ) {
+                // trigger on global caps error channel
+                caps.trigger('error', problem, request, response);
+            }
+
+            return problem;
+        }
+    }
 });
 define('processBatchData/createBatchXML',['require','jquery','fn/common'],function( require ) {
         
@@ -1243,48 +1299,9 @@ define('helper/validate',['require','fn/common'],function( require ) {
         return path;
     }
 
-    function processResponse ( request, response ) {
-        var method = request.data.RequestType;
-
-        // reject defer if response has an error payload
-
-        return $.Deferred(function( deferred ) {
-            var problem = hasError(request, response);
-
-            if ( problem ) {
-                return deferred.reject(problem);
-            }
-
-            deferred.resolve(response);
-        }).promise();
-
-        function hasError ( request, response ) {
-            var problem = null;
-
-            // some methods e.g. GetListInfo reply with NewDataSet'methodName].ErrorInfo
-            if ( fn.checkNested(response, 'NewDataSet', method, 'ErrorInfo') ) {
-                problem = response.NewDataSet[method].ErrorInfo;
-
-                // trigger on global caps error channel
-                caps.trigger('error', problem, request, response);
-            }
-
-            // some methods e.g. GetActionDefinitions reply with NewDataSet.ErrorInfo
-            if ( fn.checkNested(response, 'NewDataSet', 'ErrorInfo') ) {
-                problem = response.NewDataSet.ErrorInfo;
-
-                // trigger on global caps error channel
-                caps.trigger('error', problem, request, response);
-            }
-
-            return problem;
-        }
-    }
-
     return {
         getListTitle: getListTitle,
-        getSiteUrl: getSiteUrl,
-        processResponse: processResponse
+        getSiteUrl: getSiteUrl
     };
 });
 define('checkVariables/index',['require','jquery','fn/common','helper/validate'],function( require ) {
@@ -1314,21 +1331,13 @@ define('checkVariables/index',['require','jquery','fn/common','helper/validate']
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return checkVariables;
@@ -1362,22 +1371,14 @@ define('getActionDefinitions/index',['require','jquery','fn/common','helper/vali
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
                     SiteUrl: validate.getSiteUrl(options.siteUrl, 'getActionDefinitions'),
                     ListTitle: validate.getListTitle(options.listTitle)
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getActionDefinitions;
@@ -1410,19 +1411,11 @@ define('getActivatedSolutions/index',['require','jquery','fn/common','helper/val
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 SiteUrl: validate.getSiteUrl(options.siteUrl, 'getActivatedSolutions')
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getActivatedSolutions;
@@ -1455,21 +1448,13 @@ define('getGlobalVariables/index',['require','jquery','fn/common','helper/valida
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getGlobalVariables;
@@ -1502,22 +1487,15 @@ define('getListInfo/index',['require','jquery','fn/common','helper/validate'],fu
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {},  defaults, {
                 data: {
                     SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListInfo'),
                     ListTitle: getListTitle(options)
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
+            return fn.getPromise(request);
 
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
         }
 
         return getListInfo;
@@ -1566,19 +1544,11 @@ define('getListItems/index',['require','jquery','fn/common','helper/validate','.
                 data.CAML = convert2Caml(options.caml, options.model);
             }
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: data
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getListItems;
@@ -1611,21 +1581,13 @@ define('getServerInfo/index',['require','jquery','fn/common','helper/validate'],
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getServerInfo;
@@ -1658,21 +1620,13 @@ define('getSiteCollection/index',['require','jquery','fn/common','helper/validat
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getSiteCollection;
@@ -1705,21 +1659,13 @@ define('getSiteInfo/index',['require','jquery','fn/common','helper/validate'],fu
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getSiteInfo;
@@ -1752,21 +1698,13 @@ define('getSiteUsers/index',['require','jquery','fn/common','helper/validate'],f
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getSiteUsers;
@@ -1799,21 +1737,13 @@ define('getVersion/index',['require','jquery','fn/common','helper/validate'],fun
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getVersion;
@@ -1846,21 +1776,13 @@ define('getWebPartPageTemplates/index',['require','jquery','fn/common','helper/v
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getWebPartPageTemplates;
@@ -1893,21 +1815,13 @@ define('getWebPartProperties/index',['require','jquery','fn/common','helper/vali
 
             var request;
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
 
                 }
             }, params);
 
-            return fn.getPromise(request)
-                .then(function( response ) {
-
-                    // Advanced processing for json
-                    if ( request.data.OutputType === 'json' ) {
-                        return validate.processResponse(request, response);
-                    }
-
-                });
+            return fn.getPromise(request);
         }
 
         return getWebPartProperties;
@@ -1947,7 +1861,7 @@ define('processBatchData/index',['require','jquery','fn/common','helper/validate
 
             batch = createBatchXML(validateBatch(options));
 
-            request = $.extend(true, defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
                     SiteUrl: siteUrl,
                     ListTitle: listTitle,
@@ -1993,7 +1907,7 @@ define('caps',['require','jquery','fn/events','helper/polyfills','fn/index','che
 
         var $ = require('jquery'),
             Events = require('fn/events'),
-            version = '0.19.1',
+            version = '0.20.1',
             caps;
 
         // ECMA 5 polyfills
