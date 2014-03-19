@@ -815,9 +815,10 @@ define('fn/common',['require'],function( require ) {
     }
 
     function getSiteUrl ( relDir ) {
-        relDir = relDir || '/AppPages';
+        var pathname = location.pathname.toLocaleLowerCase();
+        relDir = relDir ? relDir.toLocaleLowerCase() :  '/apppages';
 
-        return typeof L_Menu_BaseUrl !== 'undefined' ? L_Menu_BaseUrl : location.pathname.split(relDir)[0];
+        return typeof L_Menu_BaseUrl !== 'undefined' ? L_Menu_BaseUrl : pathname.split(relDir)[0];
     }
 
     return {
@@ -1907,7 +1908,7 @@ define('caps',['require','jquery','fn/events','helper/polyfills','fn/index','che
 
         var $ = require('jquery'),
             Events = require('fn/events'),
-            version = '0.20.1',
+            version = '0.20.2',
             caps;
 
         // ECMA 5 polyfills

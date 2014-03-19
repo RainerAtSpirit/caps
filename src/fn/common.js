@@ -77,9 +77,10 @@ define(function( require ) {
     }
 
     function getSiteUrl ( relDir ) {
-        relDir = relDir || '/AppPages';
+        var pathname = location.pathname.toLocaleLowerCase();
+        relDir = relDir ? relDir.toLocaleLowerCase() :  '/apppages';
 
-        return typeof L_Menu_BaseUrl !== 'undefined' ? L_Menu_BaseUrl : location.pathname.split(relDir)[0];
+        return typeof L_Menu_BaseUrl !== 'undefined' ? L_Menu_BaseUrl : pathname.split(relDir)[0];
     }
 
     return {
