@@ -73,6 +73,8 @@ define(function( require ) {
                 if ( request.data.OutputType === 'json' ) {
                     return processResponse(request, response);
                 }
+
+                return response;
             });
     }
 
