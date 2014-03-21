@@ -34,6 +34,9 @@ define(function( require ) {
             if ( !fields ) {
                 throw new Error('caps.convertFilter2Caml(). Missing required fields argument');
              }
+
+            filter = typeof filter === 'string' ? JSON.parse(filter) : filter;
+            fields = typeof fields === 'string' ? JSON.parse(fields) : fields;
            
             where.push('<Where>');
 

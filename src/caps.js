@@ -6,7 +6,7 @@ define(function( require ) {
 
         var $ = require('jquery'),
             Events = require('fn/events'),
-            version = '0.20.3',
+            version = '0.20.4',
             caps;
 
         // ECMA 5 polyfills

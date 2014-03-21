@@ -811,6 +811,8 @@ define('fn/common',['require'],function( require ) {
                 if ( request.data.OutputType === 'json' ) {
                     return processResponse(request, response);
                 }
+
+                return response;
             });
     }
 
@@ -992,6 +994,9 @@ define('getListItems/convertFilter2Caml',['require','jquery','fn/common'],functi
             if ( !fields ) {
                 throw new Error('caps.convertFilter2Caml(). Missing required fields argument');
              }
+
+            filter = typeof filter === 'string' ? JSON.parse(filter) : filter;
+            fields = typeof fields === 'string' ? JSON.parse(fields) : fields;
            
             where.push('<Where>');
 
@@ -1908,7 +1913,7 @@ define('caps',['require','jquery','fn/events','helper/polyfills','fn/index','che
 
         var $ = require('jquery'),
             Events = require('fn/events'),
-            version = '0.20.2',
+            version = '0.20.4',
             caps;
 
         // ECMA 5 polyfills
