@@ -78,11 +78,31 @@ define(function( require ) {
             });
     }
 
-    function getSiteUrl ( relDir ) {
-        var pathname = location.pathname.toLocaleLowerCase();
-        relDir = relDir ? relDir.toLocaleLowerCase() :  '/apppages';
+    function getSiteUrl () {
+        var soapEnv = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><{0} xmlns="http://schemas.microsoft.com/sharepoint/soap/" >{1}</{0}></soap:Body></soap:Envelope>',
+            siteName = '',
+            pageUrl;
 
-        return typeof L_Menu_BaseUrl !== 'undefined' ? L_Menu_BaseUrl : pathname.split(relDir)[0];
+        // fast
+        if ( typeof L_Menu_BaseUrl !== 'undefined' ) {
+            return L_Menu_BaseUrl;
+        }
+
+        pageUrl = format('<pageUrl>{0}</pageUrl>', location.href.split('?')[0]);
+
+        // fallback using async false!
+        $.ajax('/_vti_bin/Webs.asmx', {
+            async: false,
+            type: 'POST',
+            dataType: 'xml',
+            data: format(soapEnv, 'WebUrlFromPageUrl', pageUrl),
+            contentType: 'text/xml; charset="utf-8"'
+        })
+            .complete(function( response ) {
+                siteName = $(response.responseXML).find("WebUrlFromPageUrlResult").text() ;
+            });
+
+        return siteName;
     }
 
     return {
