@@ -99,7 +99,7 @@ define(function( require ) {
             $.each(viewFields, function( index, field ) {
 
                 result.push(fn.format('<FieldRef Name="{0}" />',
-                    field)
+                    $.trim(field))
                 );
             });
 

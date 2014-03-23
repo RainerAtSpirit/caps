@@ -1209,7 +1209,7 @@ define('getListItems/convert2Caml',['require','fn/common','./convertFilter2Caml'
             $.each(viewFields, function( index, field ) {
 
                 result.push(fn.format('<FieldRef Name="{0}" />',
-                    field)
+                    $.trim(field))
                 );
             });
 
@@ -1943,7 +1943,7 @@ define('caps',['require','jquery','fn/events','helper/polyfills','fn/index','che
 
         var $ = require('jquery'),
             Events = require('fn/events'),
-            version = '0.21.1',
+            version = '0.21.2',
             caps;
 
         // ECMA 5 polyfills
