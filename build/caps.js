@@ -816,11 +816,41 @@ define('fn/common',['require'],function( require ) {
             });
     }
 
-    function getSiteUrl ( relDir ) {
-        var pathname = location.pathname.toLocaleLowerCase();
+    function getSiteUrl (relDir) {
+        var soapEnv = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><{0} xmlns="http://schemas.microsoft.com/sharepoint/soap/" >{1}</{0}></soap:Body></soap:Envelope>',
+            pathName = location.pathname.toLocaleLowerCase(),
+            siteName = '',
+            pageUrl;
+
         relDir = relDir ? relDir.toLocaleLowerCase() :  '/apppages';
 
-        return typeof L_Menu_BaseUrl !== 'undefined' ? L_Menu_BaseUrl : pathname.split(relDir)[0];
+        // Using L_Menu_BaseUrl if available
+        if ( typeof L_Menu_BaseUrl !== 'undefined' ) {
+            return L_Menu_BaseUrl;
+        }
+
+        // Testing if relDir exists in path
+        if ( pathName.indexOf(relDir) > -1 ){
+            return pathName.split(relDir)[0];
+        }
+
+
+        // last resort using webs.amsx with async false!
+
+        pageUrl = format('<pageUrl>{0}</pageUrl>', location.href.split('?')[0]);
+
+        $.ajax('/_vti_bin/Webs.asmx', {
+            async: false,
+            type: 'POST',
+            dataType: 'xml',
+            data: format(soapEnv, 'WebUrlFromPageUrl', pageUrl),
+            contentType: 'text/xml; charset="utf-8"'
+        })
+            .complete(function( response ) {
+                siteName = $(response.responseXML).find("WebUrlFromPageUrlResult").text() ;
+            });
+
+        return siteName;
     }
 
     return {
@@ -1913,7 +1943,7 @@ define('caps',['require','jquery','fn/events','helper/polyfills','fn/index','che
 
         var $ = require('jquery'),
             Events = require('fn/events'),
-            version = '0.20.4',
+            version = '0.21.1',
             caps;
 
         // ECMA 5 polyfills
