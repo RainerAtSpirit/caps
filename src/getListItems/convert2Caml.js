@@ -65,6 +65,8 @@ define(function( require ) {
             function getOrderBy ( sort ) {
                 var result = [];
 
+                sort = typeof sort === 'string' ? JSON.parse(sort) : sort;
+
                 sort = $.isArray(sort) ? sort : [sort];
 
                 result.push('<OrderBy>');
