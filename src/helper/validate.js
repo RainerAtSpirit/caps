@@ -38,14 +38,15 @@ define(function( require ) {
             errMessage = messages.getSiteUrl,
             site = siteUrl ? siteUrl : baseUrl,
             path = site.replace(/^\/+|\/+$/g, ''),
-            containsGlobal = path.match(/\[.+?\]/g),
-            containsVariable = path.match(/\%.+?\%/g);
-
-        errMessage = fn.format(errMessage, funcName || '');
+            containsGlobal,
+            containsVariable;
 
         if ( !path ) {
-            throw new Error(errMessage);
+            path = fn.getSiteUrl();
         }
+
+        containsGlobal = path.match(/\[.+?\]/g);
+        containsVariable = path.match(/\%.+?\%/g);
 
         // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
 
