@@ -1175,6 +1175,8 @@ define('getListItems/convert2Caml',['require','fn/common','./convertFilter2Caml'
             function getOrderBy ( sort ) {
                 var result = [];
 
+                sort = typeof sort === 'string' ? JSON.parse(sort) : sort;
+
                 sort = $.isArray(sort) ? sort : [sort];
 
                 result.push('<OrderBy>');
@@ -1944,7 +1946,7 @@ define('caps',['require','jquery','fn/events','helper/polyfills','fn/index','che
 
         var $ = require('jquery'),
             Events = require('fn/events'),
-            version = '0.21.4',
+            version = '0.22.1',
             caps;
 
         // ECMA 5 polyfills
