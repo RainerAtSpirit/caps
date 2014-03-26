@@ -1,7 +1,6 @@
 define(function( require ) {
         'use strict';
-        var $ = require('jquery'),
-            fn = require('fn/common'),
+        var fn = require('../fn/common'),
             camlMap = {
                 'eq': 'Eq',
                 'neq': 'Neq',

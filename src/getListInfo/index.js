@@ -1,9 +1,8 @@
 define(function( require ) {
         'use strict';
 
-        var $ = require('jquery'),
-            fn = require('fn/common'),
-            validate = require('helper/validate'),
+        var fn = require('../fn/common'),
+            validate = require('../helper/validate'),
             defaults;
 
         defaults = {
@@ -25,7 +24,7 @@ define(function( require ) {
 
             var request;
 
-            request = $.extend(true, {},  defaults, {
+            request = $.extend(true, {}, defaults, {
                 data: {
                     SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListInfo'),
                     ListTitle: getListTitle(options)

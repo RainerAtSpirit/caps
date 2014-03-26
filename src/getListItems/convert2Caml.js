@@ -1,7 +1,7 @@
 define(function( require ) {
         'use strict';
 
-        var fn = require('fn/common'),
+        var fn = require('../fn/common'),
             convertFilter2Caml = require('./convertFilter2Caml');
 
         /**

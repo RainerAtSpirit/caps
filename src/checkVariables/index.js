@@ -1,9 +1,8 @@
 define(function( require ) {
         'use strict';
 
-        var $ = require('jquery'),
-            fn = require('fn/common'),
-            validate = require('helper/validate'),
+        var fn = require('../fn/common'),
+            validate = require('../helper/validate'),
             defaults;
 
         defaults = {
