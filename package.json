@@ -16,7 +16,8 @@
     "grunt-contrib-watch": "~0.5.3",
     "open": "0.0.4",
     "grunt-open": "~0.2.3",
-    "connect-livereload": "~0.3.2"
+    "connect-livereload": "~0.3.2",
+    "grunt-webpack": "^1.0.5"
   },
   "scripts": {
     "test": "grunt travis --verbose"

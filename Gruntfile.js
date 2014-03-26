@@ -42,6 +42,25 @@ module.exports = function( grunt ) {
                 path: 'http://localhost:<%= connect.build.options.port %>'
             }
         },
+        webpack: {
+            caps: {
+                // webpack options
+                entry: "./src/caps.js",
+                output: {
+                    path: "build/",
+                    filename: "caps.js",
+                    libraryTarget: 'var',
+                    library: 'caps'
+                },
+
+                stats: {
+                    // Configure the console output
+                    colors: true,
+                    modules: true,
+                    reasons: false
+                }
+            }
+        },
         jasmine: {
             build: {
                 src: 'build/caps.js',
@@ -78,25 +97,6 @@ module.exports = function( grunt ) {
         },
         jshint: {
             all: ['Gruntfile.js', 'src/**/*.js', 'test/**/*spec.js']
-        },
-        requirejs: {
-            build: {
-                options: {
-                    almond: true,
-                    optimize: 'none',
-                    baseUrl: 'src',
-                    paths: {
-                        jquery: '../lib/jquery/jquery-1.9.1'
-                    },
-                    include: ['caps'],
-                    exclude: ['jquery'],
-                    out: 'build/caps.js',
-                    wrap: {
-                        startFile: 'src/helper/wrap/start.frag',
-                        endFile: 'src/helper/wrap/end.frag'
-                    }
-                }
-            }
         },
         uglify: {
             options: {
@@ -135,11 +135,11 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks('grunt-open');
-    grunt.loadNpmTasks("grunt-requirejs");
+    grunt.loadNpmTasks('grunt-webpack');
 
     // Default task(s).
-    grunt.registerTask('travis', ['jshint','jasmine:dev', 'jasmine:build']);
-    grunt.registerTask('build', ['jshint', 'jasmine:dev', 'clean', 'requirejs', 'uglify', 'jasmine:build']);
-    grunt.registerTask('default', ['jshint','jasmine:dev', 'watch:dev']);
-    grunt.registerTask('test', ['jshint','jasmine:dev', 'connect:dev:livereload', 'open:dev', 'watch:dev']);
+    grunt.registerTask('travis', ['jshint', 'jasmine:dev', 'jasmine:build']);
+    grunt.registerTask('build', ['jshint', 'jasmine:dev', 'clean', 'webpack:caps', 'uglify', 'jasmine:build']);
+    grunt.registerTask('default', ['jshint', 'jasmine:dev', 'watch:dev']);
+    grunt.registerTask('test', ['jshint', 'jasmine:dev', 'connect:dev:livereload', 'open:dev', 'watch:dev']);
 };
