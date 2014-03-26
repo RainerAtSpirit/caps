@@ -62,6 +62,7 @@ module.exports = function( grunt ) {
                     specs: 'test/specs/modules/**/*spec.js',
                     keepRunner: true,
                     vendor: [
+                        'lib/jquery/jquery-1.9.1.js',
                         'test/_libs/underscore.js',
                         'test/_libs/equivalent-xml.js',
                         'test/_libs/jasmine-jquery-1.5.2.js'
@@ -69,10 +70,7 @@ module.exports = function( grunt ) {
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
                         requireConfig: {
-                            baseUrl: 'src/',
-                            paths: {
-                                "jquery": "../lib/jquery/jquery-1.9.1"
-                            }
+                            baseUrl: 'src/'
                         }
                     }
                 }

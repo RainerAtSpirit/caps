@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '0.30.1',
+	            version = '0.22.1',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -82,7 +82,7 @@ var caps =
 	        Events.includeIn(caps);
 
 	        // caps API
-	        module.exports =  caps;
+	        return  caps;
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },

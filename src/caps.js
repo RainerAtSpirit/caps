@@ -5,7 +5,7 @@ define(function( require ) {
         'use strict';
 
         var Events = require('./fn/events'),
-            version = '0.30.1',
+            version = '0.22.1',
             caps;
 
         // ECMA 5 polyfills
@@ -34,6 +34,6 @@ define(function( require ) {
         Events.includeIn(caps);
 
         // caps API
-        module.exports =  caps;
+        return  caps;
     }
 );
