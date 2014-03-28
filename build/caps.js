@@ -319,9 +319,9 @@ var caps =
 
 	    // extend common methods with methods available at caps.fn namespace
 	    fn = $.extend({}, __webpack_require__(18), {
-	        createBatchXML: __webpack_require__(20),
-	        convert2Caml: __webpack_require__(21),
-	        convertFilter2Caml: __webpack_require__(22),
+	        createBatchXML: __webpack_require__(19),
+	        convert2Caml: __webpack_require__(20),
+	        convertFilter2Caml: __webpack_require__(21),
 	        Events: __webpack_require__(1)
 	    });
 
@@ -421,7 +421,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -463,7 +463,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -507,7 +507,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -547,7 +547,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -589,7 +589,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -639,8 +639,8 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
-	            convert2Caml = __webpack_require__(21),
+	            validate = __webpack_require__(22),
+	            convert2Caml = __webpack_require__(20),
 	            defaults;
 
 	        defaults = {
@@ -689,7 +689,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -731,7 +731,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -773,7 +773,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -815,7 +815,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -857,7 +857,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -899,7 +899,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -941,7 +941,7 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
+	            validate = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -983,8 +983,8 @@ var caps =
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            validate = __webpack_require__(19),
-	            createBatchXML = __webpack_require__(20),
+	            validate = __webpack_require__(22),
+	            createBatchXML = __webpack_require__(19),
 	            defaults;
 
 	        defaults = {
@@ -1227,75 +1227,6 @@ var caps =
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*global caps */
-
-	!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
-	    'use strict';
-	    var fn = __webpack_require__(18),
-	        L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
-	        messages = {
-	            getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
-	            getListTitle: 'caps.{0}(). Missing required "listTitle" property'
-	        };
-
-	    /**
-	     * Check if listTitle exists and throw error
-	     * @param listTitle {string}
-	     * @param funcName {string} function name for error message
-	     * @returns {*} listTitle
-	     */
-	    function getListTitle ( listTitle, funcName ) {
-	        var errMessage = messages.getListTitle;
-	        errMessage = fn.format(errMessage, funcName || '');
-
-	        if ( !listTitle ) {
-	            throw new Error(errMessage);
-	        }
-
-	        return listTitle;
-	    }
-
-	    /**
-	     * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
-	     * @param siteUrl {string}
-	     * @param funcName {string}
-	     * @returns {string} siteUrl
-	     */
-	    function getSiteUrl ( siteUrl, funcName ) {
-
-	        var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
-	            errMessage = messages.getSiteUrl,
-	            site = siteUrl ? siteUrl : baseUrl,
-	            path = site.replace(/^\/+|\/+$/g, ''),
-	            containsGlobal,
-	            containsVariable;
-
-	        if ( !path ) {
-	            path = fn.getSiteUrl();
-	        }
-
-	        containsGlobal = path.match(/\[.+?\]/g);
-	        containsVariable = path.match(/\%.+?\%/g);
-
-	        // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
-
-	        if ( !containsGlobal && !containsVariable ) {
-	            path = '%WebRoot%/' + path;
-	        }
-
-	        return path;
-	    }
-
-	    return {
-	        getListTitle: getListTitle,
-	        getSiteUrl: getSiteUrl
-	    };
-	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 	        var fn = __webpack_require__(18);
@@ -1380,14 +1311,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
 	        var fn = __webpack_require__(18),
-	            convertFilter2Caml = __webpack_require__(22);
+	            convertFilter2Caml = __webpack_require__(21);
 
 	        /**
 	         *
@@ -1526,7 +1457,24 @@ var caps =
 	            result.push('<QueryOptions>');
 
 	            $.each(settings, function( prop, value ) {
+
+	                if ( prop === 'Paging' ) {
+
+	                    // Checking if "&" replacement was already applied
+
+	                    if ( value.indexOf('&amp;amp;') === -1 ) {
+	                        value = value.replace(/&/g, '&amp;amp;');
+	                    }
+
+	                    //value = encodeURIComponent(value);
+
+	                    result.push(fn.format('<{0} ListItemCollectionPositionNext="{1}"/>', prop, value));
+
+	                    return;
+	                }
+
 	                result.push(fn.format('<{0}>{1}</{0}>', prop, value));
+
 	            });
 
 	            //todo: Should paging support be build into caps?
@@ -1540,7 +1488,7 @@ var caps =
 
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
@@ -1661,6 +1609,75 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*global caps */
+
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	    'use strict';
+	    var fn = __webpack_require__(18),
+	        L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+	        messages = {
+	            getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
+	            getListTitle: 'caps.{0}(). Missing required "listTitle" property'
+	        };
+
+	    /**
+	     * Check if listTitle exists and throw error
+	     * @param listTitle {string}
+	     * @param funcName {string} function name for error message
+	     * @returns {*} listTitle
+	     */
+	    function getListTitle ( listTitle, funcName ) {
+	        var errMessage = messages.getListTitle;
+	        errMessage = fn.format(errMessage, funcName || '');
+
+	        if ( !listTitle ) {
+	            throw new Error(errMessage);
+	        }
+
+	        return listTitle;
+	    }
+
+	    /**
+	     * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
+	     * @param siteUrl {string}
+	     * @param funcName {string}
+	     * @returns {string} siteUrl
+	     */
+	    function getSiteUrl ( siteUrl, funcName ) {
+
+	        var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
+	            errMessage = messages.getSiteUrl,
+	            site = siteUrl ? siteUrl : baseUrl,
+	            path = site.replace(/^\/+|\/+$/g, ''),
+	            containsGlobal,
+	            containsVariable;
+
+	        if ( !path ) {
+	            path = fn.getSiteUrl();
+	        }
+
+	        containsGlobal = path.match(/\[.+?\]/g);
+	        containsVariable = path.match(/\%.+?\%/g);
+
+	        // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
+
+	        if ( !containsGlobal && !containsVariable ) {
+	            path = '%WebRoot%/' + path;
+	        }
+
+	        return path;
+	    }
+
+	    return {
+	        getListTitle: getListTitle,
+	        getSiteUrl: getSiteUrl
+	    };
+	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }
 /******/ ])

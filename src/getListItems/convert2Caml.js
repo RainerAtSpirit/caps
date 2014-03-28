@@ -141,7 +141,24 @@ define(function( require ) {
             result.push('<QueryOptions>');
 
             $.each(settings, function( prop, value ) {
+
+                if ( prop === 'Paging' ) {
+
+                    // Checking if "&" replacement was already applied
+
+                    if ( value.indexOf('&amp;amp;') === -1 ) {
+                        value = value.replace(/&/g, '&amp;amp;');
+                    }
+
+                    //value = encodeURIComponent(value);
+
+                    result.push(fn.format('<{0} ListItemCollectionPositionNext="{1}"/>', prop, value));
+
+                    return;
+                }
+
                 result.push(fn.format('<{0}>{1}</{0}>', prop, value));
+
             });
 
             //todo: Should paging support be build into caps?
