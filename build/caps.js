@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '0.22.1',
+	            version = '0.30.2',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -1469,6 +1469,17 @@ var caps =
 	                    //value = encodeURIComponent(value);
 
 	                    result.push(fn.format('<{0} ListItemCollectionPositionNext="{1}"/>', prop, value));
+
+	                    return;
+	                }
+
+	                // Handling special case Document libraries
+	                // http://msdn.microsoft.com/en-us/library/lists.lists.getlistitems(v=office.12).aspx
+	                if ( prop === 'ViewAttributes' ) {
+
+	                    if (value.indexOf('Recursive') > -1 ){
+	                        result.push(fn.format('<{0} Scope="Recursive"/>', prop, value));
+	                    }
 
 	                    return;
 	                }

@@ -157,6 +157,17 @@ define(function( require ) {
                     return;
                 }
 
+                // Handling special case Document libraries
+                // http://msdn.microsoft.com/en-us/library/lists.lists.getlistitems(v=office.12).aspx
+                if ( prop === 'ViewAttributes' ) {
+
+                    if (value.indexOf('Recursive') > -1 ){
+                        result.push(fn.format('<{0} Scope="Recursive"/>', prop, value));
+                    }
+
+                    return;
+                }
+
                 result.push(fn.format('<{0}>{1}</{0}>', prop, value));
 
             });
