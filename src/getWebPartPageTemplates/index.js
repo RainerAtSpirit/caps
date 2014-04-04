@@ -15,7 +15,7 @@ define(function( require ) {
 
         /**
          *
-         * @param options {object} getActionDefinitions configuration object
+         * @param options {object} getWebPartPageTemplates configuration object
          * @param params {object} ajax settings overwriting defaults and options
          * @returns {*} promise
          */

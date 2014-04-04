@@ -57,7 +57,23 @@ define(function( require ) {
         return path;
     }
 
+    function addOptionalProperties ( options, data, properties ) {
+
+        $.each(properties, function( idx, property ) {
+            var value = options[property] || false,
+                propName = property.charAt(0).toUpperCase() + property.substring(1);
+
+            if ( value ) {
+                data[propName] = value;
+            }
+
+        });
+
+        return data;
+    }
+
     return {
+        addOptionalProperties: addOptionalProperties,
         getListTitle: getListTitle,
         getSiteUrl: getSiteUrl
     };

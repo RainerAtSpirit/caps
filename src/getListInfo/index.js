@@ -22,25 +22,24 @@ define(function( require ) {
         function getListInfo ( options, params ) {
             options = options || {};
 
-            var request;
+            var request, data,
+                optional = ['listTitle', 'properties'];
+
+            // Adding mandatory properties
+            data = {
+                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListInfo')
+            };
+
+            data = validate.addOptionalProperties(options, data, optional);
 
             request = $.extend(true, {}, defaults, {
-                data: {
-                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListInfo'),
-                    ListTitle: getListTitle(options)
-                }
+                data: data
             }, params);
 
-            return fn.getPromise(request);
 
+            return fn.getPromise(request);
         }
 
         return getListInfo;
-
-        // GetListInfo returns info for all lists if called without listTitle
-        function getListTitle ( options ) {
-
-            return options.listTitle || '';
-        }
     }
 );

@@ -15,19 +15,21 @@ define(function( require ) {
 
         /**
          *
-         * @param options {object} getActionDefinitions configuration object
+         * @param options {object} getSiteInfo configuration object
          * @param params {object} ajax settings overwriting defaults and options
          * @returns {*} promise
          */
         function getSiteInfo ( options, params ) {
             options = options || {};
 
-            var request;
+            var request,
+                data = {},
+                optional = ['properties'];
+
+            data = validate.addOptionalProperties(options, data, optional);
 
             request = $.extend(true, {}, defaults, {
-                data: {
-
-                }
+                data:  data
             }, params);
 
             return fn.getPromise(request);

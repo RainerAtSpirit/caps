@@ -15,7 +15,7 @@ define(function( require ) {
 
         /**
          *
-         * @param options {object} getListInfo configuration object
+         * @param options {object} getActivatedSolutions configuration object
          * @param params {object} ajax settings overwriting defaults and options
          * @returns {*} promise
          */
