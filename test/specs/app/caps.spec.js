@@ -104,6 +104,14 @@ describe("caps", function() {
 
     });
 
+    describe("getFileContents", function() {
+
+         it("should be a function", function() {
+             expect(typeof caps.getFileContents).toBe('function');
+         });
+
+     });
+
     describe("getGlobalVariables", function() {
 
         it("should be a function", function() {

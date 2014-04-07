@@ -157,6 +157,13 @@ define(function( require ) {
                 problem = response.ErrorInfo;
             }
 
+             // some methods e.g. GetListItems might reply NewDataSet.GetListItems.listItems.ErrorInfo
+            if ( checkNested(response, 'NewDataSet', 'GetListItems', 'listitems', 'ErrorInfo') ) {
+                problem = response.NewDataSet.GetListItems.listitems.ErrorInfo;
+            }
+
+
+
             if ( problem ) {
                 // trigger on global caps error channel
                 caps.trigger('error', problem, request, response);

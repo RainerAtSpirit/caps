@@ -6,7 +6,8 @@ define(function( require ) {
         L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
         messages = {
             getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
-            getListTitle: 'caps.{0}(). Missing required "listTitle" property'
+            getListTitle: 'caps.{0}(). Missing required "listTitle" property',
+            getFileUrl:   'caps.{0}(). Missing required "fileUrl" property'
         };
 
     /**
@@ -25,6 +26,23 @@ define(function( require ) {
 
         return listTitle;
     }
+
+    /**
+        * Check if fileUrl exists and throw error
+        * @param fileUrl {string}
+        * @param funcName {string} function name for error message
+        * @returns {*} listTitle
+        */
+       function getFileUrl ( fileUrl, funcName ) {
+           var errMessage = messages.getFileUrl;
+           errMessage = fn.format(errMessage, funcName || '');
+
+           if ( !fileUrl ) {
+               throw new Error(errMessage);
+           }
+
+           return fileUrl;
+       }
 
     /**
      * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
@@ -75,6 +93,7 @@ define(function( require ) {
     return {
         addOptionalProperties: addOptionalProperties,
         getListTitle: getListTitle,
-        getSiteUrl: getSiteUrl
+        getSiteUrl: getSiteUrl,
+        getFileUrl: getFileUrl
     };
 });
