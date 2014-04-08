@@ -65,18 +65,19 @@ var caps =
 	            checkVariables: __webpack_require__(4),
 	            getActionDefinitions: __webpack_require__(5),
 	            getActivatedSolutions: __webpack_require__(6),
-	            getFileContents: __webpack_require__(7),
-	            getGlobalVariables: __webpack_require__(8),
-	            getListInfo: __webpack_require__(9),
-	            getListItems: __webpack_require__(10),
-	            getServerInfo: __webpack_require__(11),
-	            getSiteCollection: __webpack_require__(12),
-	            getSiteInfo: __webpack_require__(13),
-	            getSiteUsers: __webpack_require__(14),
-	            getVersion: __webpack_require__(15),
-	            getWebPartPageTemplates: __webpack_require__(16),
-	            getWebPartProperties: __webpack_require__(17),
-	            processBatchData: __webpack_require__(18)
+	            getContentTypes: __webpack_require__(7),
+	            getFileContents: __webpack_require__(8),
+	            getGlobalVariables: __webpack_require__(9),
+	            getListInfo: __webpack_require__(10),
+	            getListItems: __webpack_require__(11),
+	            getServerInfo: __webpack_require__(12),
+	            getSiteCollection: __webpack_require__(13),
+	            getSiteInfo: __webpack_require__(14),
+	            getSiteUsers: __webpack_require__(15),
+	            getVersion: __webpack_require__(16),
+	            getWebPartPageTemplates: __webpack_require__(17),
+	            getWebPartProperties: __webpack_require__(18),
+	            processBatchData: __webpack_require__(19)
 	        };
 
 	        // Add events in caps name space
@@ -319,10 +320,10 @@ var caps =
 	    var fn;
 
 	    // extend common methods with methods available at caps.fn namespace
-	    fn = $.extend({}, __webpack_require__(19), {
-	        createBatchXML: __webpack_require__(20),
-	        convert2Caml: __webpack_require__(21),
-	        convertFilter2Caml: __webpack_require__(22),
+	    fn = $.extend({}, __webpack_require__(20), {
+	        createBatchXML: __webpack_require__(21),
+	        convert2Caml: __webpack_require__(22),
+	        convertFilter2Caml: __webpack_require__(23),
 	        Events: __webpack_require__(1)
 	    });
 
@@ -421,8 +422,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var params = __webpack_require__(25),
+	            fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -463,8 +465,8 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -507,8 +509,8 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -547,33 +549,34 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var capsParams = __webpack_require__(25),
+	            fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetFileContents',
+	                RequestType: 'GetContentTypes',
 	                OutputType: 'json'
 	            }
 	        };
 
 	        /**
 	         *
-	         * @param options {object} getListInfo configuration object
+	         * @param options {object} getContentTypes configuration object
 	         * @param params {object} ajax settings overwriting defaults and options
 	         * @returns {*} promise
 	         */
-	        function getListInfo ( options, params ) {
+	        function getContentTypes ( options, params ) {
 	            options = options || {};
 
 	            var request, data,
-	                optional = ['outputType'];
+	                optional = capsParams.getContentTypes.optional;
 
-	            // Adding mandatory properties
+	            // Adding required properties
 	            data = {
-	                FileUrl: validate.getFileUrl(options.fileUrl, 'getFileContents')
+
 	            };
 
 	            data = validate.addOptionalProperties(options, data, optional);
@@ -586,7 +589,7 @@ var caps =
 	            return fn.getPromise(request);
 	        }
 
-	        return getListInfo;
+	        return getContentTypes;
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
@@ -596,8 +599,58 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var capsParams = __webpack_require__(25),
+	            fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
+	            defaults;
+
+	        defaults = {
+	            type: 'GET',
+	            data: {
+	                RequestType: 'GetFileContents',
+	                OutputType: 'json'
+	            }
+	        };
+
+	        /**
+	         *
+	         * @param options {object} getFileContents configuration object
+	         * @param params {object} ajax settings overwriting defaults and options
+	         * @returns {*} promise
+	         */
+	        function getFileContents ( options, params ) {
+	            options = options || {};
+
+	            var request, data,
+	                optional = capsParams.getFileContents.optional;
+
+	            // Adding required properties
+	            data = {
+	                FileUrl: validate.getRequiredParam('fileUrl', options.fileUrl, 'getFileContents')
+	            };
+
+	            data = validate.addOptionalProperties(options, data, optional);
+
+	            request = $.extend(true, {}, defaults, {
+	                data: data
+	            }, params);
+
+
+	            return fn.getPromise(request);
+	        }
+
+	        return getFileContents;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -632,14 +685,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -681,15 +734,15 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
-	            convert2Caml = __webpack_require__(21),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
+	            convert2Caml = __webpack_require__(22),
 	            defaults;
 
 	        defaults = {
@@ -731,14 +784,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -773,14 +826,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -815,14 +868,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -859,14 +912,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -901,14 +954,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -943,14 +996,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -985,14 +1038,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
 	            defaults;
 
 	        defaults = {
@@ -1027,15 +1080,15 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            validate = __webpack_require__(23),
-	            createBatchXML = __webpack_require__(20),
+	        var fn = __webpack_require__(20),
+	            validate = __webpack_require__(24),
+	            createBatchXML = __webpack_require__(21),
 	            defaults;
 
 	        defaults = {
@@ -1102,7 +1155,7 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* global caps */
@@ -1185,13 +1238,13 @@ var caps =
 	            });
 	    }
 
-	    function getSiteUrl (relDir) {
+	    function getSiteUrl ( relDir ) {
 	        var soapEnv = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><{0} xmlns="http://schemas.microsoft.com/sharepoint/soap/" >{1}</{0}></soap:Body></soap:Envelope>',
 	            pathName = location.pathname.toLocaleLowerCase(),
 	            siteName = '',
 	            pageUrl;
 
-	        relDir = relDir ? relDir.toLocaleLowerCase() :  '/apppages';
+	        relDir = relDir ? relDir.toLocaleLowerCase() : '/apppages';
 
 	        // Using L_Menu_BaseUrl if available
 	        if ( typeof L_Menu_BaseUrl !== 'undefined' ) {
@@ -1199,10 +1252,9 @@ var caps =
 	        }
 
 	        // Testing if relDir exists in path
-	        if ( pathName.indexOf(relDir) > -1 ){
+	        if ( pathName.indexOf(relDir) > -1 ) {
 	            return pathName.split(relDir)[0];
 	        }
-
 
 	        // last resort using webs.amsx with async false!
 
@@ -1216,17 +1268,48 @@ var caps =
 	            contentType: 'text/xml; charset="utf-8"'
 	        })
 	            .complete(function( response ) {
-	                siteName = $(response.responseXML).find("WebUrlFromPageUrlResult").text() ;
+	                siteName = $(response.responseXML).find("WebUrlFromPageUrlResult").text();
 	            });
 
 	        return siteName;
+	    }
+
+	    // http://stackoverflow.com/questions/3390930/any-way-to-make-jquery-inarray-case-insensitive
+	    /**
+	     *
+	     * @param string {string} value to check
+	     * @param arr {array}
+	     * @param i {int} optional start index
+	     * @returns {*}
+	     */
+	    function strInArray ( string, arr, i ) {
+	        var len;
+
+	        // confirm array is populated
+
+	        if ( arr ) {
+	            len = arr.length;
+	            i = i ? (i < 0 ? Math.max(0, len + i) : i) : 0;
+
+	            string = string.toLowerCase();
+
+	            for ( ; i < len; i++ ) {
+	                if ( i in arr && arr[i].toLowerCase() === string ) {
+	                    return i;
+	                }
+	            }
+	        }
+
+	        // stick with inArray/indexOf and return -1 on no match
+	        return -1;
 	    }
 
 	    return {
 	        checkNested: checkNested,
 	        format: format,
 	        getPromise: getPromise,
-	        getSiteUrl: getSiteUrl
+	        getSiteUrl: getSiteUrl,
+	        strInArray: strInArray
 
 	    };
 
@@ -1264,12 +1347,10 @@ var caps =
 	                problem = response.ErrorInfo;
 	            }
 
-	             // some methods e.g. GetListItems might reply NewDataSet.GetListItems.listItems.ErrorInfo
+	            // some methods e.g. GetListItems might reply NewDataSet.GetListItems.listItems.ErrorInfo
 	            if ( checkNested(response, 'NewDataSet', 'GetListItems', 'listitems', 'ErrorInfo') ) {
 	                problem = response.NewDataSet.GetListItems.listitems.ErrorInfo;
 	            }
-
-
 
 	            if ( problem ) {
 	                // trigger on global caps error channel
@@ -1282,12 +1363,12 @@ var caps =
 	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
-	        var fn = __webpack_require__(19);
+	        var fn = __webpack_require__(20);
 
 
 	        function createBatchXML ( options ) {
@@ -1369,14 +1450,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(19),
-	            convertFilter2Caml = __webpack_require__(22);
+	        var fn = __webpack_require__(20),
+	            convertFilter2Caml = __webpack_require__(23);
 
 	        /**
 	         *
@@ -1557,12 +1638,12 @@ var caps =
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
-	        var fn = __webpack_require__(19),
+	        var fn = __webpack_require__(20),
 	            camlMap = {
 	                'eq': 'Eq',
 	                'neq': 'Neq',
@@ -1680,20 +1761,39 @@ var caps =
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*global caps */
 
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	    'use strict';
-	    var fn = __webpack_require__(19),
+	    var fn = __webpack_require__(20),
 	        L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
 	        messages = {
 	            getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
 	            getListTitle: 'caps.{0}(). Missing required "listTitle" property',
-	            getFileUrl:   'caps.{0}(). Missing required "fileUrl" property'
+	            getFileUrl: 'caps.{0}(). Missing required "fileUrl" property',
+	            getRequiredParam: 'caps.{0}(). Missing required "{1}" property'
 	        };
+
+	    /**
+	     * Check if value is undefined and throws error message
+	     * @param param {string}
+	     * @param value {string}
+	     * @param funcName {string} function name for error message
+	     * @returns {*} listTitle
+	     */
+	    function getRequiredParam ( param, value, funcName ) {
+	        var errMessage = messages.getRequiredParam;
+	        errMessage = fn.format(errMessage, funcName || '', param);
+
+	        if ( typeof value === 'undefined' ) {
+	            throw new Error(errMessage);
+	        }
+
+	        return value;
+	    }
 
 	    /**
 	     * Check if listTitle exists and throw error
@@ -1713,21 +1813,21 @@ var caps =
 	    }
 
 	    /**
-	        * Check if fileUrl exists and throw error
-	        * @param fileUrl {string}
-	        * @param funcName {string} function name for error message
-	        * @returns {*} listTitle
-	        */
-	       function getFileUrl ( fileUrl, funcName ) {
-	           var errMessage = messages.getFileUrl;
-	           errMessage = fn.format(errMessage, funcName || '');
+	     * Check if fileUrl exists and throw error
+	     * @param fileUrl {string}
+	     * @param funcName {string} function name for error message
+	     * @returns {*} listTitle
+	     */
+	    function getFileUrl ( fileUrl, funcName ) {
+	        var errMessage = messages.getFileUrl;
+	        errMessage = fn.format(errMessage, funcName || '');
 
-	           if ( !fileUrl ) {
-	               throw new Error(errMessage);
-	           }
+	        if ( !fileUrl ) {
+	            throw new Error(errMessage);
+	        }
 
-	           return fileUrl;
-	       }
+	        return fileUrl;
+	    }
 
 	    /**
 	     * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
@@ -1762,26 +1862,175 @@ var caps =
 
 	    function addOptionalProperties ( options, data, properties ) {
 
-	        $.each(properties, function( idx, property ) {
-	            var value = options[property] || false,
-	                propName = property.charAt(0).toUpperCase() + property.substring(1);
+	        $.each(options, function(prop, value){
 
-	            if ( value ) {
+	            var propIndex = fn.strInArray(prop, properties),
+	                propName;
+
+	            if (propIndex > -1){
+	                propName = properties[propIndex];
+
 	                data[propName] = value;
+	            }
+	        });
+
+
+	        /*$.each(properties, function( idx, property ) {
+	            var propName = property.charAt(0).toLowerCase() + property.substring(1),
+	                value = options[propName];
+
+
+	            if ( typeof value !== 'undefined' ) {
+	                data[property] = value;
 	            }
 
 	        });
-
+	*/
 	        return data;
 	    }
 
 	    return {
 	        addOptionalProperties: addOptionalProperties,
+	        getRequiredParam: getRequiredParam,
 	        getListTitle: getListTitle,
 	        getSiteUrl: getSiteUrl,
 	        getFileUrl: getFileUrl
 	    };
 	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues', 'TableName', 'TransformType', 'OutputFileName'];
+
+	        return  {
+	            batchRequest: {
+	                factory: true,
+	                required: ['RequestType', 'ConfigFileLocation || ConfigXml'],
+	                optional: optional
+	            },
+	            checkVariables: {
+	                factory: true,
+	                required: ['RequestType', 'SiteUrl', 'CWVariable', 'DatesInUtc'],
+	                optional: optional
+	            },
+	            copyFile: {
+	                factory: true,
+	                required: ['RequestType', 'NewFileName', 'ListTitle', 'SourceFileUrl'],
+	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite', 'IncludeWebParts', 'DeleteSource', 'Title'])
+	            },
+	            createPage: {
+	                factory: true,
+	                required: ['RequestType', 'FileName', 'ListTitle', 'TemplateFileName', 'Overwrite' ],
+	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
+	            },
+	            executeAction: {
+	                factory: true,
+	                required: ['RequestType', 'ActionUrl', 'ListTitle', 'ItemIds' ],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getActionDefinitions: {
+	                factory: true,
+	                required: ['RequestType', 'ListTitle'],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getActivatedSolutions: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional
+	            },
+	            getCentralViewData: {
+	                factory: true,
+	                required: ['RequestType', 'ViewUrl'],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getContentTypes: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional.concat(['ContentTypeTitle'])
+	            },
+	            getFileContents: {
+	                factory: true,
+	                required: ['RequestType', 'FileUrl'],
+	                optional: optional.concat(['Encoding'])
+	            },
+	            getGlobalVariables: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional.concat(['GlobalVariables'])
+	            },
+	            getListInfo: {
+	                factory: false,
+	                required: ['RequestType'],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'DetailLevels', 'Properties'])
+	            },
+	            getListItems: {
+	                factory: false,
+	                required: ['RequestType', 'ListTitle'],
+	                optional: optional.concat(['SiteUrl', 'CAML'])
+	            },
+	            getServerInfo: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional
+	            },
+	            getSiteCollections: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional.concat(['SiteUrl', 'GetSubsites', 'SiteLevels', 'StartAtRoot'])
+	            },
+	            getSiteInfo: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional.concat(['SiteUrl', 'DetailLevels', 'Properties'])
+	            },
+	            getSiteUsers: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional.concat(['SiteUrl', 'Users', 'DetailLevels', 'Properties'])
+	            },
+	            getVersion: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional
+	            },
+	            getWebPartPageTemplates: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional
+	            },
+	            getWebPartProperties: {
+	                factory: true,
+	                required: ['RequestType'],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'PageUrl', 'DetailLevels'])
+	            },
+	            processBatchData: {
+	                factory: false,
+	                required: ['RequestType', 'Batch'],
+	                optional: optional.concat(['SiteUrl', 'ListTitle'])
+	            },
+	            processGlobalVariables: {
+	                factory: true,
+	                required: ['RequestType', 'Batch'],
+	                optional: optional
+	            },
+	            processList: {
+	                factory: true,
+	                required: ['RequestType', 'ListTitle', 'Command'],
+	                optional: optional.concat(['SiteUrl', 'TemplateName', 'TemplateType', 'Description', 'PropertiesXml'])
+	            },
+	            startWorkflow: {
+	                factory: true,
+	                required: ['RequestType', 'WorkFlowName, ListTitle, ItemIds'],
+	                optional: optional.concat(['SiteUrl'])
+	            }
+	        };
+
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }
 /******/ ])

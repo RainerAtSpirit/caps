@@ -1,7 +1,8 @@
 define(function( require ) {
         'use strict';
 
-        var fn = require('../fn/common'),
+        var params = require('../capsParams'),
+            fn = require('../fn/common'),
             validate = require('../helper/validate'),
             defaults;
 

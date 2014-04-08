@@ -7,8 +7,27 @@ define(function( require ) {
         messages = {
             getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
             getListTitle: 'caps.{0}(). Missing required "listTitle" property',
-            getFileUrl:   'caps.{0}(). Missing required "fileUrl" property'
+            getFileUrl: 'caps.{0}(). Missing required "fileUrl" property',
+            getRequiredParam: 'caps.{0}(). Missing required "{1}" property'
         };
+
+    /**
+     * Check if value is undefined and throws error message
+     * @param param {string}
+     * @param value {string}
+     * @param funcName {string} function name for error message
+     * @returns {*} listTitle
+     */
+    function getRequiredParam ( param, value, funcName ) {
+        var errMessage = messages.getRequiredParam;
+        errMessage = fn.format(errMessage, funcName || '', param);
+
+        if ( typeof value === 'undefined' ) {
+            throw new Error(errMessage);
+        }
+
+        return value;
+    }
 
     /**
      * Check if listTitle exists and throw error
@@ -28,21 +47,21 @@ define(function( require ) {
     }
 
     /**
-        * Check if fileUrl exists and throw error
-        * @param fileUrl {string}
-        * @param funcName {string} function name for error message
-        * @returns {*} listTitle
-        */
-       function getFileUrl ( fileUrl, funcName ) {
-           var errMessage = messages.getFileUrl;
-           errMessage = fn.format(errMessage, funcName || '');
+     * Check if fileUrl exists and throw error
+     * @param fileUrl {string}
+     * @param funcName {string} function name for error message
+     * @returns {*} listTitle
+     */
+    function getFileUrl ( fileUrl, funcName ) {
+        var errMessage = messages.getFileUrl;
+        errMessage = fn.format(errMessage, funcName || '');
 
-           if ( !fileUrl ) {
-               throw new Error(errMessage);
-           }
+        if ( !fileUrl ) {
+            throw new Error(errMessage);
+        }
 
-           return fileUrl;
-       }
+        return fileUrl;
+    }
 
     /**
      * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
@@ -77,21 +96,36 @@ define(function( require ) {
 
     function addOptionalProperties ( options, data, properties ) {
 
-        $.each(properties, function( idx, property ) {
-            var value = options[property] || false,
-                propName = property.charAt(0).toUpperCase() + property.substring(1);
+        $.each(options, function(prop, value){
 
-            if ( value ) {
+            var propIndex = fn.strInArray(prop, properties),
+                propName;
+
+            if (propIndex > -1){
+                propName = properties[propIndex];
+
                 data[propName] = value;
+            }
+        });
+
+
+        /*$.each(properties, function( idx, property ) {
+            var propName = property.charAt(0).toLowerCase() + property.substring(1),
+                value = options[propName];
+
+
+            if ( typeof value !== 'undefined' ) {
+                data[property] = value;
             }
 
         });
-
+*/
         return data;
     }
 
     return {
         addOptionalProperties: addOptionalProperties,
+        getRequiredParam: getRequiredParam,
         getListTitle: getListTitle,
         getSiteUrl: getSiteUrl,
         getFileUrl: getFileUrl

@@ -9,26 +9,26 @@ define(function( require ) {
         defaults = {
             type: 'GET',
             data: {
-                RequestType: 'GetFileContents',
+                RequestType: 'GetContentTypes',
                 OutputType: 'json'
             }
         };
 
         /**
          *
-         * @param options {object} getFileContents configuration object
+         * @param options {object} getContentTypes configuration object
          * @param params {object} ajax settings overwriting defaults and options
          * @returns {*} promise
          */
-        function getFileContents ( options, params ) {
+        function getContentTypes ( options, params ) {
             options = options || {};
 
             var request, data,
-                optional = capsParams.getFileContents.optional;
+                optional = capsParams.getContentTypes.optional;
 
             // Adding required properties
             data = {
-                FileUrl: validate.getRequiredParam('fileUrl', options.fileUrl, 'getFileContents')
+
             };
 
             data = validate.addOptionalProperties(options, data, optional);
@@ -41,6 +41,6 @@ define(function( require ) {
             return fn.getPromise(request);
         }
 
-        return getFileContents;
+        return getContentTypes;
     }
 );

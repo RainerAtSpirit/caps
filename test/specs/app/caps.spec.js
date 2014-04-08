@@ -104,13 +104,21 @@ describe("caps", function() {
 
     });
 
+    describe("getContentTypes", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getContentTypes).toBe('function');
+        });
+
+    });
+
     describe("getFileContents", function() {
 
-         it("should be a function", function() {
-             expect(typeof caps.getFileContents).toBe('function');
-         });
+        it("should be a function", function() {
+            expect(typeof caps.getFileContents).toBe('function');
+        });
 
-     });
+    });
 
     describe("getGlobalVariables", function() {
 

@@ -17,6 +17,7 @@ define(function( require ) {
             checkVariables: require('./checkVariables/index'),
             getActionDefinitions: require('./getActionDefinitions/index'),
             getActivatedSolutions: require('./getActivatedSolutions/index'),
+            getContentTypes: require('./getContentTypes/index'),
             getFileContents: require('./getFileContents/index'),
             getGlobalVariables: require('./getGlobalVariables/index'),
             getListInfo: require('./getListInfo/index'),

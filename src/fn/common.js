@@ -78,13 +78,13 @@ define(function( require ) {
             });
     }
 
-    function getSiteUrl (relDir) {
+    function getSiteUrl ( relDir ) {
         var soapEnv = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><{0} xmlns="http://schemas.microsoft.com/sharepoint/soap/" >{1}</{0}></soap:Body></soap:Envelope>',
             pathName = location.pathname.toLocaleLowerCase(),
             siteName = '',
             pageUrl;
 
-        relDir = relDir ? relDir.toLocaleLowerCase() :  '/apppages';
+        relDir = relDir ? relDir.toLocaleLowerCase() : '/apppages';
 
         // Using L_Menu_BaseUrl if available
         if ( typeof L_Menu_BaseUrl !== 'undefined' ) {
@@ -92,10 +92,9 @@ define(function( require ) {
         }
 
         // Testing if relDir exists in path
-        if ( pathName.indexOf(relDir) > -1 ){
+        if ( pathName.indexOf(relDir) > -1 ) {
             return pathName.split(relDir)[0];
         }
-
 
         // last resort using webs.amsx with async false!
 
@@ -109,17 +108,48 @@ define(function( require ) {
             contentType: 'text/xml; charset="utf-8"'
         })
             .complete(function( response ) {
-                siteName = $(response.responseXML).find("WebUrlFromPageUrlResult").text() ;
+                siteName = $(response.responseXML).find("WebUrlFromPageUrlResult").text();
             });
 
         return siteName;
+    }
+
+    // http://stackoverflow.com/questions/3390930/any-way-to-make-jquery-inarray-case-insensitive
+    /**
+     *
+     * @param string {string} value to check
+     * @param arr {array}
+     * @param i {int} optional start index
+     * @returns {*}
+     */
+    function strInArray ( string, arr, i ) {
+        var len;
+
+        // confirm array is populated
+
+        if ( arr ) {
+            len = arr.length;
+            i = i ? (i < 0 ? Math.max(0, len + i) : i) : 0;
+
+            string = string.toLowerCase();
+
+            for ( ; i < len; i++ ) {
+                if ( i in arr && arr[i].toLowerCase() === string ) {
+                    return i;
+                }
+            }
+        }
+
+        // stick with inArray/indexOf and return -1 on no match
+        return -1;
     }
 
     return {
         checkNested: checkNested,
         format: format,
         getPromise: getPromise,
-        getSiteUrl: getSiteUrl
+        getSiteUrl: getSiteUrl,
+        strInArray: strInArray
 
     };
 
@@ -157,12 +187,10 @@ define(function( require ) {
                 problem = response.ErrorInfo;
             }
 
-             // some methods e.g. GetListItems might reply NewDataSet.GetListItems.listItems.ErrorInfo
+            // some methods e.g. GetListItems might reply NewDataSet.GetListItems.listItems.ErrorInfo
             if ( checkNested(response, 'NewDataSet', 'GetListItems', 'listitems', 'ErrorInfo') ) {
                 problem = response.NewDataSet.GetListItems.listitems.ErrorInfo;
             }
-
-
 
             if ( problem ) {
                 // trigger on global caps error channel
