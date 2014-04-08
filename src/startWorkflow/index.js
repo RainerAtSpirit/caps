@@ -4,7 +4,7 @@ define(function( require ) {
         var capsParams = require('../capsParams'),
             fn = require('../fn/common'),
             validate = require('../helper/validate'),
-            method = capsParams.getWebPartProperties,
+            method = capsParams.startWorkflow,
             defaults;
 
         defaults = {
@@ -17,11 +17,11 @@ define(function( require ) {
 
         /**
          *
-         * @param options {object} getWebPartProperties configuration object
+         * @param options {object} startWorkflow configuration object
          * @param params {object} ajax settings overwriting defaults and options
          * @returns {*} promise
          */
-        function getWebPartProperties ( options, params ) {
+        function startWorkflow ( options, params ) {
             options = options || {};
 
             var request,
@@ -29,7 +29,7 @@ define(function( require ) {
                 optional = method.optional,
                 required = method.required;
 
-            data = validate.addRequiredProperties(options, data, required, 'getWebPartProperties');
+            data = validate.addRequiredProperties(options, data, required, 'startWorkflow');
             data = validate.addOptionalProperties(options, data, optional);
 
             request = $.extend(true, {}, defaults, {
@@ -39,6 +39,6 @@ define(function( require ) {
             return fn.getPromise(request);
         }
 
-        return getWebPartProperties;
+        return startWorkflow;
     }
 );

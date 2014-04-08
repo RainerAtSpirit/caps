@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '0.31.1',
+	            version = '1.0.0',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -62,22 +62,30 @@ var caps =
 	        caps = {
 	            fn: __webpack_require__(2),
 	            version: version,
-	            checkVariables: __webpack_require__(4),
-	            getActionDefinitions: __webpack_require__(5),
-	            getActivatedSolutions: __webpack_require__(6),
-	            getContentTypes: __webpack_require__(7),
-	            getFileContents: __webpack_require__(8),
-	            getGlobalVariables: __webpack_require__(9),
-	            getListInfo: __webpack_require__(10),
-	            getListItems: __webpack_require__(11),
-	            getServerInfo: __webpack_require__(12),
-	            getSiteCollection: __webpack_require__(13),
-	            getSiteInfo: __webpack_require__(14),
-	            getSiteUsers: __webpack_require__(15),
-	            getVersion: __webpack_require__(16),
-	            getWebPartPageTemplates: __webpack_require__(17),
-	            getWebPartProperties: __webpack_require__(18),
-	            processBatchData: __webpack_require__(19)
+	            batchRequest: __webpack_require__(4),
+	            checkVariables: __webpack_require__(5),
+	            copyFile: __webpack_require__(6),
+	            createPage: __webpack_require__(7),
+	            executeAction: __webpack_require__(8),
+	            getActionDefinitions: __webpack_require__(9),
+	            getActivatedSolutions: __webpack_require__(10),
+	            getCentralViewData: __webpack_require__(11),
+	            getContentTypes: __webpack_require__(12),
+	            getFileContents: __webpack_require__(13),
+	            getGlobalVariables: __webpack_require__(14),
+	            getListInfo: __webpack_require__(15),
+	            getListItems: __webpack_require__(16),
+	            getServerInfo: __webpack_require__(17),
+	            getSiteCollections: __webpack_require__(18),
+	            getSiteInfo: __webpack_require__(19),
+	            getSiteUsers: __webpack_require__(20),
+	            getVersion: __webpack_require__(21),
+	            getWebPartPageTemplates: __webpack_require__(22),
+	            getWebPartProperties: __webpack_require__(23),
+	            processBatchData: __webpack_require__(24),
+	            processGlobalVariables: __webpack_require__(25),
+	            processList: __webpack_require__(26),
+	            startWorkflow: __webpack_require__(27)
 	        };
 
 	        // Add events in caps name space
@@ -320,10 +328,10 @@ var caps =
 	    var fn;
 
 	    // extend common methods with methods available at caps.fn namespace
-	    fn = $.extend({}, __webpack_require__(20), {
-	        createBatchXML: __webpack_require__(21),
-	        convert2Caml: __webpack_require__(22),
-	        convertFilter2Caml: __webpack_require__(23),
+	    fn = $.extend({}, __webpack_require__(29), {
+	        createBatchXML: __webpack_require__(31),
+	        convert2Caml: __webpack_require__(32),
+	        convertFilter2Caml: __webpack_require__(33),
 	        Events: __webpack_require__(1)
 	    });
 
@@ -422,40 +430,45 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var params = __webpack_require__(25),
-	            fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.batchRequest,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'CheckVariables',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
 
 	        /**
 	         *
-	         * @param options {object} getActionDefinitions configuration object
+	         * @param options {object} batchRequest configuration object
 	         * @param params {object} ajax settings overwriting defaults and options
 	         * @returns {*} promise
 	         */
-	        function checkVariables ( options, params ) {
+	        function batchRequest ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'batchRequest');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
 	        }
 
-	        return checkVariables;
+	        return batchRequest;
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
@@ -465,16 +478,209 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.checkVariables,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetActionDefinitions',
-	                OutputType: 'json',
-	                DetailLevels: 1
+	                RequestType: method.name,
+	                OutputType: 'json'
+	            }
+	        };
+
+	        /**
+	         *
+	         * @param options {object} batchRequest configuration object
+	         * @param params {object} ajax settings overwriting defaults and options
+	         * @returns {*} promise
+	         */
+	        function checkVariables ( options, params ) {
+	            options = options || {};
+
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'checkVariables');
+	            data = validate.addOptionalProperties(options, data, optional);
+
+	            request = $.extend(true, {}, defaults, {
+	                data: data
+	            }, params);
+
+	            return fn.getPromise(request);
+	        }
+
+	        return checkVariables;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.copyFile,
+	            defaults;
+
+	        defaults = {
+	            type: 'GET',
+	            data: {
+	                RequestType: method.name,
+	                OutputType: 'json'
+	            }
+	        };
+
+	        /**
+	         *
+	         * @param options {object} copyFile configuration object
+	         * @param params {object} ajax settings overwriting defaults and options
+	         * @returns {*} promise
+	         */
+	        function copyFile ( options, params ) {
+	            options = options || {};
+
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'copyFile');
+	            data = validate.addOptionalProperties(options, data, optional);
+
+	            request = $.extend(true, {}, defaults, {
+	                data: data
+	            }, params);
+
+	            return fn.getPromise(request);
+	        }
+
+	        return copyFile;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.createPage,
+	            defaults;
+
+	        defaults = {
+	            type: 'GET',
+	            data: {
+	                RequestType: method.name,
+	                OutputType: 'json'
+	            }
+	        };
+
+	        /**
+	         *
+	         * @param options {object} createPage configuration object
+	         * @param params {object} ajax settings overwriting defaults and options
+	         * @returns {*} promise
+	         */
+	        function createPage ( options, params ) {
+	            options = options || {};
+
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'createPage');
+	            data = validate.addOptionalProperties(options, data, optional);
+
+	            request = $.extend(true, {}, defaults, {
+	                data: data
+	            }, params);
+
+	            return fn.getPromise(request);
+	        }
+
+	        return createPage;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.executeAction,
+	            defaults;
+
+	        defaults = {
+	            type: 'GET',
+	            data: {
+	                RequestType: method.name,
+	                OutputType: 'json'
+	            }
+	        };
+
+	        /**
+	         *
+	         * @param options {object} createPage configuration object
+	         * @param params {object} ajax settings overwriting defaults and options
+	         * @returns {*} promise
+	         */
+	        function executeAction ( options, params ) {
+	            options = options || {};
+
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'executeAction');
+	            data = validate.addOptionalProperties(options, data, optional);
+
+	            request = $.extend(true, {}, defaults, {
+	                data: data
+	            }, params);
+
+	            return fn.getPromise(request);
+	        }
+
+	        return executeAction;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getActionDefinitions,
+	            defaults;
+
+	        defaults = {
+	            type: 'GET',
+	            data: {
+	                RequestType: method.name,
+	                OutputType: 'json'
 	            }
 	        };
 
@@ -487,13 +693,16 @@ var caps =
 	        function getActionDefinitions ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getActionDefinitions');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-	                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'getActionDefinitions'),
-	                    ListTitle: validate.getListTitle(options.listTitle)
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -503,37 +712,45 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 6 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getActivatedSolutions,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetActivatedSolutions',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
 
 	        /**
 	         *
-	         * @param options {object} getActivatedSolutions configuration object
+	         * @param options {object} getActionDefinitions configuration object
 	         * @param params {object} ajax settings overwriting defaults and options
 	         * @returns {*} promise
 	         */
 	        function getActivatedSolutions ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getActivatedSolutions');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getActivatedSolutions')
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -543,21 +760,70 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 7 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(25),
-	            fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getCentralViewData,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetContentTypes',
+	                RequestType: method.name,
+	                OutputType: 'json'
+	            }
+	        };
+
+	        /**
+	         *
+	         * @param options {object} getActionDefinitions configuration object
+	         * @param params {object} ajax settings overwriting defaults and options
+	         * @returns {*} promise
+	         */
+	        function getCentralViewData ( options, params ) {
+	            options = options || {};
+
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getCentralViewData');
+	            data = validate.addOptionalProperties(options, data, optional);
+
+	            request = $.extend(true, {}, defaults, {
+	                data: data
+	            }, params);
+
+	            return fn.getPromise(request);
+	        }
+
+	        return getCentralViewData;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getContentTypes,
+	            defaults;
+
+	        defaults = {
+	            type: 'GET',
+	            data: {
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -571,20 +837,17 @@ var caps =
 	        function getContentTypes ( options, params ) {
 	            options = options || {};
 
-	            var request, data,
-	                optional = capsParams.getContentTypes.optional;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
 
-	            // Adding required properties
-	            data = {
-
-	            };
-
+	            data = validate.addRequiredProperties(options, data, required, 'getContentTypes');
 	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
 	            }, params);
-
 
 	            return fn.getPromise(request);
 	        }
@@ -593,21 +856,22 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 8 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(25),
-	            fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getFileContents,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetFileContents',
+	                                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -621,20 +885,17 @@ var caps =
 	        function getFileContents ( options, params ) {
 	            options = options || {};
 
-	            var request, data,
-	                optional = capsParams.getFileContents.optional;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
 
-	            // Adding required properties
-	            data = {
-	                FileUrl: validate.getRequiredParam('fileUrl', options.fileUrl, 'getFileContents')
-	            };
-
+	            data = validate.addRequiredProperties(options, data, required, 'getFileContents');
 	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
 	            }, params);
-
 
 	            return fn.getPromise(request);
 	        }
@@ -643,20 +904,22 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 9 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getGlobalVariables,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetGlobalVariables',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -670,12 +933,16 @@ var caps =
 	        function getGlobalVariables ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getGlobalVariables');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -685,20 +952,22 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 10 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getListInfo,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetListInfo',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -712,20 +981,17 @@ var caps =
 	        function getListInfo ( options, params ) {
 	            options = options || {};
 
-	            var request, data,
-	                optional = ['listTitle', 'properties'];
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
 
-	            // Adding mandatory properties
-	            data = {
-	                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListInfo')
-	            };
-
+	            data = validate.addRequiredProperties(options, data, required, 'getListInfo');
 	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
 	            }, params);
-
 
 	            return fn.getPromise(request);
 	        }
@@ -734,21 +1000,23 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 11 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
-	            convert2Caml = __webpack_require__(22),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            convert2Caml = __webpack_require__(32),
+	            method = capsParams.getListItems,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetListItems',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -762,16 +1030,19 @@ var caps =
 	        function getListItems ( options, params ) {
 	            options = options || {};
 
-	            var data, request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
 
-	            data = {
-	                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListItems'),
-	                ListTitle: validate.getListTitle(options.listTitle, 'getListItems')
-	            };
+	            data = validate.addRequiredProperties(options, data, required, 'getListItems');
+	            data = validate.addOptionalProperties(options, data, optional);
 
-	            if ( options.caml ) {
+	            // Overwrite automatically created data.CAML with processed CAML
+	            if ( data.CAML ) {
 	                data.CAML = convert2Caml(options.caml, options.model);
 	            }
+
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -784,20 +1055,22 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 12 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getServerInfo,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetServerInfo',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -811,12 +1084,16 @@ var caps =
 	        function getServerInfo ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getServerInfo');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -826,62 +1103,70 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 13 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getSiteCollections,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetSiteCollection',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
 
 	        /**
 	         *
-	         * @param options {object} getSiteCollection configuration object
+	         * @param options {object} getSiteCollections configuration object
 	         * @param params {object} ajax settings overwriting defaults and options
 	         * @returns {*} promise
 	         */
-	        function getSiteCollection ( options, params ) {
+	        function getSiteCollections ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getSiteCollections');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
 	        }
 
-	        return getSiteCollection;
+	        return getSiteCollections;
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 14 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getSiteInfo,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetSiteInfo',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -897,12 +1182,14 @@ var caps =
 
 	            var request,
 	                data = {},
-	                optional = ['properties'];
+	                optional = method.optional,
+	                required = method.required;
 
+	            data = validate.addRequiredProperties(options, data, required, 'getSiteInfo');
 	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data:  data
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -912,20 +1199,22 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 15 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getSiteUsers,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetSiteUser',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -939,12 +1228,16 @@ var caps =
 	        function getSiteUsers ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getSiteUsers');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -954,20 +1247,22 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 16 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getVersion,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetVersion',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -981,12 +1276,16 @@ var caps =
 	        function getVersion ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getVersion');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -996,20 +1295,22 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 17 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getWebPartPageTemplates,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetWebPartPageTemplates',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -1023,12 +1324,16 @@ var caps =
 	        function getWebPartPageTemplates ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getWebPartPageTemplates');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -1038,20 +1343,22 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 18 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.getWebPartProperties,
 	            defaults;
 
 	        defaults = {
 	            type: 'GET',
 	            data: {
-	                RequestType: 'GetWebPartProperties',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -1065,12 +1372,16 @@ var caps =
 	        function getWebPartProperties ( options, params ) {
 	            options = options || {};
 
-	            var request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'getWebPartProperties');
+	            data = validate.addOptionalProperties(options, data, optional);
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -1080,15 +1391,15 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 19 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            validate = __webpack_require__(24),
-	            createBatchXML = __webpack_require__(21),
+	        var fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            createBatchXML = __webpack_require__(31),
 	            defaults;
 
 	        defaults = {
@@ -1155,7 +1466,285 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 20 */
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.processGlobalVariables,
+	            defaults;
+
+	        defaults = {
+	            type: 'GET',
+	            data: {
+	                RequestType: method.name,
+	                OutputType: 'json'
+	            }
+	        };
+
+	        /**
+	         *
+	         * @param options {object} processGlobalVariables configuration object
+	         * @param params {object} ajax settings overwriting defaults and options
+	         * @returns {*} promise
+	         */
+	        function processGlobalVariables ( options, params ) {
+	            options = options || {};
+
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'processGlobalVariables');
+	            data = validate.addOptionalProperties(options, data, optional);
+
+	            request = $.extend(true, {}, defaults, {
+	                data: data
+	            }, params);
+
+	            return fn.getPromise(request);
+	        }
+
+	        return processGlobalVariables;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.processList,
+	            defaults;
+
+	        defaults = {
+	            type: 'GET',
+	            data: {
+	                RequestType: method.name,
+	                OutputType: 'json'
+	            }
+	        };
+
+	        /**
+	         *
+	         * @param options {object} processList configuration object
+	         * @param params {object} ajax settings overwriting defaults and options
+	         * @returns {*} promise
+	         */
+	        function processList ( options, params ) {
+	            options = options || {};
+
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'processList');
+	            data = validate.addOptionalProperties(options, data, optional);
+
+	            request = $.extend(true, {}, defaults, {
+	                data: data
+	            }, params);
+
+	            return fn.getPromise(request);
+	        }
+
+	        return processList;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var capsParams = __webpack_require__(28),
+	            fn = __webpack_require__(29),
+	            validate = __webpack_require__(30),
+	            method = capsParams.startWorkflow,
+	            defaults;
+
+	        defaults = {
+	            type: 'GET',
+	            data: {
+	                RequestType: method.name,
+	                OutputType: 'json'
+	            }
+	        };
+
+	        /**
+	         *
+	         * @param options {object} startWorkflow configuration object
+	         * @param params {object} ajax settings overwriting defaults and options
+	         * @returns {*} promise
+	         */
+	        function startWorkflow ( options, params ) {
+	            options = options || {};
+
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
+
+	            data = validate.addRequiredProperties(options, data, required, 'startWorkflow');
+	            data = validate.addOptionalProperties(options, data, optional);
+
+	            request = $.extend(true, {}, defaults, {
+	                data: data
+	            }, params);
+
+	            return fn.getPromise(request);
+	        }
+
+	        return startWorkflow;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues',
+	            'TableName', 'TransformType', 'OutputFileName'];
+
+	        return  {
+	            batchRequest: {
+	                name: 'BatchRequest',
+	                required: ['ConfigFileLocation || ConfigXml'],
+	                optional: optional
+	            },
+	            checkVariables: {
+	                name: 'CheckVariables',
+	                required: ['SiteUrl', 'CWVariable', 'DatesInUtc'],
+	                optional: optional
+	            },
+	            copyFile: {
+	                name: 'CopyFile',
+	                required: ['NewFileName', 'ListTitle', 'SourceFileUrl'],
+	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite', 'IncludeWebParts', 'DeleteSource', 'Title'])
+	            },
+	            createPage: {
+	                name: 'CreatePage',
+	                required: ['FileName', 'ListTitle', 'TemplateFileName', 'Overwrite' ],
+	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
+	            },
+	            executeAction: {
+	                name: 'ExecuteAction',
+	                required: ['ActionUrl', 'ListTitle', 'ItemIds' ],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getActionDefinitions: {
+	                name: 'GetActionDefinitions',
+	                required: ['ListTitle'],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getActivatedSolutions: {
+	                name: 'GetActivatedSolutions',
+	                required: [],
+	                optional: optional
+	            },
+	            getCentralViewData: {
+	                name: 'GetCentralViewData',
+	                required: ['ViewUrl'],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getContentTypes: {
+	                name: 'GetContentTypes',
+	                required: [],
+	                optional: optional.concat(['ContentTypeTitle'])
+	            },
+	            getFileContents: {
+	                name: 'GetFileContents',
+	                required: ['FileUrl'],
+	                optional: optional.concat(['Encoding'])
+	            },
+	            getGlobalVariables: {
+	                name: 'GetGlobalVariables',
+	                required: [],
+	                optional: optional.concat(['GlobalVariables'])
+	            },
+	            getListInfo: {
+	                name: 'GetListInfo',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'DetailLevels', 'Properties'])
+	            },
+	            getListItems: {
+	                name: 'GetListItems',
+	                required: ['ListTitle'],
+	                optional: optional.concat(['SiteUrl', 'CAML'])
+	            },
+	            getServerInfo: {
+	                name: 'GetServerInfo',
+	                required: [],
+	                optional: optional
+	            },
+	            getSiteCollections: {
+	                name: 'GetSiteCollections',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'GetSubsites', 'SiteLevels', 'StartAtRoot'])
+	            },
+	            getSiteInfo: {
+	                name: 'GetSiteInfo',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'DetailLevels', 'Properties'])
+	            },
+	            getSiteUsers: {
+	                name: 'GetSiteUsers',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'Users', 'DetailLevels', 'Properties'])
+	            },
+	            getVersion: {
+	                name: 'GetVersion',
+	                required: [],
+	                optional: optional
+	            },
+	            getWebPartPageTemplates: {
+	                name: 'GetWebPartPageTemplates',
+	                required: [],
+	                optional: optional
+	            },
+	            getWebPartProperties: {
+	                name: 'GetWebPartProperties',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'PageUrl', 'DetailLevels'])
+	            },
+	            processBatchData: {
+	                name: 'ProcessBatchData',
+	                required: ['Batch'],
+	                optional: optional.concat(['SiteUrl', 'ListTitle'])
+	            },
+	            processGlobalVariables: {
+	                name: 'ProcessGlobalVariables',
+	                required: ['Batch'],
+	                optional: optional
+	            },
+	            processList: {
+	                name: 'ProcessList',
+	                required: ['ListTitle', 'Command'],
+	                optional: optional.concat(['SiteUrl', 'TemplateName', 'TemplateType', 'Description', 'PropertiesXml'])
+	            },
+	            startWorkflow: {
+	                name: 'StartWorkflow',
+	                required: ['WorkFlowName, ListTitle, ItemIds'],
+	                optional: optional.concat(['SiteUrl'])
+	            }
+	        };
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* global caps */
@@ -1363,12 +1952,175 @@ var caps =
 	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 21 */
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*global caps */
+
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	    'use strict';
+	    var fn = __webpack_require__(29),
+	        L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+	        messages = {
+	            getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
+	            getListTitle: 'caps.{0}(). Missing required "listTitle" property',
+	            getFileUrl: 'caps.{0}(). Missing required "fileUrl" property',
+	            getRequiredParam: 'caps.{0}(). Missing required "{1}" property',
+	            addRequiredProperties: 'caps.{0}(). Missing required "{1}" property'
+	        };
+
+	    /**
+	     * Check if value is undefined and throws error message
+	     * @param param {string}
+	     * @param value {string}
+	     * @param funcName {string} function name for error message
+	     * @returns {*} listTitle
+	     */
+	    function getRequiredParam ( param, value, funcName ) {
+	        var errMessage = messages.getRequiredParam;
+	        errMessage = fn.format(errMessage, funcName || '', param);
+
+	        if ( typeof value === 'undefined' ) {
+	            throw new Error(errMessage);
+	        }
+
+	        return value;
+	    }
+
+	    /**
+	     * Check if listTitle exists and throw error
+	     * @param listTitle {string}
+	     * @param funcName {string} function name for error message
+	     * @returns {*} listTitle
+	     */
+	    function getListTitle ( listTitle, funcName ) {
+	        var errMessage = messages.getListTitle;
+	        errMessage = fn.format(errMessage, funcName || '');
+
+	        if ( !listTitle ) {
+	            throw new Error(errMessage);
+	        }
+
+	        return listTitle;
+	    }
+
+	    /**
+	     * Check if fileUrl exists and throw error
+	     * @param fileUrl {string}
+	     * @param funcName {string} function name for error message
+	     * @returns {*} listTitle
+	     */
+	    function getFileUrl ( fileUrl, funcName ) {
+	        var errMessage = messages.getFileUrl;
+	        errMessage = fn.format(errMessage, funcName || '');
+
+	        if ( !fileUrl ) {
+	            throw new Error(errMessage);
+	        }
+
+	        return fileUrl;
+	    }
+
+	    /**
+	     * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
+	     * @param siteUrl {string}
+	     * @param funcName {string}
+	     * @returns {string} siteUrl
+	     */
+	    function getSiteUrl ( siteUrl, funcName ) {
+
+	        var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
+	            errMessage = messages.getSiteUrl,
+	            site = siteUrl ? siteUrl : baseUrl,
+	            path = site.replace(/^\/+|\/+$/g, ''),
+	            containsGlobal,
+	            containsVariable;
+
+	        if ( !path ) {
+	            path = fn.getSiteUrl();
+	        }
+
+	        containsGlobal = path.match(/\[.+?\]/g);
+	        containsVariable = path.match(/\%.+?\%/g);
+
+	        // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
+
+	        if ( !containsGlobal && !containsVariable ) {
+	            path = '%WebRoot%/' + path;
+	        }
+
+	        return path;
+	    }
+
+	    function addOptionalProperties ( options, data, properties ) {
+
+	        $.each(options, function(prop, value){
+
+	            var propIndex = fn.strInArray(prop, properties),
+	                propName;
+
+	            if (propIndex > -1){
+	                propName = properties[propIndex];
+
+	                data[propName] = value;
+	            }
+	        });
+
+	        return data;
+	    }
+
+	    function addRequiredProperties ( options, data, properties, funcName ) {
+
+	        var result = {},
+	            errMessage = messages.addRequiredProperties;
+
+	        // Step 1: Add required properties to result
+	        $.each(options, function(prop, value){
+
+	            var propIndex = fn.strInArray(prop, properties),
+	                propName;
+
+	            if (propIndex > -1){
+	                propName = properties[propIndex];
+
+	                result[propName] = value;
+	            }
+	        });
+
+	        // Step 2: Iterate over propterties and check if we got a matching result
+
+	        $.each(properties, function(idx, prop){
+
+	            if (typeof result[prop] === 'undefined'){
+	                errMessage = fn.format(errMessage, funcName || '', prop);
+	                throw new Error(errMessage);
+	            }
+
+	            data[prop] = result[prop];
+
+	        });
+
+	        return data;
+	    }
+
+
+	    return {
+	        addOptionalProperties: addOptionalProperties,
+	        addRequiredProperties: addRequiredProperties,
+	        getRequiredParam: getRequiredParam,
+	        getListTitle: getListTitle,
+	        getSiteUrl: getSiteUrl,
+	        getFileUrl: getFileUrl
+	    };
+	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
-	        var fn = __webpack_require__(20);
+	        var fn = __webpack_require__(29);
 
 
 	        function createBatchXML ( options ) {
@@ -1450,14 +2202,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 22 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(20),
-	            convertFilter2Caml = __webpack_require__(23);
+	        var fn = __webpack_require__(29),
+	            convertFilter2Caml = __webpack_require__(33);
 
 	        /**
 	         *
@@ -1638,12 +2390,12 @@ var caps =
 
 
 /***/ },
-/* 23 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
-	        var fn = __webpack_require__(20),
+	        var fn = __webpack_require__(29),
 	            camlMap = {
 	                'eq': 'Eq',
 	                'neq': 'Neq',
@@ -1759,278 +2511,6 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*global caps */
-
-	!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
-	    'use strict';
-	    var fn = __webpack_require__(20),
-	        L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
-	        messages = {
-	            getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
-	            getListTitle: 'caps.{0}(). Missing required "listTitle" property',
-	            getFileUrl: 'caps.{0}(). Missing required "fileUrl" property',
-	            getRequiredParam: 'caps.{0}(). Missing required "{1}" property'
-	        };
-
-	    /**
-	     * Check if value is undefined and throws error message
-	     * @param param {string}
-	     * @param value {string}
-	     * @param funcName {string} function name for error message
-	     * @returns {*} listTitle
-	     */
-	    function getRequiredParam ( param, value, funcName ) {
-	        var errMessage = messages.getRequiredParam;
-	        errMessage = fn.format(errMessage, funcName || '', param);
-
-	        if ( typeof value === 'undefined' ) {
-	            throw new Error(errMessage);
-	        }
-
-	        return value;
-	    }
-
-	    /**
-	     * Check if listTitle exists and throw error
-	     * @param listTitle {string}
-	     * @param funcName {string} function name for error message
-	     * @returns {*} listTitle
-	     */
-	    function getListTitle ( listTitle, funcName ) {
-	        var errMessage = messages.getListTitle;
-	        errMessage = fn.format(errMessage, funcName || '');
-
-	        if ( !listTitle ) {
-	            throw new Error(errMessage);
-	        }
-
-	        return listTitle;
-	    }
-
-	    /**
-	     * Check if fileUrl exists and throw error
-	     * @param fileUrl {string}
-	     * @param funcName {string} function name for error message
-	     * @returns {*} listTitle
-	     */
-	    function getFileUrl ( fileUrl, funcName ) {
-	        var errMessage = messages.getFileUrl;
-	        errMessage = fn.format(errMessage, funcName || '');
-
-	        if ( !fileUrl ) {
-	            throw new Error(errMessage);
-	        }
-
-	        return fileUrl;
-	    }
-
-	    /**
-	     * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
-	     * @param siteUrl {string}
-	     * @param funcName {string}
-	     * @returns {string} siteUrl
-	     */
-	    function getSiteUrl ( siteUrl, funcName ) {
-
-	        var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
-	            errMessage = messages.getSiteUrl,
-	            site = siteUrl ? siteUrl : baseUrl,
-	            path = site.replace(/^\/+|\/+$/g, ''),
-	            containsGlobal,
-	            containsVariable;
-
-	        if ( !path ) {
-	            path = fn.getSiteUrl();
-	        }
-
-	        containsGlobal = path.match(/\[.+?\]/g);
-	        containsVariable = path.match(/\%.+?\%/g);
-
-	        // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
-
-	        if ( !containsGlobal && !containsVariable ) {
-	            path = '%WebRoot%/' + path;
-	        }
-
-	        return path;
-	    }
-
-	    function addOptionalProperties ( options, data, properties ) {
-
-	        $.each(options, function(prop, value){
-
-	            var propIndex = fn.strInArray(prop, properties),
-	                propName;
-
-	            if (propIndex > -1){
-	                propName = properties[propIndex];
-
-	                data[propName] = value;
-	            }
-	        });
-
-
-	        /*$.each(properties, function( idx, property ) {
-	            var propName = property.charAt(0).toLowerCase() + property.substring(1),
-	                value = options[propName];
-
-
-	            if ( typeof value !== 'undefined' ) {
-	                data[property] = value;
-	            }
-
-	        });
-	*/
-	        return data;
-	    }
-
-	    return {
-	        addOptionalProperties: addOptionalProperties,
-	        getRequiredParam: getRequiredParam,
-	        getListTitle: getListTitle,
-	        getSiteUrl: getSiteUrl,
-	        getFileUrl: getFileUrl
-	    };
-	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-/***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
-	        'use strict';
-
-	        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues', 'TableName', 'TransformType', 'OutputFileName'];
-
-	        return  {
-	            batchRequest: {
-	                factory: true,
-	                required: ['RequestType', 'ConfigFileLocation || ConfigXml'],
-	                optional: optional
-	            },
-	            checkVariables: {
-	                factory: true,
-	                required: ['RequestType', 'SiteUrl', 'CWVariable', 'DatesInUtc'],
-	                optional: optional
-	            },
-	            copyFile: {
-	                factory: true,
-	                required: ['RequestType', 'NewFileName', 'ListTitle', 'SourceFileUrl'],
-	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite', 'IncludeWebParts', 'DeleteSource', 'Title'])
-	            },
-	            createPage: {
-	                factory: true,
-	                required: ['RequestType', 'FileName', 'ListTitle', 'TemplateFileName', 'Overwrite' ],
-	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
-	            },
-	            executeAction: {
-	                factory: true,
-	                required: ['RequestType', 'ActionUrl', 'ListTitle', 'ItemIds' ],
-	                optional: optional.concat(['SiteUrl'])
-	            },
-	            getActionDefinitions: {
-	                factory: true,
-	                required: ['RequestType', 'ListTitle'],
-	                optional: optional.concat(['SiteUrl'])
-	            },
-	            getActivatedSolutions: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional
-	            },
-	            getCentralViewData: {
-	                factory: true,
-	                required: ['RequestType', 'ViewUrl'],
-	                optional: optional.concat(['SiteUrl'])
-	            },
-	            getContentTypes: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional.concat(['ContentTypeTitle'])
-	            },
-	            getFileContents: {
-	                factory: true,
-	                required: ['RequestType', 'FileUrl'],
-	                optional: optional.concat(['Encoding'])
-	            },
-	            getGlobalVariables: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional.concat(['GlobalVariables'])
-	            },
-	            getListInfo: {
-	                factory: false,
-	                required: ['RequestType'],
-	                optional: optional.concat(['SiteUrl', 'ListTitle', 'DetailLevels', 'Properties'])
-	            },
-	            getListItems: {
-	                factory: false,
-	                required: ['RequestType', 'ListTitle'],
-	                optional: optional.concat(['SiteUrl', 'CAML'])
-	            },
-	            getServerInfo: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional
-	            },
-	            getSiteCollections: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional.concat(['SiteUrl', 'GetSubsites', 'SiteLevels', 'StartAtRoot'])
-	            },
-	            getSiteInfo: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional.concat(['SiteUrl', 'DetailLevels', 'Properties'])
-	            },
-	            getSiteUsers: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional.concat(['SiteUrl', 'Users', 'DetailLevels', 'Properties'])
-	            },
-	            getVersion: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional
-	            },
-	            getWebPartPageTemplates: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional
-	            },
-	            getWebPartProperties: {
-	                factory: true,
-	                required: ['RequestType'],
-	                optional: optional.concat(['SiteUrl', 'ListTitle', 'PageUrl', 'DetailLevels'])
-	            },
-	            processBatchData: {
-	                factory: false,
-	                required: ['RequestType', 'Batch'],
-	                optional: optional.concat(['SiteUrl', 'ListTitle'])
-	            },
-	            processGlobalVariables: {
-	                factory: true,
-	                required: ['RequestType', 'Batch'],
-	                optional: optional
-	            },
-	            processList: {
-	                factory: true,
-	                required: ['RequestType', 'ListTitle', 'Command'],
-	                optional: optional.concat(['SiteUrl', 'TemplateName', 'TemplateType', 'Description', 'PropertiesXml'])
-	            },
-	            startWorkflow: {
-	                factory: true,
-	                required: ['RequestType', 'WorkFlowName, ListTitle, ItemIds'],
-	                optional: optional.concat(['SiteUrl'])
-	            }
-	        };
-
-	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }
 /******/ ])

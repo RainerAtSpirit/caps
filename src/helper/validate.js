@@ -8,7 +8,8 @@ define(function( require ) {
             getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
             getListTitle: 'caps.{0}(). Missing required "listTitle" property',
             getFileUrl: 'caps.{0}(). Missing required "fileUrl" property',
-            getRequiredParam: 'caps.{0}(). Missing required "{1}" property'
+            getRequiredParam: 'caps.{0}(). Missing required "{1}" property',
+            addRequiredProperties: 'caps.{0}(). Missing required "{1}" property'
         };
 
     /**
@@ -108,23 +109,47 @@ define(function( require ) {
             }
         });
 
-
-        /*$.each(properties, function( idx, property ) {
-            var propName = property.charAt(0).toLowerCase() + property.substring(1),
-                value = options[propName];
-
-
-            if ( typeof value !== 'undefined' ) {
-                data[property] = value;
-            }
-
-        });
-*/
         return data;
     }
 
+    function addRequiredProperties ( options, data, properties, funcName ) {
+
+        var result = {},
+            errMessage = messages.addRequiredProperties;
+
+        // Step 1: Add required properties to result
+        $.each(options, function(prop, value){
+
+            var propIndex = fn.strInArray(prop, properties),
+                propName;
+
+            if (propIndex > -1){
+                propName = properties[propIndex];
+
+                result[propName] = value;
+            }
+        });
+
+        // Step 2: Iterate over propterties and check if we got a matching result
+
+        $.each(properties, function(idx, prop){
+
+            if (typeof result[prop] === 'undefined'){
+                errMessage = fn.format(errMessage, funcName || '', prop);
+                throw new Error(errMessage);
+            }
+
+            data[prop] = result[prop];
+
+        });
+
+        return data;
+    }
+
+
     return {
         addOptionalProperties: addOptionalProperties,
+        addRequiredProperties: addRequiredProperties,
         getRequiredParam: getRequiredParam,
         getListTitle: getListTitle,
         getSiteUrl: getSiteUrl,

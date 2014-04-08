@@ -1,16 +1,17 @@
 define(function( require ) {
         'use strict';
 
-        var fn = require('../fn/common'),
+        var capsParams = require('../capsParams'),
+            fn = require('../fn/common'),
             validate = require('../helper/validate'),
+            method = capsParams.getActionDefinitions,
             defaults;
 
         defaults = {
             type: 'GET',
             data: {
-                RequestType: 'GetActionDefinitions',
-                OutputType: 'json',
-                DetailLevels: 1
+                RequestType: method.name,
+                OutputType: 'json'
             }
         };
 
@@ -23,13 +24,16 @@ define(function( require ) {
         function getActionDefinitions ( options, params ) {
             options = options || {};
 
-            var request;
+            var request,
+                data = {},
+                optional = method.optional,
+                required = method.required;
+
+            data = validate.addRequiredProperties(options, data, required, 'getActionDefinitions');
+            data = validate.addOptionalProperties(options, data, optional);
 
             request = $.extend(true, {}, defaults, {
-                data: {
-                    SiteUrl: validate.getSiteUrl(options.siteUrl, 'getActionDefinitions'),
-                    ListTitle: validate.getListTitle(options.listTitle)
-                }
+                data: data
             }, params);
 
             return fn.getPromise(request);

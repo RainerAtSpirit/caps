@@ -1,6 +1,6 @@
 #capsJS
 [![Build Status](https://travis-ci.org/RainerAtSpirit/caps.png?branch=master)](https://travis-ci.org/RainerAtSpirit/caps)
->  **2013/03/10** Preliminary release. Not all caps methods are implemented yet.
+>  **2014/04/08** supports all methods of Caps version 11.3.0.40
 
 ## JavaScript library for CorasWorks Application Service (CAPS) developer
 
@@ -36,16 +36,16 @@ caps.getListInfo({listTitle: 'Test1'})
 2. install grunt using `npm install -g grunt-cli`
 3. download/clone this repo
 4. run `npm install` in repo's root directory to install grunt's dependencies
-5. run `grunt` run tests in the test directory
+5. run `grunt test` to run tests
 
 ###Contributing
 Write tests in `test/specs/modules` that describes the desired functionality and implement it in `src/`.
 No pull requests will be accepted without associating tests.
 
-In absence of a formal style guide, follow the existing code style as close as possible.
+In absence of a formal style guide, follow the existing code style.
 
 ###Building the app
-Experimental: There's a `grunt build` task that builds an optimized version in the build directory.
+There's a `grunt build` task that builds an optimized version in the build directory.
 
 ###New to grunt?
 Head over to http://gruntjs.com/ to learn the basics.

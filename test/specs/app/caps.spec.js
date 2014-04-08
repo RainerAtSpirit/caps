@@ -80,10 +80,42 @@ describe("caps", function() {
 
     });
 
+    describe("batchRequest", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.batchRequest).toBe('function');
+        });
+
+    });
+
     describe("checkVariables", function() {
 
         it("should be a function", function() {
             expect(typeof caps.checkVariables).toBe('function');
+        });
+
+    });
+
+    describe("copyFile", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.copyFile).toBe('function');
+        });
+
+    });
+
+    describe("createPage", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.createPage).toBe('function');
+        });
+
+    });
+
+    describe("executeAction", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.executeAction).toBe('function');
         });
 
     });
@@ -100,6 +132,14 @@ describe("caps", function() {
 
         it("should be a function", function() {
             expect(typeof caps.getActivatedSolutions).toBe('function');
+        });
+
+    });
+
+    describe("getCentralViewData", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.getCentralViewData).toBe('function');
         });
 
     });
@@ -152,10 +192,10 @@ describe("caps", function() {
 
     });
 
-    describe("getSiteCollection", function() {
+    describe("getSiteCollections", function() {
 
         it("should be a function", function() {
-            expect(typeof caps.getSiteCollection).toBe('function');
+            expect(typeof caps.getSiteCollections).toBe('function');
         });
 
     });
@@ -204,6 +244,30 @@ describe("caps", function() {
 
         it("should be a function", function() {
             expect(typeof caps.processBatchData).toBe('function');
+        });
+
+    });
+
+    describe("processGlobalVariables", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.processGlobalVariables).toBe('function');
+        });
+
+    });
+
+    describe("processList", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.processList).toBe('function');
+        });
+
+    });
+
+    describe("startWorkflow", function() {
+
+        it("should be a function", function() {
+            expect(typeof caps.startWorkflow).toBe('function');
         });
 
     });

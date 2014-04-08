@@ -1,31 +1,39 @@
 define(function( require ) {
         'use strict';
 
-        var fn = require('../fn/common'),
+        var capsParams = require('../capsParams'),
+            fn = require('../fn/common'),
             validate = require('../helper/validate'),
+            method = capsParams.getActivatedSolutions,
             defaults;
 
         defaults = {
             type: 'GET',
             data: {
-                RequestType: 'GetActivatedSolutions',
+                RequestType: method.name,
                 OutputType: 'json'
             }
         };
 
         /**
          *
-         * @param options {object} getActivatedSolutions configuration object
+         * @param options {object} getActionDefinitions configuration object
          * @param params {object} ajax settings overwriting defaults and options
          * @returns {*} promise
          */
         function getActivatedSolutions ( options, params ) {
             options = options || {};
 
-            var request;
+            var request,
+                data = {},
+                optional = method.optional,
+                required = method.required;
+
+            data = validate.addRequiredProperties(options, data, required, 'getActivatedSolutions');
+            data = validate.addOptionalProperties(options, data, optional);
 
             request = $.extend(true, {}, defaults, {
-                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getActivatedSolutions')
+                data: data
             }, params);
 
             return fn.getPromise(request);

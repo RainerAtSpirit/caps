@@ -1,15 +1,17 @@
 define(function( require ) {
         'use strict';
 
-        var fn = require('../fn/common'),
+        var capsParams = require('../capsParams'),
+            fn = require('../fn/common'),
             validate = require('../helper/validate'),
             convert2Caml = require('./convert2Caml'),
+            method = capsParams.getListItems,
             defaults;
 
         defaults = {
             type: 'GET',
             data: {
-                RequestType: 'GetListItems',
+                RequestType: method.name,
                 OutputType: 'json'
             }
         };
@@ -23,16 +25,19 @@ define(function( require ) {
         function getListItems ( options, params ) {
             options = options || {};
 
-            var data, request;
+            var request,
+                data = {},
+                optional = method.optional,
+                required = method.required;
 
-            data = {
-                SiteUrl: validate.getSiteUrl(options.siteUrl, 'getListItems'),
-                ListTitle: validate.getListTitle(options.listTitle, 'getListItems')
-            };
+            data = validate.addRequiredProperties(options, data, required, 'getListItems');
+            data = validate.addOptionalProperties(options, data, optional);
 
-            if ( options.caml ) {
+            // Overwrite automatically created data.CAML with processed CAML
+            if ( data.CAML ) {
                 data.CAML = convert2Caml(options.caml, options.model);
             }
+
 
             request = $.extend(true, {}, defaults, {
                 data: data

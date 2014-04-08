@@ -1,130 +1,130 @@
 define(function( require ) {
         'use strict';
 
-        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues', 'TableName', 'TransformType', 'OutputFileName'];
+        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues',
+            'TableName', 'TransformType', 'OutputFileName'];
 
         return  {
             batchRequest: {
-                factory: true,
-                required: ['RequestType', 'ConfigFileLocation || ConfigXml'],
+                name: 'BatchRequest',
+                required: ['ConfigFileLocation || ConfigXml'],
                 optional: optional
             },
             checkVariables: {
-                factory: true,
-                required: ['RequestType', 'SiteUrl', 'CWVariable', 'DatesInUtc'],
+                name: 'CheckVariables',
+                required: ['SiteUrl', 'CWVariable', 'DatesInUtc'],
                 optional: optional
             },
             copyFile: {
-                factory: true,
-                required: ['RequestType', 'NewFileName', 'ListTitle', 'SourceFileUrl'],
+                name: 'CopyFile',
+                required: ['NewFileName', 'ListTitle', 'SourceFileUrl'],
                 optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite', 'IncludeWebParts', 'DeleteSource', 'Title'])
             },
             createPage: {
-                factory: true,
-                required: ['RequestType', 'FileName', 'ListTitle', 'TemplateFileName', 'Overwrite' ],
+                name: 'CreatePage',
+                required: ['FileName', 'ListTitle', 'TemplateFileName', 'Overwrite' ],
                 optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
             },
             executeAction: {
-                factory: true,
-                required: ['RequestType', 'ActionUrl', 'ListTitle', 'ItemIds' ],
+                name: 'ExecuteAction',
+                required: ['ActionUrl', 'ListTitle', 'ItemIds' ],
                 optional: optional.concat(['SiteUrl'])
             },
             getActionDefinitions: {
-                factory: true,
-                required: ['RequestType', 'ListTitle'],
+                name: 'GetActionDefinitions',
+                required: ['ListTitle'],
                 optional: optional.concat(['SiteUrl'])
             },
             getActivatedSolutions: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetActivatedSolutions',
+                required: [],
                 optional: optional
             },
             getCentralViewData: {
-                factory: true,
-                required: ['RequestType', 'ViewUrl'],
+                name: 'GetCentralViewData',
+                required: ['ViewUrl'],
                 optional: optional.concat(['SiteUrl'])
             },
             getContentTypes: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetContentTypes',
+                required: [],
                 optional: optional.concat(['ContentTypeTitle'])
             },
             getFileContents: {
-                factory: true,
-                required: ['RequestType', 'FileUrl'],
+                name: 'GetFileContents',
+                required: ['FileUrl'],
                 optional: optional.concat(['Encoding'])
             },
             getGlobalVariables: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetGlobalVariables',
+                required: [],
                 optional: optional.concat(['GlobalVariables'])
             },
             getListInfo: {
-                factory: false,
-                required: ['RequestType'],
+                name: 'GetListInfo',
+                required: [],
                 optional: optional.concat(['SiteUrl', 'ListTitle', 'DetailLevels', 'Properties'])
             },
             getListItems: {
-                factory: false,
-                required: ['RequestType', 'ListTitle'],
+                name: 'GetListItems',
+                required: ['ListTitle'],
                 optional: optional.concat(['SiteUrl', 'CAML'])
             },
             getServerInfo: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetServerInfo',
+                required: [],
                 optional: optional
             },
             getSiteCollections: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetSiteCollections',
+                required: [],
                 optional: optional.concat(['SiteUrl', 'GetSubsites', 'SiteLevels', 'StartAtRoot'])
             },
             getSiteInfo: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetSiteInfo',
+                required: [],
                 optional: optional.concat(['SiteUrl', 'DetailLevels', 'Properties'])
             },
             getSiteUsers: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetSiteUsers',
+                required: [],
                 optional: optional.concat(['SiteUrl', 'Users', 'DetailLevels', 'Properties'])
             },
             getVersion: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetVersion',
+                required: [],
                 optional: optional
             },
             getWebPartPageTemplates: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetWebPartPageTemplates',
+                required: [],
                 optional: optional
             },
             getWebPartProperties: {
-                factory: true,
-                required: ['RequestType'],
+                name: 'GetWebPartProperties',
+                required: [],
                 optional: optional.concat(['SiteUrl', 'ListTitle', 'PageUrl', 'DetailLevels'])
             },
             processBatchData: {
-                factory: false,
-                required: ['RequestType', 'Batch'],
+                name: 'ProcessBatchData',
+                required: ['Batch'],
                 optional: optional.concat(['SiteUrl', 'ListTitle'])
             },
             processGlobalVariables: {
-                factory: true,
-                required: ['RequestType', 'Batch'],
+                name: 'ProcessGlobalVariables',
+                required: ['Batch'],
                 optional: optional
             },
             processList: {
-                factory: true,
-                required: ['RequestType', 'ListTitle', 'Command'],
+                name: 'ProcessList',
+                required: ['ListTitle', 'Command'],
                 optional: optional.concat(['SiteUrl', 'TemplateName', 'TemplateType', 'Description', 'PropertiesXml'])
             },
             startWorkflow: {
-                factory: true,
-                required: ['RequestType', 'WorkFlowName, ListTitle, ItemIds'],
+                name: 'StartWorkflow',
+                required: ['WorkFlowName, ListTitle, ItemIds'],
                 optional: optional.concat(['SiteUrl'])
             }
         };
-
     }
 );

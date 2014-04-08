@@ -1,14 +1,16 @@
 define(function( require ) {
         'use strict';
 
-        var fn = require('../fn/common'),
+        var capsParams = require('../capsParams'),
+            fn = require('../fn/common'),
             validate = require('../helper/validate'),
+            method = capsParams.getServerInfo,
             defaults;
 
         defaults = {
             type: 'GET',
             data: {
-                RequestType: 'GetServerInfo',
+                RequestType: method.name,
                 OutputType: 'json'
             }
         };
@@ -22,12 +24,16 @@ define(function( require ) {
         function getServerInfo ( options, params ) {
             options = options || {};
 
-            var request;
+            var request,
+                data = {},
+                optional = method.optional,
+                required = method.required;
+
+            data = validate.addRequiredProperties(options, data, required, 'getServerInfo');
+            data = validate.addOptionalProperties(options, data, optional);
 
             request = $.extend(true, {}, defaults, {
-                data: {
-
-                }
+                data: data
             }, params);
 
             return fn.getPromise(request);
