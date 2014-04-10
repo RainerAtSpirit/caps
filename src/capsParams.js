@@ -2,7 +2,7 @@ define(function( require ) {
         'use strict';
 
         var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues',
-            'TableName', 'TransformType', 'OutputFileName'];
+            'TableName', 'RedirectURL', 'ContentDisposition', 'DatesInUtc', 'OutputFileName'];
 
         return  {
             batchRequest: {
@@ -12,8 +12,8 @@ define(function( require ) {
             },
             checkVariables: {
                 name: 'CheckVariables',
-                required: ['SiteUrl', 'CWVariable', 'DatesInUtc'],
-                optional: optional
+                required: [],
+                optional: optional.concat(['SiteUrl', 'CWVariable', 'DatesInUtc'])
             },
             copyFile: {
                 name: 'CopyFile',
@@ -48,7 +48,7 @@ define(function( require ) {
             getContentTypes: {
                 name: 'GetContentTypes',
                 required: [],
-                optional: optional.concat(['ContentTypeTitle'])
+                optional: optional.concat(['SiteUrl', 'ContentTypeTitle'])
             },
             getFileContents: {
                 name: 'GetFileContents',
@@ -108,7 +108,7 @@ define(function( require ) {
             processBatchData: {
                 name: 'ProcessBatchData',
                 required: ['Batch'],
-                optional: optional.concat(['SiteUrl', 'ListTitle'])
+                optional: optional.concat(['SiteUrl', 'ListTitle', 'ListType'])
             },
             processGlobalVariables: {
                 name: 'ProcessGlobalVariables',

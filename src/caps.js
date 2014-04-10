@@ -5,7 +5,7 @@ define(function( require ) {
         'use strict';
 
         var Events = require('./fn/events'),
-            version = '1.0.1',
+            version = '1.0.2',
             caps;
 
         // ECMA 5 polyfills

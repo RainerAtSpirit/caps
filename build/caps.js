@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '1.0.0',
+	            version = '1.0.2',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -1617,7 +1617,7 @@ var caps =
 	        'use strict';
 
 	        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues',
-	            'TableName', 'TransformType', 'OutputFileName'];
+	            'TableName', 'RedirectURL', 'ContentDisposition', 'DatesInUtc', 'OutputFileName'];
 
 	        return  {
 	            batchRequest: {
@@ -1627,8 +1627,8 @@ var caps =
 	            },
 	            checkVariables: {
 	                name: 'CheckVariables',
-	                required: ['SiteUrl', 'CWVariable', 'DatesInUtc'],
-	                optional: optional
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'CWVariable', 'DatesInUtc'])
 	            },
 	            copyFile: {
 	                name: 'CopyFile',
@@ -1663,7 +1663,7 @@ var caps =
 	            getContentTypes: {
 	                name: 'GetContentTypes',
 	                required: [],
-	                optional: optional.concat(['ContentTypeTitle'])
+	                optional: optional.concat(['SiteUrl', 'ContentTypeTitle'])
 	            },
 	            getFileContents: {
 	                name: 'GetFileContents',
@@ -1723,7 +1723,7 @@ var caps =
 	            processBatchData: {
 	                name: 'ProcessBatchData',
 	                required: ['Batch'],
-	                optional: optional.concat(['SiteUrl', 'ListTitle'])
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'ListType'])
 	            },
 	            processGlobalVariables: {
 	                name: 'ProcessGlobalVariables',
