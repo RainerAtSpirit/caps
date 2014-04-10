@@ -22,7 +22,7 @@ define(function( require ) {
             },
             createPage: {
                 name: 'CreatePage',
-                required: ['FileName', 'ListTitle', 'TemplateFileName', 'Overwrite' ],
+                required: ['FileName', 'ListTitle', 'TemplateFileName' ],
                 optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
             },
             executeAction: {

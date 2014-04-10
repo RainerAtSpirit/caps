@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '1.0.2',
+	            version = '1.0.3',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -1637,7 +1637,7 @@ var caps =
 	            },
 	            createPage: {
 	                name: 'CreatePage',
-	                required: ['FileName', 'ListTitle', 'TemplateFileName', 'Overwrite' ],
+	                required: ['FileName', 'ListTitle', 'TemplateFileName' ],
 	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
 	            },
 	            executeAction: {
