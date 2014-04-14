@@ -84,7 +84,8 @@ define(function( require ) {
         var L_Menu_BaseUrl = window.L_Menu_BaseUrl,
             soapEnv = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><{0} xmlns="http://schemas.microsoft.com/sharepoint/soap/" >{1}</{0}></soap:Body></soap:Envelope>',
             pathName = location.pathname.toLocaleLowerCase(),
-            siteName = '',
+            site = '',
+            siteLink = '',
             pageUrl;
 
         relDir = relDir ? relDir.toLocaleLowerCase() : '/apppages';
@@ -111,10 +112,15 @@ define(function( require ) {
             contentType: 'text/xml; charset="utf-8"'
         })
             .complete(function( response ) {
-                siteName = $(response.responseXML).find("WebUrlFromPageUrlResult").text();
+                site = siteLink = $(response.responseXML).find("WebUrlFromPageUrlResult").text();
+
+                if (site.indexOf('://')){
+                    siteLink = site.split(location.hostname)[1];
+                }
+
             });
 
-        return siteName;
+        return siteLink;
     }
 
     // http://stackoverflow.com/questions/3390930/any-way-to-make-jquery-inarray-case-insensitive
