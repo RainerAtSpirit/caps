@@ -2,7 +2,7 @@
 define(function( require ) {
     'use strict';
 
-    var L_Menu_BaseUrl = window.L_Menu_BaseUrl;
+   // var L_Menu_BaseUrl = window.L_Menu_BaseUrl;
 
     /**
      * Check for existence of nested object keys
@@ -51,7 +51,9 @@ define(function( require ) {
      */
     function getPromise ( options ) {
 
-        var urlCaps = '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
+        var L_Menu_BaseUrl = window.L_Menu_BaseUrl,
+            relUrlCaps = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
+            urlCaps = relUrlCaps + '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
             url = options.url || urlCaps,
             request,
             defaults = {
@@ -79,7 +81,8 @@ define(function( require ) {
     }
 
     function getSiteUrl ( relDir ) {
-        var soapEnv = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><{0} xmlns="http://schemas.microsoft.com/sharepoint/soap/" >{1}</{0}></soap:Body></soap:Envelope>',
+        var L_Menu_BaseUrl = window.L_Menu_BaseUrl,
+            soapEnv = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><{0} xmlns="http://schemas.microsoft.com/sharepoint/soap/" >{1}</{0}></soap:Body></soap:Envelope>',
             pathName = location.pathname.toLocaleLowerCase(),
             siteName = '',
             pageUrl;
@@ -96,7 +99,7 @@ define(function( require ) {
             return pathName.split(relDir)[0];
         }
 
-        // last resort using webs.amsx with async false!
+        // last resort using webs.asmx with async false!
 
         pageUrl = format('<pageUrl>{0}</pageUrl>', location.href.split('?')[0]);
 

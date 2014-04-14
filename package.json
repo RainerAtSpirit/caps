@@ -1,6 +1,6 @@
 {
   "name": "caps",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Accessing the CorasWorks application service (caps) via JavaScript",
   "main": "caps.js",
   "dependencies": {},
