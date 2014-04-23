@@ -55,6 +55,7 @@ define(function( require ) {
             relUrlCaps = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
             urlCaps = relUrlCaps + '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
             url = options.url || urlCaps,
+            isSameSite,
             request,
             defaults = {
                 data: null,
@@ -65,6 +66,16 @@ define(function( require ) {
         if ( options.url ) {
             delete options.url;
         }
+
+        // Avoid adding SiteUrl param for the current site
+        if ( options.data && options.data.SiteUrl){
+            isSameSite = options.data.SiteUrl.toLowerCase() === relUrlCaps.toLowerCase();
+
+            if (isSameSite){
+                delete options.data.SiteUrl;
+            }
+        }
+        // Clean up
 
         request = $.extend(true, {}, defaults, options);
 

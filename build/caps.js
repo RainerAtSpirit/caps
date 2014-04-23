@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '1.0.4',
+	            version = '1.0.5',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -328,10 +328,10 @@ var caps =
 	    var fn;
 
 	    // extend common methods with methods available at caps.fn namespace
-	    fn = $.extend({}, __webpack_require__(29), {
-	        createBatchXML: __webpack_require__(31),
-	        convert2Caml: __webpack_require__(32),
-	        convertFilter2Caml: __webpack_require__(33),
+	    fn = $.extend({}, __webpack_require__(28), {
+	        createBatchXML: __webpack_require__(29),
+	        convert2Caml: __webpack_require__(30),
+	        convertFilter2Caml: __webpack_require__(31),
 	        Events: __webpack_require__(1)
 	    });
 
@@ -430,9 +430,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.batchRequest,
 	            defaults;
 
@@ -478,9 +478,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.checkVariables,
 	            defaults;
 
@@ -526,9 +526,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.copyFile,
 	            defaults;
 
@@ -574,9 +574,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.createPage,
 	            defaults;
 
@@ -622,9 +622,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.executeAction,
 	            defaults;
 
@@ -670,9 +670,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getActionDefinitions,
 	            defaults;
 
@@ -718,9 +718,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getActivatedSolutions,
 	            defaults;
 
@@ -766,9 +766,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getCentralViewData,
 	            defaults;
 
@@ -814,9 +814,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getContentTypes,
 	            defaults;
 
@@ -862,9 +862,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getFileContents,
 	            defaults;
 
@@ -910,9 +910,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getGlobalVariables,
 	            defaults;
 
@@ -958,9 +958,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getListInfo,
 	            defaults;
 
@@ -1006,10 +1006,10 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
-	            convert2Caml = __webpack_require__(32),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
+	            convert2Caml = __webpack_require__(30),
 	            method = capsParams.getListItems,
 	            defaults;
 
@@ -1061,9 +1061,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getServerInfo,
 	            defaults;
 
@@ -1109,9 +1109,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getSiteCollections,
 	            defaults;
 
@@ -1157,9 +1157,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getSiteInfo,
 	            defaults;
 
@@ -1205,9 +1205,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getSiteUsers,
 	            defaults;
 
@@ -1253,9 +1253,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getVersion,
 	            defaults;
 
@@ -1301,9 +1301,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getWebPartPageTemplates,
 	            defaults;
 
@@ -1349,9 +1349,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getWebPartProperties,
 	            defaults;
 
@@ -1397,9 +1397,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
-	            createBatchXML = __webpack_require__(31),
+	        var fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
+	            createBatchXML = __webpack_require__(29),
 	            defaults;
 
 	        defaults = {
@@ -1472,9 +1472,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.processGlobalVariables,
 	            defaults;
 
@@ -1520,9 +1520,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.processList,
 	            defaults;
 
@@ -1568,9 +1568,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.startWorkflow,
 	            defaults;
 
@@ -1611,140 +1611,6 @@ var caps =
 
 /***/ },
 /* 28 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
-	        'use strict';
-
-	        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues',
-	            'TableName', 'RedirectURL', 'ContentDisposition', 'DatesInUtc', 'OutputFileName'];
-
-	        return  {
-	            batchRequest: {
-	                name: 'BatchRequest',
-	                required: ['ConfigFileLocation || ConfigXml'],
-	                optional: optional
-	            },
-	            checkVariables: {
-	                name: 'CheckVariables',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'CWVariable', 'DatesInUtc'])
-	            },
-	            copyFile: {
-	                name: 'CopyFile',
-	                required: ['NewFileName', 'ListTitle', 'SourceFileUrl'],
-	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite', 'IncludeWebParts', 'DeleteSource', 'Title'])
-	            },
-	            createPage: {
-	                name: 'CreatePage',
-	                required: ['FileName', 'ListTitle', 'TemplateFileName' ],
-	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
-	            },
-	            executeAction: {
-	                name: 'ExecuteAction',
-	                required: ['ActionUrl', 'ListTitle', 'ItemIds' ],
-	                optional: optional.concat(['SiteUrl'])
-	            },
-	            getActionDefinitions: {
-	                name: 'GetActionDefinitions',
-	                required: ['ListTitle'],
-	                optional: optional.concat(['SiteUrl'])
-	            },
-	            getActivatedSolutions: {
-	                name: 'GetActivatedSolutions',
-	                required: [],
-	                optional: optional
-	            },
-	            getCentralViewData: {
-	                name: 'GetCentralViewData',
-	                required: ['ViewUrl'],
-	                optional: optional.concat(['SiteUrl'])
-	            },
-	            getContentTypes: {
-	                name: 'GetContentTypes',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'ContentTypeTitle'])
-	            },
-	            getFileContents: {
-	                name: 'GetFileContents',
-	                required: ['FileUrl'],
-	                optional: optional.concat(['Encoding'])
-	            },
-	            getGlobalVariables: {
-	                name: 'GetGlobalVariables',
-	                required: [],
-	                optional: optional.concat(['GlobalVariables'])
-	            },
-	            getListInfo: {
-	                name: 'GetListInfo',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'ListTitle', 'DetailLevels', 'Properties'])
-	            },
-	            getListItems: {
-	                name: 'GetListItems',
-	                required: ['ListTitle'],
-	                optional: optional.concat(['SiteUrl', 'CAML'])
-	            },
-	            getServerInfo: {
-	                name: 'GetServerInfo',
-	                required: [],
-	                optional: optional
-	            },
-	            getSiteCollections: {
-	                name: 'GetSiteCollections',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'GetSubsites', 'SiteLevels', 'StartAtRoot'])
-	            },
-	            getSiteInfo: {
-	                name: 'GetSiteInfo',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'DetailLevels', 'Properties'])
-	            },
-	            getSiteUsers: {
-	                name: 'GetSiteUsers',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'Users', 'DetailLevels', 'Properties'])
-	            },
-	            getVersion: {
-	                name: 'GetVersion',
-	                required: [],
-	                optional: optional
-	            },
-	            getWebPartPageTemplates: {
-	                name: 'GetWebPartPageTemplates',
-	                required: [],
-	                optional: optional
-	            },
-	            getWebPartProperties: {
-	                name: 'GetWebPartProperties',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'ListTitle', 'PageUrl', 'DetailLevels'])
-	            },
-	            processBatchData: {
-	                name: 'ProcessBatchData',
-	                required: ['Batch'],
-	                optional: optional.concat(['SiteUrl', 'ListTitle', 'ListType'])
-	            },
-	            processGlobalVariables: {
-	                name: 'ProcessGlobalVariables',
-	                required: ['Batch'],
-	                optional: optional
-	            },
-	            processList: {
-	                name: 'ProcessList',
-	                required: ['ListTitle', 'Command'],
-	                optional: optional.concat(['SiteUrl', 'TemplateName', 'TemplateType', 'Description', 'PropertiesXml'])
-	            },
-	            startWorkflow: {
-	                name: 'StartWorkflow',
-	                required: ['WorkFlowName, ListTitle, ItemIds'],
-	                optional: optional.concat(['SiteUrl'])
-	            }
-	        };
-	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-/***/ },
-/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* global caps */
@@ -1804,6 +1670,7 @@ var caps =
 	            relUrlCaps = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
 	            urlCaps = relUrlCaps + '/_layouts/CorasWorksApps/CorasWorksApplicationService.ashx',
 	            url = options.url || urlCaps,
+	            isSameSite,
 	            request,
 	            defaults = {
 	                data: null,
@@ -1814,6 +1681,16 @@ var caps =
 	        if ( options.url ) {
 	            delete options.url;
 	        }
+
+	        // Avoid adding SiteUrl param for the current site
+	        if ( options.data && options.data.SiteUrl){
+	            isSameSite = options.data.SiteUrl.toLowerCase() === relUrlCaps.toLowerCase();
+
+	            if (isSameSite){
+	                delete options.data.SiteUrl;
+	            }
+	        }
+	        // Clean up
 
 	        request = $.extend(true, {}, defaults, options);
 
@@ -1866,7 +1743,7 @@ var caps =
 	                if (site.indexOf('://')){
 	                    siteLink = site.split(location.hostname)[1];
 	                }
-	                
+
 	            });
 
 	        return siteLink;
@@ -1961,175 +1838,12 @@ var caps =
 	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;/*global caps */
-
-	!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
-	    'use strict';
-	    var fn = __webpack_require__(29),
-	        L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
-	        messages = {
-	            getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
-	            getListTitle: 'caps.{0}(). Missing required "listTitle" property',
-	            getFileUrl: 'caps.{0}(). Missing required "fileUrl" property',
-	            getRequiredParam: 'caps.{0}(). Missing required "{1}" property',
-	            addRequiredProperties: 'caps.{0}(). Missing required "{1}" property'
-	        };
-
-	    /**
-	     * Check if value is undefined and throws error message
-	     * @param param {string}
-	     * @param value {string}
-	     * @param funcName {string} function name for error message
-	     * @returns {*} listTitle
-	     */
-	    function getRequiredParam ( param, value, funcName ) {
-	        var errMessage = messages.getRequiredParam;
-	        errMessage = fn.format(errMessage, funcName || '', param);
-
-	        if ( typeof value === 'undefined' ) {
-	            throw new Error(errMessage);
-	        }
-
-	        return value;
-	    }
-
-	    /**
-	     * Check if listTitle exists and throw error
-	     * @param listTitle {string}
-	     * @param funcName {string} function name for error message
-	     * @returns {*} listTitle
-	     */
-	    function getListTitle ( listTitle, funcName ) {
-	        var errMessage = messages.getListTitle;
-	        errMessage = fn.format(errMessage, funcName || '');
-
-	        if ( !listTitle ) {
-	            throw new Error(errMessage);
-	        }
-
-	        return listTitle;
-	    }
-
-	    /**
-	     * Check if fileUrl exists and throw error
-	     * @param fileUrl {string}
-	     * @param funcName {string} function name for error message
-	     * @returns {*} listTitle
-	     */
-	    function getFileUrl ( fileUrl, funcName ) {
-	        var errMessage = messages.getFileUrl;
-	        errMessage = fn.format(errMessage, funcName || '');
-
-	        if ( !fileUrl ) {
-	            throw new Error(errMessage);
-	        }
-
-	        return fileUrl;
-	    }
-
-	    /**
-	     * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
-	     * @param siteUrl {string}
-	     * @param funcName {string}
-	     * @returns {string} siteUrl
-	     */
-	    function getSiteUrl ( siteUrl, funcName ) {
-
-	        var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
-	            errMessage = messages.getSiteUrl,
-	            site = siteUrl ? siteUrl : baseUrl,
-	            path = site.replace(/^\/+|\/+$/g, ''),
-	            containsGlobal,
-	            containsVariable;
-
-	        if ( !path ) {
-	            path = fn.getSiteUrl();
-	        }
-
-	        containsGlobal = path.match(/\[.+?\]/g);
-	        containsVariable = path.match(/\%.+?\%/g);
-
-	        // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
-
-	        if ( !containsGlobal && !containsVariable ) {
-	            path = '%WebRoot%/' + path;
-	        }
-
-	        return path;
-	    }
-
-	    function addOptionalProperties ( options, data, properties ) {
-
-	        $.each(options, function(prop, value){
-
-	            var propIndex = fn.strInArray(prop, properties),
-	                propName;
-
-	            if (propIndex > -1){
-	                propName = properties[propIndex];
-
-	                data[propName] = value;
-	            }
-	        });
-
-	        return data;
-	    }
-
-	    function addRequiredProperties ( options, data, properties, funcName ) {
-
-	        var result = {},
-	            errMessage = messages.addRequiredProperties;
-
-	        // Step 1: Add required properties to result
-	        $.each(options, function(prop, value){
-
-	            var propIndex = fn.strInArray(prop, properties),
-	                propName;
-
-	            if (propIndex > -1){
-	                propName = properties[propIndex];
-
-	                result[propName] = value;
-	            }
-	        });
-
-	        // Step 2: Iterate over propterties and check if we got a matching result
-
-	        $.each(properties, function(idx, prop){
-
-	            if (typeof result[prop] === 'undefined'){
-	                errMessage = fn.format(errMessage, funcName || '', prop);
-	                throw new Error(errMessage);
-	            }
-
-	            data[prop] = result[prop];
-
-	        });
-
-	        return data;
-	    }
-
-
-	    return {
-	        addOptionalProperties: addOptionalProperties,
-	        addRequiredProperties: addRequiredProperties,
-	        getRequiredParam: getRequiredParam,
-	        getListTitle: getListTitle,
-	        getSiteUrl: getSiteUrl,
-	        getFileUrl: getFileUrl
-	    };
-	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-/***/ },
-/* 31 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
-	        var fn = __webpack_require__(29);
+	        var fn = __webpack_require__(28);
 
 
 	        function createBatchXML ( options ) {
@@ -2211,14 +1925,14 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 32 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(29),
-	            convertFilter2Caml = __webpack_require__(33);
+	        var fn = __webpack_require__(28),
+	            convertFilter2Caml = __webpack_require__(31);
 
 	        /**
 	         *
@@ -2399,12 +2113,12 @@ var caps =
 
 
 /***/ },
-/* 33 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
-	        var fn = __webpack_require__(29),
+	        var fn = __webpack_require__(28),
 	            camlMap = {
 	                'eq': 'Eq',
 	                'neq': 'Neq',
@@ -2520,6 +2234,303 @@ var caps =
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues',
+	            'TableName', 'RedirectURL', 'ContentDisposition', 'DatesInUtc', 'OutputFileName'];
+
+	        return  {
+	            batchRequest: {
+	                name: 'BatchRequest',
+	                required: ['ConfigFileLocation || ConfigXml'],
+	                optional: optional
+	            },
+	            checkVariables: {
+	                name: 'CheckVariables',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'CWVariable', 'DatesInUtc'])
+	            },
+	            copyFile: {
+	                name: 'CopyFile',
+	                required: ['NewFileName', 'ListTitle', 'SourceFileUrl'],
+	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite', 'IncludeWebParts', 'DeleteSource', 'Title'])
+	            },
+	            createPage: {
+	                name: 'CreatePage',
+	                required: ['FileName', 'ListTitle', 'TemplateFileName' ],
+	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
+	            },
+	            executeAction: {
+	                name: 'ExecuteAction',
+	                required: ['ActionUrl', 'ListTitle', 'ItemIds' ],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getActionDefinitions: {
+	                name: 'GetActionDefinitions',
+	                required: ['ListTitle'],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getActivatedSolutions: {
+	                name: 'GetActivatedSolutions',
+	                required: [],
+	                optional: optional
+	            },
+	            getCentralViewData: {
+	                name: 'GetCentralViewData',
+	                required: ['ViewUrl'],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getContentTypes: {
+	                name: 'GetContentTypes',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'ContentTypeTitle'])
+	            },
+	            getFileContents: {
+	                name: 'GetFileContents',
+	                required: ['FileUrl'],
+	                optional: optional.concat(['Encoding'])
+	            },
+	            getGlobalVariables: {
+	                name: 'GetGlobalVariables',
+	                required: [],
+	                optional: optional.concat(['GlobalVariables'])
+	            },
+	            getListInfo: {
+	                name: 'GetListInfo',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'DetailLevels', 'Properties'])
+	            },
+	            getListItems: {
+	                name: 'GetListItems',
+	                required: ['ListTitle'],
+	                optional: optional.concat(['SiteUrl', 'CAML'])
+	            },
+	            getServerInfo: {
+	                name: 'GetServerInfo',
+	                required: [],
+	                optional: optional
+	            },
+	            getSiteCollections: {
+	                name: 'GetSiteCollections',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'GetSubsites', 'SiteLevels', 'StartAtRoot'])
+	            },
+	            getSiteInfo: {
+	                name: 'GetSiteInfo',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'DetailLevels', 'Properties'])
+	            },
+	            getSiteUsers: {
+	                name: 'GetSiteUsers',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'Users', 'DetailLevels', 'Properties'])
+	            },
+	            getVersion: {
+	                name: 'GetVersion',
+	                required: [],
+	                optional: optional
+	            },
+	            getWebPartPageTemplates: {
+	                name: 'GetWebPartPageTemplates',
+	                required: [],
+	                optional: optional
+	            },
+	            getWebPartProperties: {
+	                name: 'GetWebPartProperties',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'PageUrl', 'DetailLevels'])
+	            },
+	            processBatchData: {
+	                name: 'ProcessBatchData',
+	                required: ['Batch'],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'ListType'])
+	            },
+	            processGlobalVariables: {
+	                name: 'ProcessGlobalVariables',
+	                required: ['Batch'],
+	                optional: optional
+	            },
+	            processList: {
+	                name: 'ProcessList',
+	                required: ['ListTitle', 'Command'],
+	                optional: optional.concat(['SiteUrl', 'TemplateName', 'TemplateType', 'Description', 'PropertiesXml'])
+	            },
+	            startWorkflow: {
+	                name: 'StartWorkflow',
+	                required: ['WorkFlowName, ListTitle, ItemIds'],
+	                optional: optional.concat(['SiteUrl'])
+	            }
+	        };
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*global caps */
+
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	    'use strict';
+	    var fn = __webpack_require__(28),
+	        L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
+	        messages = {
+	            getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
+	            getListTitle: 'caps.{0}(). Missing required "listTitle" property',
+	            getFileUrl: 'caps.{0}(). Missing required "fileUrl" property',
+	            getRequiredParam: 'caps.{0}(). Missing required "{1}" property',
+	            addRequiredProperties: 'caps.{0}(). Missing required "{1}" property'
+	        };
+
+	    /**
+	     * Check if value is undefined and throws error message
+	     * @param param {string}
+	     * @param value {string}
+	     * @param funcName {string} function name for error message
+	     * @returns {*} listTitle
+	     */
+	    function getRequiredParam ( param, value, funcName ) {
+	        var errMessage = messages.getRequiredParam;
+	        errMessage = fn.format(errMessage, funcName || '', param);
+
+	        if ( typeof value === 'undefined' ) {
+	            throw new Error(errMessage);
+	        }
+
+	        return value;
+	    }
+
+	    /**
+	     * Check if listTitle exists and throw error
+	     * @param listTitle {string}
+	     * @param funcName {string} function name for error message
+	     * @returns {*} listTitle
+	     */
+	    function getListTitle ( listTitle, funcName ) {
+	        var errMessage = messages.getListTitle;
+	        errMessage = fn.format(errMessage, funcName || '');
+
+	        if ( !listTitle ) {
+	            throw new Error(errMessage);
+	        }
+
+	        return listTitle;
+	    }
+
+	    /**
+	     * Check if fileUrl exists and throw error
+	     * @param fileUrl {string}
+	     * @param funcName {string} function name for error message
+	     * @returns {*} listTitle
+	     */
+	    function getFileUrl ( fileUrl, funcName ) {
+	        var errMessage = messages.getFileUrl;
+	        errMessage = fn.format(errMessage, funcName || '');
+
+	        if ( !fileUrl ) {
+	            throw new Error(errMessage);
+	        }
+
+	        return fileUrl;
+	    }
+
+	    /**
+	     * Check if siteUrl exists and fallback to use L_Menu_BaseUrl (local site). Throw error if both are undefined
+	     * @param siteUrl {string}
+	     * @param funcName {string}
+	     * @returns {string} siteUrl
+	     */
+	    function getSiteUrl ( siteUrl, funcName ) {
+
+	        var baseUrl = L_Menu_BaseUrl ? L_Menu_BaseUrl : '',
+	            errMessage = messages.getSiteUrl,
+	            site = siteUrl ? siteUrl : baseUrl,
+	            path = site.replace(/^\/+|\/+$/g, ''),
+	            containsGlobal,
+	            containsVariable;
+
+	        if ( !path ) {
+	            path = fn.getSiteUrl();
+	        }
+
+	        containsGlobal = path.match(/\[.+?\]/g);
+	        containsVariable = path.match(/\%.+?\%/g);
+
+	        // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
+
+	        if ( !containsGlobal && !containsVariable ) {
+	            path = '%WebRoot%/' + path;
+	        }
+
+	        return path;
+	    }
+
+	    function addOptionalProperties ( options, data, properties ) {
+
+	        $.each(options, function(prop, value){
+
+	            var propIndex = fn.strInArray(prop, properties),
+	                propName;
+
+	            if (propIndex > -1){
+	                propName = properties[propIndex];
+
+	                data[propName] = value;
+	            }
+	        });
+
+	        return data;
+	    }
+
+	    function addRequiredProperties ( options, data, properties, funcName ) {
+
+	        var result = {},
+	            errMessage = messages.addRequiredProperties;
+
+	        // Step 1: Add required properties to result
+	        $.each(options, function(prop, value){
+
+	            var propIndex = fn.strInArray(prop, properties),
+	                propName;
+
+	            if (propIndex > -1){
+	                propName = properties[propIndex];
+
+	                result[propName] = value;
+	            }
+	        });
+
+	        // Step 2: Iterate over propterties and check if we got a matching result
+
+	        $.each(properties, function(idx, prop){
+
+	            if (typeof result[prop] === 'undefined'){
+	                errMessage = fn.format(errMessage, funcName || '', prop);
+	                throw new Error(errMessage);
+	            }
+
+	            data[prop] = result[prop];
+
+	        });
+
+	        return data;
+	    }
+
+
+	    return {
+	        addOptionalProperties: addOptionalProperties,
+	        addRequiredProperties: addRequiredProperties,
+	        getRequiredParam: getRequiredParam,
+	        getListTitle: getListTitle,
+	        getSiteUrl: getSiteUrl,
+	        getFileUrl: getFileUrl
+	    };
+	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }
 /******/ ])
