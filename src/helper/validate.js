@@ -76,6 +76,7 @@ define(function( require ) {
             errMessage = messages.getSiteUrl,
             site = siteUrl ? siteUrl : baseUrl,
             path = site.replace(/^\/+|\/+$/g, ''),
+            containsProtocol,
             containsGlobal,
             containsVariable;
 
@@ -83,12 +84,13 @@ define(function( require ) {
             path = fn.getSiteUrl();
         }
 
+        containsProtocol = path.match(/^http(s?)\:\/\//g);
         containsGlobal = path.match(/\[.+?\]/g);
         containsVariable = path.match(/\%.+?\%/g);
 
         // add leading slash / as long as path doesn't contain a global variable or a caps variable
 
-        if ( !containsGlobal && !containsVariable ) {
+        if ( !containsGlobal && !containsVariable && !containsProtocol) {
             path = '/' + path;
         }
 
