@@ -86,16 +86,16 @@ define(function( require ) {
         containsGlobal = path.match(/\[.+?\]/g);
         containsVariable = path.match(/\%.+?\%/g);
 
-        // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
+        // add leading slash / as long as path doesn't contain a global variable or a caps variable
 
         if ( !containsGlobal && !containsVariable ) {
-            path = '%WebRoot%/' + path;
+            path = '/' + path;
         }
 
         return path;
     }
 
-    function addOptionalProperties ( options, data, properties ) {
+    function addOptionalProperties ( options, data, properties, funcName ) {
 
         $.each(options, function(prop, value){
 
@@ -104,6 +104,12 @@ define(function( require ) {
 
             if (propIndex > -1){
                 propName = properties[propIndex];
+
+                if (propName === 'SiteUrl'){
+
+                    data[propName] = getSiteUrl(value, funcName);
+                    return;
+                }
 
                 data[propName] = value;
             }

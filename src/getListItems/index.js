@@ -31,7 +31,7 @@ define(function( require ) {
                 required = method.required;
 
             data = validate.addRequiredProperties(options, data, required, 'getListItems');
-            data = validate.addOptionalProperties(options, data, optional);
+            data = validate.addOptionalProperties(options, data, optional, 'getListItems');
 
             // Overwrite automatically created data.CAML with processed CAML
             if ( data.CAML ) {

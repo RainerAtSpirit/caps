@@ -30,7 +30,7 @@ define(function( require ) {
                 required = method.required;
 
             data = validate.addRequiredProperties(options, data, required, 'startWorkflow');
-            data = validate.addOptionalProperties(options, data, optional);
+            data = validate.addOptionalProperties(options, data, optional, 'startWorkflow');
 
             request = $.extend(true, {}, defaults, {
                 data: data

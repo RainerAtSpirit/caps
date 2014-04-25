@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '1.0.5',
+	            version = '1.0.6',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -459,7 +459,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'batchRequest');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'batchRequest');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -507,7 +507,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'checkVariables');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'checkVariables');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -555,7 +555,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'copyFile');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'copyFile');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -603,7 +603,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'createPage');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'createPage');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -651,7 +651,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'executeAction');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'executeAction');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -699,7 +699,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getActionDefinitions');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getActionDefinitions');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -747,7 +747,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getActivatedSolutions');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getActivatedSolutions');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -795,7 +795,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getCentralViewData');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getCentralViewData');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -843,7 +843,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getContentTypes');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getContentTypes');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -891,7 +891,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getFileContents');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getFileContents');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -939,7 +939,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getGlobalVariables');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getGlobalVariables');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -987,7 +987,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getListInfo');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getListInfo');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1036,7 +1036,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getListItems');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getListItems');
 
 	            // Overwrite automatically created data.CAML with processed CAML
 	            if ( data.CAML ) {
@@ -1090,7 +1090,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getServerInfo');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getServerInfo');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1138,7 +1138,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getSiteCollections');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getSiteCollections');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1186,7 +1186,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getSiteInfo');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getSiteInfo');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1234,7 +1234,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getSiteUsers');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getSiteUsers');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1282,7 +1282,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getVersion');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getVersion');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1330,7 +1330,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getWebPartPageTemplates');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getWebPartPageTemplates');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1378,7 +1378,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'getWebPartProperties');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'getWebPartProperties');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1501,7 +1501,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'processGlobalVariables');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'processGlobalVariables');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1549,7 +1549,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'processList');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'processList');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -1597,7 +1597,7 @@ var caps =
 	                required = method.required;
 
 	            data = validate.addRequiredProperties(options, data, required, 'startWorkflow');
-	            data = validate.addOptionalProperties(options, data, optional);
+	            data = validate.addOptionalProperties(options, data, optional, 'startWorkflow');
 
 	            request = $.extend(true, {}, defaults, {
 	                data: data
@@ -2461,16 +2461,16 @@ var caps =
 	        containsGlobal = path.match(/\[.+?\]/g);
 	        containsVariable = path.match(/\%.+?\%/g);
 
-	        // add %WebRoot%/ as long as path doesn't contain a global variable or a caps variable
+	        // add leading slash / as long as path doesn't contain a global variable or a caps variable
 
 	        if ( !containsGlobal && !containsVariable ) {
-	            path = '%WebRoot%/' + path;
+	            path = '/' + path;
 	        }
 
 	        return path;
 	    }
 
-	    function addOptionalProperties ( options, data, properties ) {
+	    function addOptionalProperties ( options, data, properties, funcName ) {
 
 	        $.each(options, function(prop, value){
 
@@ -2479,6 +2479,12 @@ var caps =
 
 	            if (propIndex > -1){
 	                propName = properties[propIndex];
+
+	                if (propName === 'SiteUrl'){
+
+	                    data[propName] = getSiteUrl(value, funcName);
+	                    return;
+	                }
 
 	                data[propName] = value;
 	            }
