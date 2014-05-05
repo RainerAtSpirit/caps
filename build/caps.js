@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '1.0.7',
+	            version = '1.0.8',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -2240,7 +2240,10 @@ var caps =
 	        return  {
 	            batchRequest: {
 	                name: 'BatchRequest',
-	                required: ['ConfigFileLocation || ConfigXml'],
+	                required: {
+	                    params: [],
+	                    or: ['ConfigFileLocation', 'ConfigXml']
+	                },
 	                optional: optional
 	            },
 	            checkVariables: {
@@ -2457,7 +2460,7 @@ var caps =
 
 	        // add leading slash / as long as path doesn't contain a global variable or a caps variable
 
-	        if ( !containsGlobal && !containsVariable && !containsProtocol) {
+	        if ( !containsGlobal && !containsVariable && !containsProtocol ) {
 	            path = '/' + path;
 	        }
 
@@ -2466,15 +2469,15 @@ var caps =
 
 	    function addOptionalProperties ( options, data, properties, funcName ) {
 
-	        $.each(options, function(prop, value){
+	        $.each(options, function( prop, value ) {
 
 	            var propIndex = fn.strInArray(prop, properties),
 	                propName;
 
-	            if (propIndex > -1){
+	            if ( propIndex > -1 ) {
 	                propName = properties[propIndex];
 
-	                if (propName === 'SiteUrl'){
+	                if ( propName === 'SiteUrl' ) {
 
 	                    data[propName] = getSiteUrl(value, funcName);
 	                    return;
@@ -2490,26 +2493,44 @@ var caps =
 	    function addRequiredProperties ( options, data, properties, funcName ) {
 
 	        var result = {},
-	            errMessage = messages.addRequiredProperties;
+	            errMessage = messages.addRequiredProperties,
+	            hasOrParams = typeof properties.or !== 'undefined',
+	            orParams = [],
+	            orParamsNotInOptions = [];
+
+	        if ( hasOrParams ) {
+	            orParams = properties.or;
+	            properties = properties.params;
+
+	        }
 
 	        // Step 1: Add required properties to result
-	        $.each(options, function(prop, value){
+	        $.each(options, function( prop, value ) {
 
 	            var propIndex = fn.strInArray(prop, properties),
+	                orIndex = fn.strInArray(prop, orParams),
 	                propName;
 
-	            if (propIndex > -1){
+	            // Special case or params e.g. batchRequest
+	            if ( orIndex > -1 ) {
+	                propName = orParams[orIndex];
+
+	                result[propName] = value;
+	            }
+
+	            if ( propIndex > -1 ) {
 	                propName = properties[propIndex];
 
 	                result[propName] = value;
 	            }
+
 	        });
 
-	        // Step 2: Iterate over propterties and check if we got a matching result
+	        // Step 2: Iterate over properties and check if we got a matching result
 
-	        $.each(properties, function(idx, prop){
+	        $.each(properties, function( idx, prop ) {
 
-	            if (typeof result[prop] === 'undefined'){
+	            if ( typeof result[prop] === 'undefined' ) {
 	                errMessage = fn.format(errMessage, funcName || '', prop);
 	                throw new Error(errMessage);
 	            }
@@ -2518,9 +2539,25 @@ var caps =
 
 	        });
 
+	        if ( hasOrParams ) {
+	            $.each(orParams, function( idx, prop ) {
+	                if ( typeof result[prop] === 'undefined' ) {
+	                    orParamsNotInOptions.push(prop);
+	                    return;
+	                }
+
+	                data[prop] = result[prop];
+
+	            });
+
+	            if ( orParams.length === orParamsNotInOptions.length ) {
+	                errMessage = fn.format(errMessage, funcName || '', orParams.join(' || '));
+	                throw new Error(errMessage);
+	            }
+	        }
+
 	        return data;
 	    }
-
 
 	    return {
 	        addOptionalProperties: addOptionalProperties,

@@ -7,7 +7,10 @@ define(function( require ) {
         return  {
             batchRequest: {
                 name: 'BatchRequest',
-                required: ['ConfigFileLocation || ConfigXml'],
+                required: {
+                    params: [],
+                    or: ['ConfigFileLocation', 'ConfigXml']
+                },
                 optional: optional
             },
             checkVariables: {
