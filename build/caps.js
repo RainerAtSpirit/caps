@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '1.0.6',
+	            version = '1.0.7',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -1682,14 +1682,6 @@ var caps =
 	            delete options.url;
 	        }
 
-	        // Avoid adding SiteUrl param for the current site
-	        if ( options.data && options.data.SiteUrl){
-	            isSameSite = options.data.SiteUrl.toLowerCase() === relUrlCaps.toLowerCase();
-
-	            if (isSameSite){
-	                delete options.data.SiteUrl;
-	            }
-	        }
 	        // Clean up
 
 	        request = $.extend(true, {}, defaults, options);

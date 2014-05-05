@@ -67,14 +67,6 @@ define(function( require ) {
             delete options.url;
         }
 
-        // Avoid adding SiteUrl param for the current site
-        if ( options.data && options.data.SiteUrl){
-            isSameSite = options.data.SiteUrl.toLowerCase() === relUrlCaps.toLowerCase();
-
-            if (isSameSite){
-                delete options.data.SiteUrl;
-            }
-        }
         // Clean up
 
         request = $.extend(true, {}, defaults, options);
