@@ -26,7 +26,7 @@ define(function( require ) {
                     len = batches.length;
 
                 for ( i = 0; i < len; i++ ) {
-                    processItems(list.name, batches[i]);
+                    processItems(list.listTitle, batches[i]);
                 }
 
             }

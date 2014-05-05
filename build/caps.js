@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '1.0.8',
+	            version = '1.1.0',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -1397,15 +1397,17 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var fn = __webpack_require__(28),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
 	            validate = __webpack_require__(33),
 	            createBatchXML = __webpack_require__(29),
+	            method = capsParams.processBatchData,
 	            defaults;
 
 	        defaults = {
 	            type: 'POST',
 	            data: {
-	                RequestType: 'ProcessBatchData',
+	                RequestType: method.name,
 	                OutputType: 'json'
 	            }
 	        };
@@ -1419,20 +1421,24 @@ var caps =
 	        function processBatchData ( options, params ) {
 	            options = options || {};
 
-	            var siteUrl, listTitle, batch, request;
+	            var request,
+	                data = {},
+	                optional = method.optional,
+	                required = method.required;
 
-	            siteUrl = validate.getSiteUrl(options.siteUrl, 'processBatchData');
+	            // Bypass check if options is an Array
+	            if (!$.isArray(options)){
+	                data = validate.addRequiredProperties(options, data, required, 'processBatchData');
+	                data = validate.addOptionalProperties(options, data, optional, 'processBatchData');
+	            }
 
-	            listTitle = getListTitle(options);
-
-	            batch = createBatchXML(validateBatch(options));
+	            if ( $.isArray(options) || typeof data.Batch !== 'string' ) {
+	                data.Batch = createBatchXML(options);
+	                data.ListTitle = getListTitle(options);
+	            }
 
 	            request = $.extend(true, {}, defaults, {
-	                data: {
-	                    SiteUrl: siteUrl,
-	                    ListTitle: listTitle,
-	                    Batch: batch
-	                }
+	                data: data
 	            }, params);
 
 	            return fn.getPromise(request);
@@ -1442,6 +1448,8 @@ var caps =
 
 	        //Internal
 	        function getListTitle ( options ) {
+	            options = $.isArray(options) ? options : [options];
+
 	            var listTitle = '';
 
 	            listTitle = $.map(options,function( obj ) {
@@ -1455,14 +1463,6 @@ var caps =
 	            return listTitle;
 	        }
 
-	        function validateBatch ( options ) {
-
-	            if ( !options && !options.batch ) {
-	                throw new Error('caps.processBatchData(). Missing required "batch" property.');
-	            }
-
-	            return options.batch;
-	        }
 	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
@@ -1861,7 +1861,7 @@ var caps =
 	                    len = batches.length;
 
 	                for ( i = 0; i < len; i++ ) {
-	                    processItems(list.name, batches[i]);
+	                    processItems(list.listTitle, batches[i]);
 	                }
 
 	            }

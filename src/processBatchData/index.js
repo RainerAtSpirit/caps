@@ -1,15 +1,17 @@
 define(function( require ) {
         'use strict';
 
-        var fn = require('../fn/common'),
+        var capsParams = require('../capsParams'),
+            fn = require('../fn/common'),
             validate = require('../helper/validate'),
             createBatchXML = require('./createBatchXML'),
+            method = capsParams.processBatchData,
             defaults;
 
         defaults = {
             type: 'POST',
             data: {
-                RequestType: 'ProcessBatchData',
+                RequestType: method.name,
                 OutputType: 'json'
             }
         };
@@ -23,20 +25,24 @@ define(function( require ) {
         function processBatchData ( options, params ) {
             options = options || {};
 
-            var siteUrl, listTitle, batch, request;
+            var request,
+                data = {},
+                optional = method.optional,
+                required = method.required;
 
-            siteUrl = validate.getSiteUrl(options.siteUrl, 'processBatchData');
+            // Bypass check if options is an Array
+            if (!$.isArray(options)){
+                data = validate.addRequiredProperties(options, data, required, 'processBatchData');
+                data = validate.addOptionalProperties(options, data, optional, 'processBatchData');
+            }
 
-            listTitle = getListTitle(options);
-
-            batch = createBatchXML(validateBatch(options));
+            if ( $.isArray(options) || typeof data.Batch !== 'string' ) {
+                data.Batch = createBatchXML(options);
+                data.ListTitle = getListTitle(options);
+            }
 
             request = $.extend(true, {}, defaults, {
-                data: {
-                    SiteUrl: siteUrl,
-                    ListTitle: listTitle,
-                    Batch: batch
-                }
+                data: data
             }, params);
 
             return fn.getPromise(request);
@@ -46,6 +52,8 @@ define(function( require ) {
 
         //Internal
         function getListTitle ( options ) {
+            options = $.isArray(options) ? options : [options];
+
             var listTitle = '';
 
             listTitle = $.map(options,function( obj ) {
@@ -59,13 +67,5 @@ define(function( require ) {
             return listTitle;
         }
 
-        function validateBatch ( options ) {
-
-            if ( !options && !options.batch ) {
-                throw new Error('caps.processBatchData(). Missing required "batch" property.');
-            }
-
-            return options.batch;
-        }
     }
 );
