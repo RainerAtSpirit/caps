@@ -97,17 +97,17 @@ define(function( require ) {
             function createExpression ( filterObj ) {
                 filterObj = $.isArray(filterObj) ? filterObj[0] : filterObj;
                 var filterExprMap = {
-                        'default': "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
-                        'null' : "<{0}><FieldRef Name='{1}' /></{0}>"
+                        'base': "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
+                        'isNull' : "<{0}><FieldRef Name='{1}' /></{0}>"
                     },
-                    filterExpr = filterExprMap.default,
+                    filterExpr = filterExprMap.base,
                     val = filterObj.value,
                     operator = camlMap[filterObj.operator],
                     field = filterObj.field,
                     type;
 
                 if (operator === 'IsNotNull' || operator === 'IsNull'){
-                    filterExpr = filterExprMap.null;
+                    filterExpr = filterExprMap.isNull;
                 }
 
                 // Check if we got a valid fields definition
