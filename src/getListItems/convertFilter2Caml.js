@@ -9,7 +9,9 @@ define(function( require ) {
                 'gt': 'Gt',
                 'gte': 'Geq',
                 'startswith': 'BeginsWith',
-                'contains': 'Contains'
+                'contains': 'Contains',
+                'isNotNull': 'IsNotNull',
+                'isNull': 'IsNull'
             },
             logicMap = {
                 'and': 'And',
@@ -94,15 +96,23 @@ define(function( require ) {
 
             function createExpression ( filterObj ) {
                 filterObj = $.isArray(filterObj) ? filterObj[0] : filterObj;
-                var filterExpr = "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
+                var filterExprMap = {
+                        'default': "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
+                        'null' : "<{0}><FieldRef Name='{1}' /></{0}>"
+                    },
+                    filterExpr = filterExprMap.default,
                     val = filterObj.value,
                     operator = camlMap[filterObj.operator],
                     field = filterObj.field,
                     type;
 
+                if (operator === 'IsNotNull' || operator === 'IsNull'){
+                    filterExpr = filterExprMap.null;
+                }
+
                 // Check if we got a valid fields definition
                 if ( !fields[filterObj.field] ) {
-                    throw new Error(fn.format('caps.convertFilter2Caml(). Missing model.fields defintion for {0}', filterObj.field));
+                    throw new Error(fn.format('caps.convertFilter2Caml(). Missing model.fields definition for {0}', filterObj.field));
                 }
 
                 type = fields[filterObj.field].Type;

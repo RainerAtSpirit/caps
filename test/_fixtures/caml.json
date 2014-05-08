@@ -14,6 +14,30 @@
                 },
                 "caml": "<Where><BeginsWith><FieldRef Name='Title' /><Value Type='Text'>T</Value></BeginsWith></Where>"
             },
+            "isNotNull": {
+                "filter": {
+                    "filters": [
+                        {
+                            "field": "AssignedTo",
+                            "operator": "isNotNull"
+                        }
+                    ],
+                    "logic": "and"
+                },
+                "caml": "<Where><IsNotNull><FieldRef Name='AssignedTo'/></IsNotNull></Where>"
+            },
+            "isNull": {
+                "filter": {
+                    "filters": [
+                        {
+                            "field": "AssignedTo",
+                            "operator": "isNull"
+                        }
+                    ],
+                    "logic": "and"
+                },
+                "caml": "<Where><IsNull><FieldRef Name='AssignedTo'/></IsNull></Where>"
+            },
 
             "AorBorC": {
                 "filter": {

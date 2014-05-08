@@ -29,6 +29,18 @@ describe('getListItems module', function() {
                 expressions = fixtures['caml.json'].expressions.one;
             });
 
+            it('AssignedTo isNull', function() {
+                useFixture('isNull');
+
+                expect(convertedXML).beEquivalentTo(resultXML);
+            });
+
+            it('AssignedTo isNotNull', function() {
+                useFixture('isNotNull');
+
+                expect(convertedXML).beEquivalentTo(resultXML);
+            });
+
             it('Title startswith T', function() {
                 useFixture('startswith');
 
