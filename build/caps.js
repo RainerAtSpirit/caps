@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '1.2.1',
+	            version = '1.2.2',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -328,10 +328,10 @@ var caps =
 	    var fn;
 
 	    // extend common methods with methods available at caps.fn namespace
-	    fn = $.extend({}, __webpack_require__(29), {
-	        createBatchXML: __webpack_require__(31),
-	        convert2Caml: __webpack_require__(32),
-	        convertFilter2Caml: __webpack_require__(33),
+	    fn = $.extend({}, __webpack_require__(28), {
+	        createBatchXML: __webpack_require__(29),
+	        convert2Caml: __webpack_require__(30),
+	        convertFilter2Caml: __webpack_require__(31),
 	        Events: __webpack_require__(1)
 	    });
 
@@ -430,9 +430,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.batchRequest,
 	            defaults;
 
@@ -478,9 +478,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.checkVariables,
 	            defaults;
 
@@ -526,9 +526,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.copyFile,
 	            defaults;
 
@@ -574,9 +574,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.createPage,
 	            defaults;
 
@@ -622,9 +622,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.executeAction,
 	            defaults;
 
@@ -670,9 +670,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getActionDefinitions,
 	            defaults;
 
@@ -718,9 +718,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getActivatedSolutions,
 	            defaults;
 
@@ -766,9 +766,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getCentralViewData,
 	            defaults;
 
@@ -814,9 +814,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getContentTypes,
 	            defaults;
 
@@ -862,9 +862,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getFileContents,
 	            defaults;
 
@@ -910,9 +910,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getGlobalVariables,
 	            defaults;
 
@@ -958,9 +958,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getListInfo,
 	            defaults;
 
@@ -1006,10 +1006,10 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
-	            convert2Caml = __webpack_require__(32),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
+	            convert2Caml = __webpack_require__(30),
 	            method = capsParams.getListItems,
 	            defaults;
 
@@ -1061,9 +1061,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getServerInfo,
 	            defaults;
 
@@ -1109,9 +1109,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getSiteCollections,
 	            defaults;
 
@@ -1157,9 +1157,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getSiteInfo,
 	            defaults;
 
@@ -1205,9 +1205,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getSiteUsers,
 	            defaults;
 
@@ -1253,9 +1253,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getVersion,
 	            defaults;
 
@@ -1301,9 +1301,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getWebPartPageTemplates,
 	            defaults;
 
@@ -1349,9 +1349,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.getWebPartProperties,
 	            defaults;
 
@@ -1397,10 +1397,10 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
-	            createBatchXML = __webpack_require__(31),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
+	            createBatchXML = __webpack_require__(29),
 	            method = capsParams.processBatchData,
 	            defaults;
 
@@ -1472,9 +1472,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.processGlobalVariables,
 	            defaults;
 
@@ -1520,9 +1520,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.processList,
 	            defaults;
 
@@ -1568,9 +1568,9 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 
-	        var capsParams = __webpack_require__(28),
-	            fn = __webpack_require__(29),
-	            validate = __webpack_require__(30),
+	        var capsParams = __webpack_require__(32),
+	            fn = __webpack_require__(28),
+	            validate = __webpack_require__(33),
 	            method = capsParams.startWorkflow,
 	            defaults;
 
@@ -1611,143 +1611,6 @@ var caps =
 
 /***/ },
 /* 28 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
-	        'use strict';
-
-	        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues',
-	            'TableName', 'RedirectURL', 'ContentDisposition', 'DatesInUtc', 'OutputFileName'];
-
-	        return  {
-	            batchRequest: {
-	                name: 'BatchRequest',
-	                required: {
-	                    params: [],
-	                    or: ['ConfigFileLocation', 'ConfigXml']
-	                },
-	                optional: optional
-	            },
-	            checkVariables: {
-	                name: 'CheckVariables',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'CWVariable', 'DatesInUtc'])
-	            },
-	            copyFile: {
-	                name: 'CopyFile',
-	                required: ['NewFileName', 'ListTitle', 'SourceFileUrl'],
-	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite', 'IncludeWebParts', 'DeleteSource', 'Title'])
-	            },
-	            createPage: {
-	                name: 'CreatePage',
-	                required: ['FileName', 'ListTitle', 'TemplateFileName' ],
-	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
-	            },
-	            executeAction: {
-	                name: 'ExecuteAction',
-	                required: ['ActionUrl', 'ListTitle', 'ItemIds' ],
-	                optional: optional.concat(['SiteUrl'])
-	            },
-	            getActionDefinitions: {
-	                name: 'GetActionDefinitions',
-	                required: ['ListTitle'],
-	                optional: optional.concat(['SiteUrl'])
-	            },
-	            getActivatedSolutions: {
-	                name: 'GetActivatedSolutions',
-	                required: [],
-	                optional: optional
-	            },
-	            getCentralViewData: {
-	                name: 'GetCentralViewData',
-	                required: ['ViewUrl'],
-	                optional: optional.concat(['SiteUrl'])
-	            },
-	            getContentTypes: {
-	                name: 'GetContentTypes',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'ContentTypeTitle'])
-	            },
-	            getFileContents: {
-	                name: 'GetFileContents',
-	                required: ['FileUrl'],
-	                optional: optional.concat(['Encoding'])
-	            },
-	            getGlobalVariables: {
-	                name: 'GetGlobalVariables',
-	                required: [],
-	                optional: optional.concat(['GlobalVariables'])
-	            },
-	            getListInfo: {
-	                name: 'GetListInfo',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'ListTitle', 'DetailLevels', 'Properties'])
-	            },
-	            getListItems: {
-	                name: 'GetListItems',
-	                required: ['ListTitle'],
-	                optional: optional.concat(['SiteUrl', 'CAML'])
-	            },
-	            getServerInfo: {
-	                name: 'GetServerInfo',
-	                required: [],
-	                optional: optional
-	            },
-	            getSiteCollections: {
-	                name: 'GetSiteCollections',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'GetSubsites', 'SiteLevels', 'StartAtRoot'])
-	            },
-	            getSiteInfo: {
-	                name: 'GetSiteInfo',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'DetailLevels', 'Properties'])
-	            },
-	            getSiteUsers: {
-	                name: 'GetSiteUsers',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'User', 'DetailLevels', 'Properties'])
-	            },
-	            getVersion: {
-	                name: 'GetVersion',
-	                required: [],
-	                optional: optional
-	            },
-	            getWebPartPageTemplates: {
-	                name: 'GetWebPartPageTemplates',
-	                required: [],
-	                optional: optional
-	            },
-	            getWebPartProperties: {
-	                name: 'GetWebPartProperties',
-	                required: [],
-	                optional: optional.concat(['SiteUrl', 'ListTitle', 'PageUrl', 'DetailLevels'])
-	            },
-	            processBatchData: {
-	                name: 'ProcessBatchData',
-	                required: ['Batch'],
-	                optional: optional.concat(['SiteUrl', 'ListTitle', 'ListType'])
-	            },
-	            processGlobalVariables: {
-	                name: 'ProcessGlobalVariables',
-	                required: ['Batch'],
-	                optional: optional
-	            },
-	            processList: {
-	                name: 'ProcessList',
-	                required: ['ListTitle', 'Command'],
-	                optional: optional.concat(['SiteUrl', 'TemplateName', 'TemplateType', 'Description', 'PropertiesXml'])
-	            },
-	            startWorkflow: {
-	                name: 'StartWorkflow',
-	                required: ['WorkFlowName, ListTitle, ItemIds'],
-	                optional: optional.concat(['SiteUrl'])
-	            }
-	        };
-	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-/***/ },
-/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* global caps */
@@ -1967,14 +1830,559 @@ var caps =
 	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+	        var fn = __webpack_require__(28);
+
+
+	        function createBatchXML ( options ) {
+	                options = $.isArray(options) ? options : [options];
+
+	                var i,
+	                len = options.length,
+	                methods = "";
+
+	            methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
+
+	            for ( i = 0; i < len; i++ ) {
+	                processList(options[i]);
+	            }
+
+	            methods += '</ows:Batch></Batch>';
+
+	            return methods;
+
+	            function processList ( list ) {
+	                var batches = $.isArray(list.batch) ? list.batch : [list.batch],
+	                    i,
+	                    len = batches.length;
+
+	                for ( i = 0; i < len; i++ ) {
+	                    processItems(list.listTitle, batches[i]);
+	                }
+
+	            }
+
+	            function processItems ( listName, batch ) {
+	                var items = $.isArray(batch.items) ? batch.items : [batch.items],
+	                    i,
+	                    len = items.length,
+	                    typeMap = {
+	                        'create': 'New',
+	                        'update': 'Update',
+	                        'delete': 'Delete'
+	                    };
+
+	                for ( i = 0; i < len; i++ ) {
+	                    var item = items[i];
+	                    methods += fn.format(
+	                        '<Method ID="{methodId}">' +
+	                            '<SetList>%{list}%</SetList>' +
+	                            '<SetVar Name="Cmd">{cmd}</SetVar>',
+	                        {
+	                            methodId: (item.Id ? item.Id + ',' + typeMap[batch.method] : typeMap[batch.method]) +
+	                                ',' + listName,
+	                            list: listName,
+	                            cmd: batch.method === 'delete' ? 'Delete' : 'Save'
+	                        }
+	                    );
+	                    processProps(item);
+	                    methods += '</Method>';
+	                }
+	            }
+
+	            function processProps ( item ) {
+	                var prop;
+
+	                methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
+	                    {itemId: item.Id || 'New'});
+
+	                for ( prop in item ) {
+	                    if ( item.hasOwnProperty(prop) ) {
+	                        if ( prop !== 'Id' ) {
+	                            methods += fn.format(
+	                                '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
+	                                prop, item[prop]);
+	                        }
+	                    }
+	                }
+	            }
+
+	        }
+
+	        return createBatchXML;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
 /* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var fn = __webpack_require__(28),
+	            convertFilter2Caml = __webpack_require__(31);
+
+	        /**
+	         *
+	         * @param caml {object} caml configuration
+	         * @param model {object} model object required by caml.filter
+	         * @returns {string}
+	         */
+	        function convertCaml ( caml, model ) {
+	            model = model || {};
+
+	            var result = [], fields;
+
+	            // filter require options.model.fields
+	            if ( caml.filter && (!model || !fn.checkNested(model.fields)) ) {
+	                throw new Error('caps.getListItems({caml.filter}). Required param model.fields missing.');
+	            }
+
+	            result.push(getQuery(caml.sort, caml.filter, model.fields));
+
+	            result.push(getViewFields(caml.viewFields));
+
+	            result.push(getRowLimit(caml.rowLimit));
+
+	            result.push(getQueryOptions(caml.queryOptions));
+
+	            return result.join('');
+
+	        }
+
+	        return convertCaml;
+
+	        //Internal
+	        function getRowLimit ( rowLimit ) {
+	            var result = "";
+
+	            if ( rowLimit ) {
+	                result = fn.format('<RowLimit>{0}</RowLimit>',
+	                    rowLimit);
+	            }
+
+	            return result;
+	        }
+
+	        function getQuery ( sort, filter, fields ) {
+	            var result = [];
+	            result.push('<Query>');
+
+	            if ( sort ) {
+	                result.push(getOrderBy(sort));
+	            }
+
+	            if ( filter ) {
+	                result.push(convertFilter2Caml(filter, fields));
+	            }
+
+	            result.push('</Query>');
+
+	            return result.join('');
+
+	            function getOrderBy ( sort ) {
+	                var result = [];
+
+	                sort = typeof sort === 'string' ? JSON.parse(sort) : sort;
+
+	                sort = $.isArray(sort) ? sort : [sort];
+
+	                result.push('<OrderBy>');
+
+	                $.each(sort, function( index, sortObj ) {
+	                    var sortDir = (sortObj.dir === 'asc');
+
+	                    result.push(fn.format('<FieldRef Name="{0}" Ascending="{1}"/>',
+	                        sortObj.field,
+	                        sortDir)
+	                    );
+	                });
+
+	                result.push('</OrderBy>');
+
+	                return result.join('');
+	            }
+
+	        }
+
+	        function getViewFields ( viewFields ) {
+	            var result = [];
+
+	            if ( !viewFields ) {
+	                return '';
+	            }
+
+	            viewFields = $.isArray(viewFields) ? viewFields : viewFields.split(',');
+
+	            result.push('<ViewFields>');
+
+	            $.each(viewFields, function( index, field ) {
+
+	                result.push(fn.format('<FieldRef Name="{0}" />',
+	                    $.trim(field))
+	                );
+	            });
+
+	            result.push('</ViewFields>');
+
+	            return result.join('');
+	        }
+
+	        function getQueryOptions ( queryOptions ) {
+	            var result = [],
+	                settings,
+	                defaults;
+
+	            // Todo: Add getter/setter
+	            // http://msdn.microsoft.com/en-us/library/dd966064%28v=office.12%29.aspx
+	            defaults = {
+	                /*     DateInUtc: null,
+	                 Folder: null,
+	                 Paging: null,
+	                 IncludeMandatoryColumns: null,
+	                 MeetingInstanceID: null,
+	                 ViewAttributes: null,
+	                 RecurrencePatternXMLVersion: null,
+	                 RecurrenceOrderBy: null,
+	                 IncludePermissions: null,
+	                 ExpandUserField: null,
+	                 IncludeAttachmentUrls: null,
+	                 IncludeAttachmentVersion: null,
+	                 RemoveInvalidXmlCharacters: null,
+	                 OptimizeFor: null,
+	                 ExtraIds: null,
+	                 OptimizeLookups: null*/
+	            };
+
+	            settings = $.extend({}, defaults, queryOptions);
+
+	            result.push('<QueryOptions>');
+
+	            $.each(settings, function( prop, value ) {
+
+	                if ( prop === 'Paging' ) {
+
+	                    // Checking if "&" replacement was already applied
+
+	                    if ( value.indexOf('&amp;amp;') === -1 ) {
+	                        value = value.replace(/&/g, '&amp;amp;');
+	                    }
+
+	                    //value = encodeURIComponent(value);
+
+	                    result.push(fn.format('<{0} ListItemCollectionPositionNext="{1}"/>', prop, value));
+
+	                    return;
+	                }
+
+	                // Handling special case Document libraries
+	                // http://msdn.microsoft.com/en-us/library/lists.lists.getlistitems(v=office.12).aspx
+	                if ( prop === 'ViewAttributes' ) {
+
+	                    if (value.indexOf('Recursive') > -1 ){
+	                        result.push(fn.format('<{0} Scope="Recursive"/>', prop, value));
+	                    }
+
+	                    return;
+	                }
+
+	                result.push(fn.format('<{0}>{1}</{0}>', prop, value));
+
+	            });
+
+	            //todo: Should paging support be build into caps?
+	            result.push('</QueryOptions>');
+
+	            return result.join('');
+	        }
+
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+	        var fn = __webpack_require__(28),
+	            camlMap = {
+	                'eq': 'Eq',
+	                'neq': 'Neq',
+	                'lt': 'Lt',
+	                'lte': 'Leq',
+	                'gt': 'Gt',
+	                'gte': 'Geq',
+	                'startswith': 'BeginsWith',
+	                'contains': 'Contains',
+	                'isNotNull': 'IsNotNull',
+	                'isNull': 'IsNull'
+	            },
+	            logicMap = {
+	                'and': 'And',
+	                'or': 'Or',
+	                'And': 'And',
+	                'Or': 'Or'
+	            },
+	            groupMap = {
+	                'Or': 'Or Group="true"',
+	                'And': 'And Group="true"'
+	            };
+
+	        function convertFilter2Caml ( filter, fields ) {
+	            var where = [],
+	                caml = [];
+
+	            if ( !filter ) {
+	                throw new Error('caps.convertFilter2Caml(). Missing required filter argument');
+	            }
+
+	            if ( !fields ) {
+	                throw new Error('caps.convertFilter2Caml(). Missing required fields argument');
+	             }
+
+	            filter = typeof filter === 'string' ? JSON.parse(filter) : filter;
+	            fields = typeof fields === 'string' ? JSON.parse(fields) : fields;
+	           
+	            where.push('<Where>');
+
+	            if ( filter && filter.filters.length === 1 && filter.filters[0].field ) {
+	                where.push(createExpression(filter.filters[0]));
+	            }
+	            else {
+	                convertBinarySearchTree2Caml(filter);
+	                where.push(caml.join(''));
+	            }
+	            where.push('</Where>');
+
+	            return (where.join(''));
+
+	            // Internal
+	            function convertBinarySearchTree2Caml ( filter, filterID ) {
+	                var fID = '',
+	                    rfilters = filter.filters,
+	                    logic = logicMap[filter.logic || 'And'],
+	                    groupID;
+
+	                groupID = (typeof filterID !== 'undefined') ? parseInt(filterID.substring(filterID.lastIndexOf('.') + 1), 10) : 0;
+
+	                if ( groupID > 0 && groupID % 2 === 0 ) {
+	                    caml.unshift(caml[0]);
+	                    caml.push(caml[0].replace('<', '</'));
+	                }
+	                caml.push(fn.format('<{0}>', (typeof filterID !== 'undefined') ? groupMap[logic] : logic));
+
+	                $.each(rfilters, function( idx, currFilter ) {
+
+	                    fID = filterID ? filterID + '.' + idx.toString() : idx.toString();
+
+	                    if ( typeof currFilter.logic !== 'undefined' ) {
+	                        convertBinarySearchTree2Caml(currFilter, fID);
+	                    }
+	                    else {
+	                        if ( idx > 1 ) {
+	                            var insertIdx = caml.lastIndexOf('<' + groupMap[logic] + '>') + 1;
+
+	                            if ( insertIdx === -1 ) {
+	                                caml.unshift(fn.format('<{0}>', logic));
+	                            }
+	                            else {
+	                                caml.splice(insertIdx, 0, fn.format('<{0}>', logic));
+	                            }
+
+	                            caml.push(fn.format('</{0}>', logic));
+	                        }
+	                        caml.push(createExpression(currFilter));
+	                    }
+	                });
+
+	                caml.push(fn.format('</{0}>', logic));
+	            }
+
+	            function createExpression ( filterObj ) {
+	                filterObj = $.isArray(filterObj) ? filterObj[0] : filterObj;
+	                var filterExprMap = {
+	                        'base': "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
+	                        'isNull' : "<{0}><FieldRef Name='{1}' /></{0}>"
+	                    },
+	                    filterExpr = filterExprMap.base,
+	                    val = filterObj.value,
+	                    operator = camlMap[filterObj.operator],
+	                    field = filterObj.field,
+	                    type;
+
+	                if (operator === 'IsNotNull' || operator === 'IsNull'){
+	                    filterExpr = filterExprMap.isNull;
+	                }
+
+	                // Check if we got a valid fields definition
+	                if ( !fields[filterObj.field] ) {
+	                    throw new Error(fn.format('caps.convertFilter2Caml(). Missing model.fields definition for {0}', filterObj.field));
+	                }
+
+	                type = fields[filterObj.field].Type;
+
+	                return fn.format(filterExpr, operator, field, type, val);
+	            }
+
+	        }
+
+	        return convertFilter2Caml;
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
+	        'use strict';
+
+	        var optional = ['OutputType', 'XsltLocation', 'DisableVariableReplacement', 'Variables', 'DefaultValues',
+	            'TableName', 'RedirectURL', 'ContentDisposition', 'DatesInUtc', 'OutputFileName'];
+
+	        return  {
+	            batchRequest: {
+	                name: 'BatchRequest',
+	                required: {
+	                    params: [],
+	                    or: ['ConfigFileLocation', 'ConfigXml']
+	                },
+	                optional: optional
+	            },
+	            checkVariables: {
+	                name: 'CheckVariables',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'CWVariable', 'DatesInUtc'])
+	            },
+	            copyFile: {
+	                name: 'CopyFile',
+	                required: ['NewFileName', 'ListTitle', 'SourceFileUrl'],
+	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite', 'IncludeWebParts', 'DeleteSource', 'Title'])
+	            },
+	            createPage: {
+	                name: 'CreatePage',
+	                required: ['FileName', 'ListTitle', 'TemplateFileName' ],
+	                optional: optional.concat(['SiteUrl', 'FolderName', 'Overwrite'])
+	            },
+	            executeAction: {
+	                name: 'ExecuteAction',
+	                required: ['ActionUrl', 'ListTitle', 'ItemIds' ],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getActionDefinitions: {
+	                name: 'GetActionDefinitions',
+	                required: ['ListTitle'],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getActivatedSolutions: {
+	                name: 'GetActivatedSolutions',
+	                required: [],
+	                optional: optional
+	            },
+	            getCentralViewData: {
+	                name: 'GetCentralViewData',
+	                required: ['ViewUrl'],
+	                optional: optional.concat(['SiteUrl'])
+	            },
+	            getContentTypes: {
+	                name: 'GetContentTypes',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'ContentTypeTitle'])
+	            },
+	            getFileContents: {
+	                name: 'GetFileContents',
+	                required: ['FileUrl'],
+	                optional: optional.concat(['Encoding'])
+	            },
+	            getGlobalVariables: {
+	                name: 'GetGlobalVariables',
+	                required: [],
+	                optional: optional.concat(['GlobalVariables'])
+	            },
+	            getListInfo: {
+	                name: 'GetListInfo',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'DetailLevels', 'Properties'])
+	            },
+	            getListItems: {
+	                name: 'GetListItems',
+	                required: ['ListTitle'],
+	                optional: optional.concat(['SiteUrl', 'CAML'])
+	            },
+	            getServerInfo: {
+	                name: 'GetServerInfo',
+	                required: [],
+	                optional: optional
+	            },
+	            getSiteCollections: {
+	                name: 'GetSiteCollections',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'GetSubsites', 'SiteLevels', 'StartAtRoot'])
+	            },
+	            getSiteInfo: {
+	                name: 'GetSiteInfo',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'DetailLevels', 'Properties'])
+	            },
+	            getSiteUsers: {
+	                name: 'GetSiteUsers',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'User', 'DetailLevels', 'Properties'])
+	            },
+	            getVersion: {
+	                name: 'GetVersion',
+	                required: [],
+	                optional: optional
+	            },
+	            getWebPartPageTemplates: {
+	                name: 'GetWebPartPageTemplates',
+	                required: [],
+	                optional: optional
+	            },
+	            getWebPartProperties: {
+	                name: 'GetWebPartProperties',
+	                required: [],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'PageUrl', 'DetailLevels'])
+	            },
+	            processBatchData: {
+	                name: 'ProcessBatchData',
+	                required: ['Batch'],
+	                optional: optional.concat(['SiteUrl', 'ListTitle', 'ListType'])
+	            },
+	            processGlobalVariables: {
+	                name: 'ProcessGlobalVariables',
+	                required: ['Batch'],
+	                optional: optional
+	            },
+	            processList: {
+	                name: 'ProcessList',
+	                required: ['ListTitle', 'Command'],
+	                optional: optional.concat(['SiteUrl', 'TemplateName', 'TemplateType', 'Description', 'PropertiesXml'])
+	            },
+	            startWorkflow: {
+	                name: 'StartWorkflow',
+	                required: ['WorkFlowName, ListTitle, ItemIds'],
+	                optional: optional.concat(['SiteUrl'])
+	            }
+	        };
+	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*global caps */
 
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	    'use strict';
-	    var fn = __webpack_require__(29),
+	    var fn = __webpack_require__(28),
 	        L_Menu_BaseUrl = window.L_Menu_BaseUrl || null,
 	        messages = {
 	            getSiteUrl: 'caps.{0}(). Missing required "siteUrl" property and fallback method "L_Menu_BaseUrl" is undefined.',
@@ -2170,414 +2578,6 @@ var caps =
 	        getFileUrl: getFileUrl
 	    };
 	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-/***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
-	        'use strict';
-	        var fn = __webpack_require__(29);
-
-
-	        function createBatchXML ( options ) {
-	                options = $.isArray(options) ? options : [options];
-
-	                var i,
-	                len = options.length,
-	                methods = "";
-
-	            methods = '<Batch><ows:Batch OnError="Continue"  xmlns:ows="http://www.corasworks.net/2012/ows">';
-
-	            for ( i = 0; i < len; i++ ) {
-	                processList(options[i]);
-	            }
-
-	            methods += '</ows:Batch></Batch>';
-
-	            return methods;
-
-	            function processList ( list ) {
-	                var batches = $.isArray(list.batch) ? list.batch : [list.batch],
-	                    i,
-	                    len = batches.length;
-
-	                for ( i = 0; i < len; i++ ) {
-	                    processItems(list.listTitle, batches[i]);
-	                }
-
-	            }
-
-	            function processItems ( listName, batch ) {
-	                var items = $.isArray(batch.items) ? batch.items : [batch.items],
-	                    i,
-	                    len = items.length,
-	                    typeMap = {
-	                        'create': 'New',
-	                        'update': 'Update',
-	                        'delete': 'Delete'
-	                    };
-
-	                for ( i = 0; i < len; i++ ) {
-	                    var item = items[i];
-	                    methods += fn.format(
-	                        '<Method ID="{methodId}">' +
-	                            '<SetList>%{list}%</SetList>' +
-	                            '<SetVar Name="Cmd">{cmd}</SetVar>',
-	                        {
-	                            methodId: (item.Id ? item.Id + ',' + typeMap[batch.method] : typeMap[batch.method]) +
-	                                ',' + listName,
-	                            list: listName,
-	                            cmd: batch.method === 'delete' ? 'Delete' : 'Save'
-	                        }
-	                    );
-	                    processProps(item);
-	                    methods += '</Method>';
-	                }
-	            }
-
-	            function processProps ( item ) {
-	                var prop;
-
-	                methods += fn.format('<SetVar Name="ID">{itemId}</SetVar>',
-	                    {itemId: item.Id || 'New'});
-
-	                for ( prop in item ) {
-	                    if ( item.hasOwnProperty(prop) ) {
-	                        if ( prop !== 'Id' ) {
-	                            methods += fn.format(
-	                                '<SetVar Name="urn:schemas-microsoft-com:office:office#{0}"><![CDATA[{1}]]></SetVar>',
-	                                prop, item[prop]);
-	                        }
-	                    }
-	                }
-	            }
-
-	        }
-
-	        return createBatchXML;
-	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-/***/ },
-/* 32 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
-	        'use strict';
-
-	        var fn = __webpack_require__(29),
-	            convertFilter2Caml = __webpack_require__(33);
-
-	        /**
-	         *
-	         * @param caml {object} caml configuration
-	         * @param model {object} model object required by caml.filter
-	         * @returns {string}
-	         */
-	        function convertCaml ( caml, model ) {
-	            model = model || {};
-
-	            var result = [], fields;
-
-	            // filter require options.model.fields
-	            if ( caml.filter && (!model || !fn.checkNested(model.fields)) ) {
-	                throw new Error('caps.getListItems({caml.filter}). Required param model.fields missing.');
-	            }
-
-	            result.push(getQuery(caml.sort, caml.filter, model.fields));
-
-	            result.push(getViewFields(caml.viewFields));
-
-	            result.push(getRowLimit(caml.rowLimit));
-
-	            result.push(getQueryOptions(caml.queryOptions));
-
-	            return result.join('');
-
-	        }
-
-	        return convertCaml;
-
-	        //Internal
-	        function getRowLimit ( rowLimit ) {
-	            var result = "";
-
-	            if ( rowLimit ) {
-	                result = fn.format('<RowLimit>{0}</RowLimit>',
-	                    rowLimit);
-	            }
-
-	            return result;
-	        }
-
-	        function getQuery ( sort, filter, fields ) {
-	            var result = [];
-	            result.push('<Query>');
-
-	            if ( sort ) {
-	                result.push(getOrderBy(sort));
-	            }
-
-	            if ( filter ) {
-	                result.push(convertFilter2Caml(filter, fields));
-	            }
-
-	            result.push('</Query>');
-
-	            return result.join('');
-
-	            function getOrderBy ( sort ) {
-	                var result = [];
-
-	                sort = typeof sort === 'string' ? JSON.parse(sort) : sort;
-
-	                sort = $.isArray(sort) ? sort : [sort];
-
-	                result.push('<OrderBy>');
-
-	                $.each(sort, function( index, sortObj ) {
-	                    var sortDir = (sortObj.dir === 'asc');
-
-	                    result.push(fn.format('<FieldRef Name="{0}" Ascending="{1}"/>',
-	                        sortObj.field,
-	                        sortDir)
-	                    );
-	                });
-
-	                result.push('</OrderBy>');
-
-	                return result.join('');
-	            }
-
-	        }
-
-	        function getViewFields ( viewFields ) {
-	            var result = [];
-
-	            if ( !viewFields ) {
-	                return '';
-	            }
-
-	            viewFields = $.isArray(viewFields) ? viewFields : viewFields.split(',');
-
-	            result.push('<ViewFields>');
-
-	            $.each(viewFields, function( index, field ) {
-
-	                result.push(fn.format('<FieldRef Name="{0}" />',
-	                    $.trim(field))
-	                );
-	            });
-
-	            result.push('</ViewFields>');
-
-	            return result.join('');
-	        }
-
-	        function getQueryOptions ( queryOptions ) {
-	            var result = [],
-	                settings,
-	                defaults;
-
-	            // Todo: Add getter/setter
-	            // http://msdn.microsoft.com/en-us/library/dd966064%28v=office.12%29.aspx
-	            defaults = {
-	                /*     DateInUtc: null,
-	                 Folder: null,
-	                 Paging: null,
-	                 IncludeMandatoryColumns: null,
-	                 MeetingInstanceID: null,
-	                 ViewAttributes: null,
-	                 RecurrencePatternXMLVersion: null,
-	                 RecurrenceOrderBy: null,
-	                 IncludePermissions: null,
-	                 ExpandUserField: null,
-	                 IncludeAttachmentUrls: null,
-	                 IncludeAttachmentVersion: null,
-	                 RemoveInvalidXmlCharacters: null,
-	                 OptimizeFor: null,
-	                 ExtraIds: null,
-	                 OptimizeLookups: null*/
-	            };
-
-	            settings = $.extend({}, defaults, queryOptions);
-
-	            result.push('<QueryOptions>');
-
-	            $.each(settings, function( prop, value ) {
-
-	                if ( prop === 'Paging' ) {
-
-	                    // Checking if "&" replacement was already applied
-
-	                    if ( value.indexOf('&amp;amp;') === -1 ) {
-	                        value = value.replace(/&/g, '&amp;amp;');
-	                    }
-
-	                    //value = encodeURIComponent(value);
-
-	                    result.push(fn.format('<{0} ListItemCollectionPositionNext="{1}"/>', prop, value));
-
-	                    return;
-	                }
-
-	                // Handling special case Document libraries
-	                // http://msdn.microsoft.com/en-us/library/lists.lists.getlistitems(v=office.12).aspx
-	                if ( prop === 'ViewAttributes' ) {
-
-	                    if (value.indexOf('Recursive') > -1 ){
-	                        result.push(fn.format('<{0} Scope="Recursive"/>', prop, value));
-	                    }
-
-	                    return;
-	                }
-
-	                result.push(fn.format('<{0}>{1}</{0}>', prop, value));
-
-	            });
-
-	            //todo: Should paging support be build into caps?
-	            result.push('</QueryOptions>');
-
-	            return result.join('');
-	        }
-
-	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-
-
-/***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
-	        'use strict';
-	        var fn = __webpack_require__(29),
-	            camlMap = {
-	                'eq': 'Eq',
-	                'neq': 'Neq',
-	                'lt': 'Lt',
-	                'lte': 'Leq',
-	                'gt': 'Gt',
-	                'gte': 'Geq',
-	                'startswith': 'BeginsWith',
-	                'contains': 'Contains',
-	                'isNotNull': 'IsNotNull',
-	                'isNull': 'IsNull'
-	            },
-	            logicMap = {
-	                'and': 'And',
-	                'or': 'Or',
-	                'And': 'And',
-	                'Or': 'Or'
-	            },
-	            groupMap = {
-	                'Or': 'Or Group="true"',
-	                'And': 'And Group="true"'
-	            };
-
-	        function convertFilter2Caml ( filter, fields ) {
-	            var where = [],
-	                caml = [];
-
-	            if ( !filter ) {
-	                throw new Error('caps.convertFilter2Caml(). Missing required filter argument');
-	            }
-
-	            if ( !fields ) {
-	                throw new Error('caps.convertFilter2Caml(). Missing required fields argument');
-	             }
-
-	            filter = typeof filter === 'string' ? JSON.parse(filter) : filter;
-	            fields = typeof fields === 'string' ? JSON.parse(fields) : fields;
-	           
-	            where.push('<Where>');
-
-	            if ( filter && filter.filters.length === 1 && filter.filters[0].field ) {
-	                where.push(createExpression(filter.filters[0]));
-	            }
-	            else {
-	                convertBinarySearchTree2Caml(filter);
-	                where.push(caml.join(''));
-	            }
-	            where.push('</Where>');
-
-	            return (where.join(''));
-
-	            // Internal
-	            function convertBinarySearchTree2Caml ( filter, filterID ) {
-	                var fID = '',
-	                    rfilters = filter.filters,
-	                    logic = logicMap[filter.logic || 'And'],
-	                    groupID;
-
-	                groupID = (typeof filterID !== 'undefined') ? parseInt(filterID.substring(filterID.lastIndexOf('.') + 1), 10) : 0;
-
-	                if ( groupID > 0 && groupID % 2 === 0 ) {
-	                    caml.unshift(caml[0]);
-	                    caml.push(caml[0].replace('<', '</'));
-	                }
-	                caml.push(fn.format('<{0}>', (typeof filterID !== 'undefined') ? groupMap[logic] : logic));
-
-	                $.each(rfilters, function( idx, currFilter ) {
-
-	                    fID = filterID ? filterID + '.' + idx.toString() : idx.toString();
-
-	                    if ( typeof currFilter.logic !== 'undefined' ) {
-	                        convertBinarySearchTree2Caml(currFilter, fID);
-	                    }
-	                    else {
-	                        if ( idx > 1 ) {
-	                            var insertIdx = caml.lastIndexOf('<' + groupMap[logic] + '>') + 1;
-
-	                            if ( insertIdx === -1 ) {
-	                                caml.unshift(fn.format('<{0}>', logic));
-	                            }
-	                            else {
-	                                caml.splice(insertIdx, 0, fn.format('<{0}>', logic));
-	                            }
-
-	                            caml.push(fn.format('</{0}>', logic));
-	                        }
-	                        caml.push(createExpression(currFilter));
-	                    }
-	                });
-
-	                caml.push(fn.format('</{0}>', logic));
-	            }
-
-	            function createExpression ( filterObj ) {
-	                filterObj = $.isArray(filterObj) ? filterObj[0] : filterObj;
-	                var filterExprMap = {
-	                        'base': "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
-	                        'isNull' : "<{0}><FieldRef Name='{1}' /></{0}>"
-	                    },
-	                    filterExpr = filterExprMap.base,
-	                    val = filterObj.value,
-	                    operator = camlMap[filterObj.operator],
-	                    field = filterObj.field,
-	                    type;
-
-	                if (operator === 'IsNotNull' || operator === 'IsNull'){
-	                    filterExpr = filterExprMap.isNull;
-	                }
-
-	                // Check if we got a valid fields definition
-	                if ( !fields[filterObj.field] ) {
-	                    throw new Error(fn.format('caps.convertFilter2Caml(). Missing model.fields definition for {0}', filterObj.field));
-	                }
-
-	                type = fields[filterObj.field].Type;
-
-	                return fn.format(filterExpr, operator, field, type, val);
-	            }
-
-	        }
-
-	        return convertFilter2Caml;
-	    }.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-
 
 /***/ }
 /******/ ])
