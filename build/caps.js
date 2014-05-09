@@ -1706,7 +1706,7 @@ var caps =
 	            getSiteUsers: {
 	                name: 'GetSiteUsers',
 	                required: [],
-	                optional: optional.concat(['SiteUrl', 'Users', 'DetailLevels', 'Properties'])
+	                optional: optional.concat(['SiteUrl', 'User', 'DetailLevels', 'Properties'])
 	            },
 	            getVersion: {
 	                name: 'GetVersion',
