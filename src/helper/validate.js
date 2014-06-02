@@ -91,7 +91,9 @@ define(function( require ) {
         // add leading slash / as long as path doesn't contain a global variable or a caps variable
 
         if ( !containsGlobal && !containsVariable && !containsProtocol ) {
-            path = '/' + path;
+            if ( path.charAt(0) !== '/' ) {
+                path = '/' + path;
+            }
         }
 
         return path;
