@@ -53,7 +53,7 @@ var caps =
 	        'use strict';
 
 	        var Events = __webpack_require__(1),
-	            version = '1.2.3',
+	            version = '1.2.4',
 	            caps;
 
 	        // ECMA 5 polyfills
@@ -384,42 +384,6 @@ var caps =
 	                return result;
 	            };
 	        }());
-	    }
-	    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/lastIndexOf
-	    if ( !Array.prototype.lastIndexOf ) {
-	        Array.prototype.lastIndexOf = function( searchElement /*, fromIndex*/ ) {
-
-	            if ( this == null ) {
-	                throw new TypeError();
-	            }
-
-	            var n, k,
-	                t = Object(this),
-	                len = t.length >>> 0;
-	            if ( len === 0 ) {
-	                return -1;
-	            }
-
-	            n = len;
-	            if ( arguments.length > 1 ) {
-	                n = Number(arguments[1]);
-	                if ( n != n ) {
-	                    n = 0;
-	                }
-	                else if ( n != 0 && n != (1 / 0) && n != -(1 / 0) ) {
-	                    n = (n > 0 || -1) * Math.floor(Math.abs(n));
-	                }
-	            }
-
-	            for ( k = n >= 0
-	                ? Math.min(n, len - 1)
-	                : len - Math.abs(n); k >= 0; k-- ) {
-	                if ( k in t && t[k] === searchElement ) {
-	                    return k;
-	                }
-	            }
-	            return -1;
-	        };
 	    }
 	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
@@ -2111,6 +2075,7 @@ var caps =
 	var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function( require ) {
 	        'use strict';
 	        var fn = __webpack_require__(28),
+	            lastIndexOf = __webpack_require__(34),
 	            camlMap = {
 	                'eq': 'Eq',
 	                'neq': 'Neq',
@@ -2144,11 +2109,11 @@ var caps =
 
 	            if ( !fields ) {
 	                throw new Error('caps.convertFilter2Caml(). Missing required fields argument');
-	             }
+	            }
 
 	            filter = typeof filter === 'string' ? JSON.parse(filter) : filter;
 	            fields = typeof fields === 'string' ? JSON.parse(fields) : fields;
-	           
+
 	            where.push('<Where>');
 
 	            if ( filter && filter.filters.length === 1 && filter.filters[0].field ) {
@@ -2169,7 +2134,7 @@ var caps =
 	                    logic = logicMap[filter.logic || 'And'],
 	                    groupID;
 
-	                groupID = (typeof filterID !== 'undefined') ? parseInt(filterID.substring(filterID.lastIndexOf('.') + 1), 10) : 0;
+	                groupID = (typeof filterID !== 'undefined') ? parseInt(filterID.substring(lastIndexOf(filterID, '.') + 1), 10) : 0;
 
 	                if ( groupID > 0 && groupID % 2 === 0 ) {
 	                    caml.unshift(caml[0]);
@@ -2186,7 +2151,8 @@ var caps =
 	                    }
 	                    else {
 	                        if ( idx > 1 ) {
-	                            var insertIdx = caml.lastIndexOf('<' + groupMap[logic] + '>') + 1;
+	                            var searchStr = '<' + groupMap[logic] + '>',
+	                                insertIdx = lastIndexOf(caml, searchStr) + 1;
 
 	                            if ( insertIdx === -1 ) {
 	                                caml.unshift(fn.format('<{0}>', logic));
@@ -2208,7 +2174,7 @@ var caps =
 	                filterObj = $.isArray(filterObj) ? filterObj[0] : filterObj;
 	                var filterExprMap = {
 	                        'base': "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
-	                        'isNull' : "<{0}><FieldRef Name='{1}' /></{0}>"
+	                        'isNull': "<{0}><FieldRef Name='{1}' /></{0}>"
 	                    },
 	                    filterExpr = filterExprMap.base,
 	                    val = filterObj.value,
@@ -2216,7 +2182,7 @@ var caps =
 	                    field = filterObj.field,
 	                    type;
 
-	                if (operator === 'IsNotNull' || operator === 'IsNull'){
+	                if ( operator === 'IsNotNull' || operator === 'IsNull' ) {
 	                    filterExpr = filterExprMap.isNull;
 	                }
 
@@ -2579,6 +2545,42 @@ var caps =
 	        getSiteUrl: getSiteUrl,
 	        getFileUrl: getFileUrl
 	    };
+	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;// https://github.com/mout/mout/blob/master/src/array/lastIndexOf.js
+	// license: https://github.com/mout/mout/blob/master/LICENSE.md
+
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+
+	    /**
+	     * Array lastIndexOf
+	     */
+	    function lastIndexOf(arr, item, fromIndex) {
+	        if (arr == null) {
+	            return -1;
+	        }
+
+	        var len = arr.length;
+	        fromIndex = (fromIndex == null || fromIndex >= len)? len - 1 : fromIndex;
+	        fromIndex = (fromIndex < 0)? len + fromIndex : fromIndex;
+
+	        while (fromIndex >= 0) {
+	            // we iterate over sparse items since there is no way to make it
+	            // work properly on IE 7-8. see #64
+	            if (arr[fromIndex] === item) {
+	                return fromIndex;
+	            }
+	            fromIndex--;
+	        }
+
+	        return -1;
+	    }
+
+	    return lastIndexOf;
 	}.call(exports, __webpack_require__, exports, module)), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }

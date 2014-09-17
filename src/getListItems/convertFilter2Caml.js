@@ -1,6 +1,7 @@
 define(function( require ) {
         'use strict';
         var fn = require('../fn/common'),
+            lastIndexOf = require('./../helper/lastIndexOf'),
             camlMap = {
                 'eq': 'Eq',
                 'neq': 'Neq',
@@ -34,11 +35,11 @@ define(function( require ) {
 
             if ( !fields ) {
                 throw new Error('caps.convertFilter2Caml(). Missing required fields argument');
-             }
+            }
 
             filter = typeof filter === 'string' ? JSON.parse(filter) : filter;
             fields = typeof fields === 'string' ? JSON.parse(fields) : fields;
-           
+
             where.push('<Where>');
 
             if ( filter && filter.filters.length === 1 && filter.filters[0].field ) {
@@ -59,7 +60,7 @@ define(function( require ) {
                     logic = logicMap[filter.logic || 'And'],
                     groupID;
 
-                groupID = (typeof filterID !== 'undefined') ? parseInt(filterID.substring(filterID.lastIndexOf('.') + 1), 10) : 0;
+                groupID = (typeof filterID !== 'undefined') ? parseInt(filterID.substring(lastIndexOf(filterID, '.') + 1), 10) : 0;
 
                 if ( groupID > 0 && groupID % 2 === 0 ) {
                     caml.unshift(caml[0]);
@@ -76,7 +77,8 @@ define(function( require ) {
                     }
                     else {
                         if ( idx > 1 ) {
-                            var insertIdx = caml.lastIndexOf('<' + groupMap[logic] + '>') + 1;
+                            var searchStr = '<' + groupMap[logic] + '>',
+                                insertIdx = lastIndexOf(caml, searchStr) + 1;
 
                             if ( insertIdx === -1 ) {
                                 caml.unshift(fn.format('<{0}>', logic));
@@ -98,7 +100,7 @@ define(function( require ) {
                 filterObj = $.isArray(filterObj) ? filterObj[0] : filterObj;
                 var filterExprMap = {
                         'base': "<{0}><FieldRef Name='{1}' /><Value Type='{2}'>{3}</Value></{0}>",
-                        'isNull' : "<{0}><FieldRef Name='{1}' /></{0}>"
+                        'isNull': "<{0}><FieldRef Name='{1}' /></{0}>"
                     },
                     filterExpr = filterExprMap.base,
                     val = filterObj.value,
@@ -106,7 +108,7 @@ define(function( require ) {
                     field = filterObj.field,
                     type;
 
-                if (operator === 'IsNotNull' || operator === 'IsNull'){
+                if ( operator === 'IsNotNull' || operator === 'IsNull' ) {
                     filterExpr = filterExprMap.isNull;
                 }
 

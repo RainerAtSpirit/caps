@@ -1,1 +1,2 @@
 src/helper/polyfills.js
+src/helper/lastIndexOf.js
